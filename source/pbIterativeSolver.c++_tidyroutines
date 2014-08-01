@@ -27,76 +27,12 @@
 #include <cstring>
 #include <cstdlib>
 #include <cmath>
-//#include "mfa_functions.h"
+#include "mfa_params.h" // Needed for kernelType
+#include "mfa_analytic.h"
+#include "kernel.h"
 
 using namespace std;
 //using namesapce mfa;
-
-
-namespace mfaAnalytic
-{
-  enum kernelTypes { constant, additive, multiplicative, continuum, freemolecular, kinetic, shearlinear, shearnonlinear, settling, inertiasettling, berry, condensation, spmtest};
-
-  kernelTypes kernelType; // Read from command line with -k flag.  Default is constant
-
-  const int noMoments=4; // Number of moments to compute
-  const string dataDir="data/"; // Output directory
-  
-} //namespace mfaAnalytic
-
-
-// Coagulation kernel header
-double k(unsigned long i, unsigned long j);
-
-
-// Coagulation kernel definition
-double k(unsigned long i, unsigned long j)
-{
-  
-  using namespace mfaAnalytic;
-  
-  switch (kernelType)
-    {
-    case continuum: // Brownian motion (continuum regime)
-      return (pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0));
-      break;
-    case freemolecular: // Brownian motion (free molecular regime)
-      return pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*pow(pow(i,-1e0/3e0)+pow(j,-1e0/3e0),1e0/2e0);
-      break;
-    case kinetic: // Based on kinetic theory
-      return (pow(i,1e0/3e0)+pow(j,1e0/3e0))*pow(i*j,1e0/2e0)*pow(i+j,-3e0/2e0);
-      break;
-    case shearlinear: // Shear (linear velocity profile)
-      return pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),3e0);
-      break;
-    case shearnonlinear: // Shear (nonlinear velocity profile):
-      return pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),7e0/3e0);
-      break;
-    case settling: // Gravitational settling
-      return pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*abs(pow(i,1e0/3e0)-pow(j,1e0/3e0));
-      break;
-    case inertiasettling: // Inertia and gravitational settling
-      return pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*abs(pow(i,2e0/3e0)-pow(j,2e0/3e0));
-      break;
-    case berry: // Analytic approximation of Berry's kernel
-      return pow(i-j,2e0)*pow(i+j,-1e0);
-      break;
-    case condensation: // Condensation and/or branched-chain polymerisation
-      return (i+2)*(j+2);  // with constant c=2 
-      break;
-    case additive:
-      return i+j;
-      break;
-    case multiplicative:
-      return i*j;
-      break;
-    case spmtest:
-      return pow(i*j,1e0/3e0);
-      break;    
-    default: // constant kernel
-      return 1e0;
-    }
-}
 
 
 
@@ -123,9 +59,7 @@ int main(int argc, char *argv[])
   double maxRes = 0e0; // maximum residual tolerance
   int maxIter = 1000;
   double resCutOff = 1e2;
-
-  bool coagOn=true;
-  
+    
   // Default values
   alpha=1e-1;
   beta=alpha;
@@ -263,11 +197,6 @@ int main(int argc, char *argv[])
 	  // Read number of outer convergence loops
 	  maxRes = atof(argv[++i]); //
 	}
-      else if (strcmp(argv[i], "-nocoag") == 0)
-	{
-	  // Read number of outer convergence loops
-	  coagOn = false; //
-	}
     }
 
   const unsigned long N=pow(2,p); // Max particle size, i.e., i<N in n_i. # of particles is sum_i n_i
@@ -328,10 +257,6 @@ int main(int argc, char *argv[])
   ofstream momentsFile;
   //ofstream diamsFile;
 
-  if (!coagOn)
-    kernelName = "nocoag";
-
-  
   string repType;
   if (numberDensityRep)
     repType="_nd";
@@ -392,11 +317,7 @@ int main(int argc, char *argv[])
   cout << endl << endl;
 
   kernelName[0]=toupper(kernelName[0]); // capitalise
-  if(coagOn)
-    cout << kernelName << " kernel selected." << endl;
-  else
-    cout << "Solving Cauchy problem (in/outflow only)" << endl;
-
+  cout << kernelName << " kernel selected." << endl;
   cout << "Inflow rate (1/alpha):" << 1/alpha << endl;
   cout << "Outflow rate (1/beta):" << 1/beta << endl;
   cout << endl;

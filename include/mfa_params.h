@@ -2,6 +2,8 @@
 #define MFA_PARAMS_H
 
 #include <vector>
+#include <string>
+
 
 namespace MFA
 {
