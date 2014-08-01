@@ -1,15 +1,14 @@
-
 #include<cmath>
 #include "mfa_analytic.h"
-#include "kernel.h"
-
-using namespace mfaAnalytic;
-using namespace std;
-
+#include "mfa_functions.h"
 
 // Coagulation kernel definition
-double k(unsigned long i, unsigned long j)
+double k(unsigned long int i, unsigned long int j)
 {
+  
+  using namespace std;
+  using namespace mfaAnalytic;
+  
   switch (kernelType)
     {
     case continuum: // Brownian motion (continuum regime)

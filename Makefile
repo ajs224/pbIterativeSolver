@@ -7,8 +7,8 @@ COMPILER = g++
 TARGET= pbIterativeSolver
 SRC=./source
 
-${TARGET}: ${TARGET}.o  moments.o Particle.o #kernel.o theta.o
-	${COMPILER} -o ${TARGET} ${FLAGS} ${TARGET}.o  moments.o Particle.o #kernel.o theta.o
+${TARGET}: ${TARGET}.o  moments.o Particle.o #kernel.o #theta.o
+	${COMPILER} -o ${TARGET} ${FLAGS} ${TARGET}.o  moments.o Particle.o #kernel.o #theta.o
 
 ${TARGET}.o: ${SRC}/${TARGET}.c++
 	${COMPILER} -c ${FLAGS} ${SRC}/${TARGET}.c++
