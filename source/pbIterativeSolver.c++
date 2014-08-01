@@ -364,7 +364,14 @@ int main(int argc, char *argv[])
   n[1]=1e0;
     
   //out << N;
-  out << "p" << p << "_alpha" << alpha << "_beta" << beta << "_loops" << outerItLoops;
+
+  
+  out << "p" << p << "_alpha" << alpha << "_beta" << beta;
+  if (maxRes > 0e0)
+    out << "_res" << maxRes;
+  else
+    out << "_loops" << outerItLoops;
+
   desc=out.str();
   
   outputFileName+=desc+repType+ext;
@@ -426,7 +433,7 @@ int main(int argc, char *argv[])
   // Iterate L times
   while (isRunning)
     {      
-
+      
       currMaxRes = 0e0;
       // Let's compute the moments of the distribution
       for(int moment=0;moment<noMoments;moment++)
@@ -436,24 +443,17 @@ int main(int argc, char *argv[])
 	    {
 	      moments[moment]+=pow(i,moment)*n[i];
 	    }
-
+	  
 	  double currRes = abs(moments[moment] - momentsPrev[moment]);
 	  if(currRes > currMaxRes)
 	    currMaxRes = currRes;
 	  //cout << "m"<< moment << "residual = " << currRes << endl;
-
+	  
 	  momentsPrev[moment] = moments[moment];
 	  
 	}
-
+      
       //cout << "Current max res = " << currMaxRes << endl;
-
-      
-      
-      
-      
-      
-      
 
       
       /*
@@ -508,7 +508,14 @@ int main(int argc, char *argv[])
 	  
 	  if(numberDensityRep)
 	    summa*=0.5;
-	  	  
+
+	  if (!coagOn)
+	    {
+	      d = 0e0;
+	      summa =0e0;
+	    }
+	  
+	  
 	  // Iterate baby!
 	  //n[i]=(n_in/alpha+0.5*summa)/(1e0/beta+d);
 	  n[i]=(n_in/alpha+summa)/(1e0/beta+d);
@@ -529,12 +536,11 @@ int main(int argc, char *argv[])
 	  isRunning = false;
 	}
       
-
       l++; // Update iteration counter
-
+      
       if (l > maxIter || currMaxRes > resCutOff)
 	{
-	  cout << "Carried out " << maxIter << " iterations. Check that there is a steady-state solution." << endl;
+	  cout << "Carried out " << l << " iterations, with a current residual of " << currMaxRes<< ". Check that there is a steady-state solution." << endl;
 	  isRunning = false;
 	}
 	  
