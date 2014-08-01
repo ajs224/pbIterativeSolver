@@ -1,0 +1,1589 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: Enscript Output
+%%For: Alastair J. Smith
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Fri Jul 15 18:18:56 2011
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 10 10 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-simple 1.6 4
+
+/do_header {	% print default simple header
+  gsave
+    d_header_x d_header_y HFpt_h 3 div add translate
+
+    HF setfont
+    user_header_p {
+      5 0 moveto user_header_left_str show
+
+      d_header_w user_header_center_str stringwidth pop sub 2 div
+      0 moveto user_header_center_str show
+
+      d_header_w user_header_right_str stringwidth pop sub 5 sub
+      0 moveto user_header_right_str show
+    } {
+      fname length fmodstr length add pagenumstr length add 95 6 idiv add d_header_w 6 idiv le{
+        5 0 moveto fname show
+        45 0 rmoveto fmodstr show
+        45 0 rmoveto pagenumstr show
+      } {
+        5 0 moveto fmodstr show
+        45 0 rmoveto pagenumstr show
+        fname length d_header_w 6 idiv idiv 1 add 10 mul 5 exch moveto
+        1 1 fname length d_header_w 6 idiv idiv
+        {
+          dup fname exch 1 sub d_header_w 6 idiv mul d_header_w 6 idiv getinterval show
+          5 exch 10 mul fname length d_header_w 6 idiv idiv 1 add 10 mul exch sub moveto
+        } for
+        5 10 moveto
+        fname fname length d_header_w 6 idiv idiv d_header_w 6 idiv mul dup fname length exch sub getinterval show
+      }ifelse
+    }ifelse
+
+  grestore
+} def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 700 def
+/d_header_w 536 def
+/d_header_h 44 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 700 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(// ---------------------------------------------------------------\\) s
+5 676 M
+(//) s
+5 665 M
+(// Iterative PBE Solver) s
+5 654 M
+(// --------------------) s
+5 643 M
+(// Solve discrete Smoluchowski Eqn with in/outflow and coagulation) s
+5 632 M
+(// described by constant, additive and multiplicative kernels \(analytic\)) s
+5 621 M
+(// in addition to a range of more physically realistic kernels.) s
+5 610 M
+(//) s
+5 599 M
+(// A. J. Smith \(ajs224@cam.ac.uk\)) s
+5 588 M
+(//) s
+5 577 M
+(// V4.5) s
+5 566 M
+(//) s
+5 555 M
+(//---------------------------------------------------------------/) s
+5 533 M
+(// To run with inflow rate=outflow rate=1, const kernel, 16 outer loops and a max clust) s
+5 522 M
+(er size of 2^10 use: ) s
+5 511 M
+(// time ./pbSolverIterative -alpha 1 -k constant -loops 16 -p 10) s
+5 500 M
+(// To run with the additive kernel and defaul in/outflow rates use:) s
+5 489 M
+(// time ./pbSolverIterative -k additive -loops 256 -p 20) s
+5 478 M
+(// In order to achieve convergence with the additive \(and multiplicative?\) kernels lowe) s
+5 467 M
+(r the inflow rate:) s
+5 456 M
+(// time ./pbSolverIterative -alpha 0.1 -k additive -loops 256 -p 10) s
+5 445 M
+(//time ./pbSolverIterative -alpha 0.1 -k multiplicative -loops 64 -p 16) s
+5 423 M
+(#include <iostream>) s
+5 412 M
+(#include <sstream>) s
+5 401 M
+(#include <fstream>) s
+5 390 M
+(#include <iomanip>) s
+5 379 M
+(#include <cstring>) s
+5 368 M
+(#include <cstdlib>) s
+5 357 M
+(#include <cmath>) s
+5 346 M
+(//#include "mfa_functions.h") s
+5 324 M
+(using namespace std;) s
+5 313 M
+(//using namesapce mfa;) s
+5 280 M
+(namespace mfaAnalytic) s
+5 269 M
+({) s
+5 258 M
+(  enum kernelTypes { constant, additive, multiplicative, continuum, freemolecular, kine) s
+5 247 M
+(tic, shearlinear, shearnonlinear, settling, inertiasettling, berry, condensation, spmte) s
+5 236 M
+(st};) s
+5 214 M
+(  kernelTypes kernelType; // Read from command line with -k flag.  Default is constant) s
+5 192 M
+(  const int noMoments=4; // Number of moments to compute) s
+5 181 M
+(  const string dataDir="data/"; // Output directory) s
+5 170 M
+(  ) s
+5 159 M
+(} //namespace mfaAnalytic) s
+5 126 M
+(// Coagulation kernel header) s
+5 115 M
+(double k\(unsigned long i, unsigned long j\);) s
+5 82 M
+(// Coagulation kernel definition) s
+5 71 M
+(double k\(unsigned long i, unsigned long j\)) s
+5 60 M
+({) s
+5 49 M
+(  ) s
+5 38 M
+(  using namespace mfaAnalytic;) s
+5 27 M
+(  ) s
+5 16 M
+(  switch \(kernelType\)) s
+5 5 M
+(    {) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(    case continuum: // Brownian motion \(continuum regime\)) s
+5 676 M
+(      return \(pow\(i,1e0/3e0\)+pow\(j,1e0/3e0\)\)*\(pow\(i,-1e0/3e0\)+pow\(j,-1e0/3e0\)\);) s
+5 665 M
+(      break;) s
+5 654 M
+(    case freemolecular: // Brownian motion \(free molecular regime\)) s
+5 643 M
+(      return pow\(pow\(i,1e0/3e0\)+pow\(j,1e0/3e0\),2e0\)*pow\(pow\(i,-1e0/3e0\)+pow\(j,-1e0/3e0\)) s
+5 632 M
+(,1e0/2e0\);) s
+5 621 M
+(      break;) s
+5 610 M
+(    case kinetic: // Based on kinetic theory) s
+5 599 M
+(      return \(pow\(i,1e0/3e0\)+pow\(j,1e0/3e0\)\)*pow\(i*j,1e0/2e0\)*pow\(i+j,-3e0/2e0\);) s
+5 588 M
+(      break;) s
+5 577 M
+(    case shearlinear: // Shear \(linear velocity profile\)) s
+5 566 M
+(      return pow\(pow\(i,1e0/3e0\)+pow\(j,1e0/3e0\),3e0\);) s
+5 555 M
+(      break;) s
+5 544 M
+(    case shearnonlinear: // Shear \(nonlinear velocity profile\):) s
+5 533 M
+(      return pow\(pow\(i,1e0/3e0\)+pow\(j,1e0/3e0\),7e0/3e0\);) s
+5 522 M
+(      break;) s
+5 511 M
+(    case settling: // Gravitational settling) s
+5 500 M
+(      return pow\(pow\(i,1e0/3e0\)+pow\(j,1e0/3e0\),2e0\)*abs\(pow\(i,1e0/3e0\)-pow\(j,1e0/3e0\)\);) s
+5 489 M
+(      break;) s
+5 478 M
+(    case inertiasettling: // Inertia and gravitational settling) s
+5 467 M
+(      return pow\(pow\(i,1e0/3e0\)+pow\(j,1e0/3e0\),2e0\)*abs\(pow\(i,2e0/3e0\)-pow\(j,2e0/3e0\)\);) s
+5 456 M
+(      break;) s
+5 445 M
+(    case berry: // Analytic approximation of Berry's kernel) s
+5 434 M
+(      return pow\(i-j,2e0\)*pow\(i+j,-1e0\);) s
+5 423 M
+(      break;) s
+5 412 M
+(    case condensation: // Condensation and/or branched-chain polymerisation) s
+5 401 M
+(      return \(i+2\)*\(j+2\);  // with constant c=2 ) s
+5 390 M
+(      break;) s
+5 379 M
+(    case additive:) s
+5 368 M
+(      return i+j;) s
+5 357 M
+(      break;) s
+5 346 M
+(    case multiplicative:) s
+5 335 M
+(      return i*j;) s
+5 324 M
+(      break;) s
+5 313 M
+(    case spmtest:) s
+5 302 M
+(      return pow\(i*j,1e0/3e0\);) s
+5 291 M
+(      break;    ) s
+5 280 M
+(    default: // constant kernel) s
+5 269 M
+(      return 1e0;) s
+5 258 M
+(    }) s
+5 247 M
+(}) s
+5 203 M
+(int main\(int argc, char *argv[]\)) s
+5 192 M
+({) s
+5 181 M
+(  ) s
+5 170 M
+(  using namespace mfaAnalytic;) s
+5 159 M
+(  ) s
+5 148 M
+(  unsigned int p=16; // Maximum cluster size N=2^p, default is 16 \(over-ridden with the) s
+5 137 M
+( -p flag\)) s
+5 126 M
+(  ) s
+5 115 M
+(  // Sometimes we can improve the convergence by doing more than log2\(N\) iterations \(ca) s
+5 104 M
+(reful not to do too many though--div 0!\)) s
+5 93 M
+(  unsigned int outerItLoops=4; // Try increasing this to around 256 for non constant ke) s
+5 82 M
+(rnels \(override with -loops flag\) ) s
+5 71 M
+(  ) s
+5 60 M
+(  kernelType=constant; // default kernel type) s
+5 49 M
+(  ) s
+5 38 M
+(  string kernelName;) s
+5 27 M
+(  double * moments = new double[noMoments];) s
+5 16 M
+(  ) s
+5 5 M
+(  double alpha, beta; // In and outflow factors) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (3) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(  ) s
+5 676 M
+(  // Default values) s
+5 665 M
+(  alpha=1e-1;) s
+5 654 M
+(  beta=alpha;) s
+5 632 M
+(  bool numberDensityRep=true;) s
+5 610 M
+(  // Output blurb) s
+5 599 M
+(  cout << endl;) s
+5 588 M
+(  cout << "Iterative PBE Solver - A. J. Smith \(ajs224@cam.ac.uk\)" << endl;) s
+5 577 M
+(  cout << endl;) s
+5 566 M
+(  cout << "This code solves the discrete Smoluchowski equation with in/outflow" << endl) s
+5 555 M
+(;) s
+5 544 M
+(  cout << "and coagulation described by constant, additive and multiplicative kernels ") s
+5 533 M
+( << endl;) s
+5 522 M
+(  cout << "\(admitting analytic solutions\) in addition to a range of more physically " <) s
+5 511 M
+(< endl;) s
+5 500 M
+(  cout << "realistic kernels \(run with --help for additional information\)." << endl;) s
+5 489 M
+(  cout << endl;) s
+5 478 M
+(    ) s
+5 467 M
+(  // Process command line arguments) s
+5 456 M
+(  for \(int i=1; i<argc; ++i\)) s
+5 445 M
+(    {) s
+5 434 M
+(      if \(strcmp\(argv[i], "--help"\) == 0\) ) s
+5 423 M
+(        {) s
+5 412 M
+(          //cout << "This is the help message" << endl;) s
+5 401 M
+(          cout << "Usage: "<< argv[0] << " <flags>" << endl << endl;) s
+5 390 M
+(          cout << "where <flags> is one or more of:" << endl << endl;) s
+5 379 M
+(          cout << "\\t" << "-alpha" << "\\t\\t" << "inflow factor \(default is 1/10\)" << en) s
+5 368 M
+(dl;) s
+5 357 M
+(          cout << "\\t" << "-beta" << "\\t\\t" << "outflow factor \(=alpha if omitted\)" << ) s
+5 346 M
+(endl;) s
+5 335 M
+(          cout << "\\t" << "-p" << "\\t\\t" << "power p, appearing in the maximum cluster ) s
+5 324 M
+(size, N=2^p \(default is 16\)" << endl;) s
+5 313 M
+(          cout << "\\t" << "-loops" << "\\t\\t" << "Can sometimes improve the convergence ) s
+5 302 M
+(by doing more than log2\(N\) " << endl;) s
+5 291 M
+(          cout << "\\t\\t\\titerations \(careful not to do too many though! -- default is 4) s
+5 280 M
+(\)" << endl;) s
+5 269 M
+(          cout << "\\t" << "-mass" << "\\t\\t" << "Solves the PBE in mass flow form for mo) s
+5 258 M
+(re direct comparison with" << endl;) s
+5 247 M
+(          cout << "\\t\\t\\tstochastic algorithms \(default is in terms of number density\)") s
+5 236 M
+( << endl;) s
+5 225 M
+(          cout << "\\t\\t\\tN.B. In this case we expect m0=1, otherwise we expect m1=1 \(us) s
+5 214 M
+(eful convergence check\)" << endl;) s
+5 203 M
+(          cout << "\\t" << "-k <type>" << "\\t" << "kernel type, where <type> is one of:") s
+5 192 M
+( << endl << endl;) s
+5 181 M
+(          cout << "\\t\\t" << "constant" << "\\t\\t" << "constant kernel \(default\)" << endl) s
+5 170 M
+(;) s
+5 159 M
+(          cout << "\\t\\t" << "additive" << "\\t\\t" << "additive" << endl;) s
+5 148 M
+(          cout << "\\t\\t" << "multiplicative" << "\\t\\t" << "multiplicative" << endl;) s
+5 137 M
+(          cout << "\\t\\t" << "continuum" << "\\t\\t" << "Brownian motion \(continuum regime) s
+5 126 M
+(\)" << endl;) s
+5 115 M
+(          cout << "\\t\\t" << "freemolecular" << "\\t\\t" << "Brownian motion \(free molecul) s
+5 104 M
+(ar regime\)" << endl;) s
+5 93 M
+(          cout << "\\t\\t" << "kinetic" << "\\t\\t\\t" << "Based on kinetic theory" << endl;) s
+5 82 M
+(          cout << "\\t\\t" << "shearlinear" << "\\t\\t" << "Shear \(linear velocity profile\)) s
+5 71 M
+(" << endl;) s
+5 60 M
+(          cout << "\\t\\t" << "shearnonlinear" << "\\t\\t" << "Shear \(nonlinear velocity pr) s
+5 49 M
+(ofile\)" << endl;) s
+5 38 M
+(          cout << "\\t\\t" << "settling" << "\\t\\t" << "Gravitational settling" << endl;) s
+5 27 M
+(          cout << "\\t\\t" << "inertiasettling" << "\\t\\t" << "Inertia and gravitational s) s
+5 16 M
+(ettling" << endl;) s
+5 5 M
+(          cout << "\\t\\t" << "berry" << "\\t\\t\\t" << "Analytic approximation of Berry's k) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (4) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(ernel" << endl;) s
+5 676 M
+(          cout << "\\t\\t" << "condensation" << "\\t\\t" << "Condensation and/or branched-c) s
+5 665 M
+(hain polymerisation" << endl;) s
+5 654 M
+(          cout << "\\t\\t" << "spmtest" << "\\t\\t\\t" << "Kernel used to test the Single Pa) s
+5 643 M
+(rticle Method \(SPM\)" << endl;) s
+5 632 M
+(          cout << endl;) s
+5 621 M
+(          cout << "Examples:" << endl << endl;) s
+5 610 M
+(          cout << "* To run with inflow rate=outflow rate=1, const kernel, 16 outer loo) s
+5 599 M
+(ps and a max cluster size of 2^10 use:" << endl; ) s
+5 588 M
+(          cout << "\\ttime "<< argv[0] << " -alpha 1 -loops 16 -p 10" << endl;) s
+5 577 M
+(          cout << "* To run with the additive kernel and default in/outflow rates use:") s
+5 566 M
+( << endl;) s
+5 555 M
+(          cout << "\\ttime "<< argv[0] << " -k additive -loops 256 -p 20" << endl;) s
+5 544 M
+(          cout << "* In order to achieve convergence with more complicated kernels lowe) s
+5 533 M
+(r the inflow rate:" << endl;) s
+5 522 M
+(          cout << "\\ttime "<< argv[0] << " -alpha 0.1 -k multiplicative -loops 64 -p 16) s
+5 511 M
+(" << endl;) s
+5 500 M
+(          cout << "\\ttime "<< argv[0] << " -alpha 0.05 -k freemolecular -loops 64 -p 16) s
+5 489 M
+(" << endl;) s
+5 478 M
+(          cout << endl;) s
+5 467 M
+(          return 0;) s
+5 456 M
+(        }) s
+5 445 M
+(      else if \(strcmp\(argv[i], "-alpha"\) == 0\) ) s
+5 434 M
+(        {) s
+5 423 M
+(          // Read inflow factor) s
+5 412 M
+(          alpha = atof\(argv[++i]\); // default 1/10) s
+5 401 M
+(          beta=alpha;) s
+5 390 M
+(        }) s
+5 379 M
+(      else if \(strcmp\(argv[i], "-beta"\) == 0\)) s
+5 368 M
+(        {) s
+5 357 M
+(          // Read outflow factor) s
+5 346 M
+(          // If omitted inflow=outflow rate) s
+5 335 M
+(          beta = atof\(argv[++i]\); // default 2) s
+5 324 M
+(        }) s
+5 313 M
+(      else if \(strcmp\(argv[i], "-mass"\) == 0\)) s
+5 302 M
+(        {) s
+5 291 M
+(          // Solves the equation in mass flow form) s
+5 280 M
+(          numberDensityRep=false;         ) s
+5 269 M
+(        }) s
+5 258 M
+(      else if \(strcmp\(argv[i], "-k"\) == 0\)) s
+5 247 M
+(        {) s
+5 236 M
+(          // read constants appearing in multiplicative kernel k\(x,y\)=c*x^a*y^b) s
+5 225 M
+(          // c=argv[++i];) s
+5 214 M
+(          // a=argv[++i];) s
+5 203 M
+(          // b=argv[++i];) s
+5 192 M
+(          ) s
+5 181 M
+(          // Just read one of the 3 basic kernel types with analytic solution for now) s
+5 170 M
+(          char *kArg=argv[++i];) s
+5 159 M
+(          if \(strcmp\(kArg, "additive"\) == 0\)) s
+5 148 M
+(            kernelType=additive;) s
+5 137 M
+(          else if \(strcmp\(kArg, "multiplicative"\) == 0\)) s
+5 126 M
+(            kernelType=multiplicative;) s
+5 115 M
+(          else if \(strcmp\(kArg, "continuum"\) == 0\)) s
+5 104 M
+(            kernelType=continuum;) s
+5 93 M
+(          else if \(strcmp\(kArg, "freemolecular"\) == 0\)) s
+5 82 M
+(            kernelType=freemolecular;) s
+5 71 M
+(          else if \(strcmp\(kArg, "kinetic"\) == 0\)) s
+5 60 M
+(            kernelType=kinetic;) s
+5 49 M
+(          else if \(strcmp\(kArg, "shearlinear"\) == 0\)) s
+5 38 M
+(            kernelType=shearlinear;) s
+5 27 M
+(          else if \(strcmp\(kArg, "shearnonlinear"\) == 0\)) s
+5 16 M
+(            kernelType=shearnonlinear;) s
+5 5 M
+(          else if \(strcmp\(kArg, "settling"\) == 0\)) s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 5 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (5) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(            kernelType=settling;) s
+5 676 M
+(          else if \(strcmp\(kArg, "inertiasettling"\) == 0\)) s
+5 665 M
+(            kernelType=inertiasettling;) s
+5 654 M
+(          else if \(strcmp\(kArg, "berry"\) == 0\)) s
+5 643 M
+(            kernelType=berry;) s
+5 632 M
+(          else if \(strcmp\(kArg, "condensation"\) == 0\)) s
+5 621 M
+(            kernelType=condensation;) s
+5 610 M
+(          else if \(strcmp\(kArg, "spmtest"\) == 0\)) s
+5 599 M
+(            kernelType=spmtest;) s
+5 588 M
+(          else) s
+5 577 M
+(            kernelType=constant; // actually this is default anyway) s
+5 566 M
+(        }) s
+5 555 M
+(      else if \(strcmp\(argv[i], "-p"\) == 0\)) s
+5 544 M
+(        {) s
+5 533 M
+(          // Read p, where the maximum cluster size, N=2^p) s
+5 522 M
+(          p = atoi\(argv[++i]\); // default 16) s
+5 511 M
+(        }) s
+5 500 M
+(      else if \(strcmp\(argv[i], "-loops"\) == 0\)) s
+5 489 M
+(        {) s
+5 478 M
+(          // Read number of outer convergence loops) s
+5 467 M
+(          outerItLoops = atoi\(argv[++i]\); // default 4) s
+5 456 M
+(        }) s
+5 445 M
+(    }) s
+5 423 M
+(  const unsigned long N=pow\(2,p\); // Max particle size, i.e., i<N in n_i. # of particle) s
+5 412 M
+(s is sum_i n_i) s
+5 401 M
+(  // I choose a power of 2, because for pure coagulations the cluster sizes double with) s
+5 390 M
+( each iteration) s
+5 379 M
+(  // so we can't do more than log2\(N\)=p iterations before gelation occurs.) s
+5 368 M
+(  const int L=outerItLoops*floor\(log2\(N\)\); // Number of iterations to perform) s
+5 357 M
+(  ) s
+5 346 M
+(  // Find out which kernel type is selected) s
+5 335 M
+(  switch \(kernelType\)) s
+5 324 M
+(    {) s
+5 313 M
+(    case continuum:) s
+5 302 M
+(      kernelName="continuum";) s
+5 291 M
+(      break;) s
+5 280 M
+(    case freemolecular: ) s
+5 269 M
+(      kernelName="freemolecular";) s
+5 258 M
+(      break;) s
+5 247 M
+(    case kinetic:) s
+5 236 M
+(      kernelName="kinetic";) s
+5 225 M
+(      break;) s
+5 214 M
+(    case shearlinear:) s
+5 203 M
+(      kernelName="shearlinear";) s
+5 192 M
+(      break;) s
+5 181 M
+(    case shearnonlinear:) s
+5 170 M
+(      kernelName="shearnonlinear";) s
+5 159 M
+(      break;) s
+5 148 M
+(    case settling:) s
+5 137 M
+(      kernelName="settling";) s
+5 126 M
+(      break;) s
+5 115 M
+(    case inertiasettling:) s
+5 104 M
+(      kernelName="inertiasettling";) s
+5 93 M
+(      break;) s
+5 82 M
+(    case berry:) s
+5 71 M
+(      kernelName="berry";) s
+5 60 M
+(      break;) s
+5 49 M
+(    case condensation:) s
+5 38 M
+(      kernelName="condensation";) s
+5 27 M
+(      break;) s
+5 16 M
+(      // Analytic kernels      ) s
+5 5 M
+(    case additive:) s
+_R
+S
+%%Page: (6) 6
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 6 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (6) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(      kernelName="additive";) s
+5 676 M
+(      break;) s
+5 665 M
+(    case multiplicative:) s
+5 654 M
+(      kernelName="multiplicative";) s
+5 643 M
+(      break;) s
+5 632 M
+(    case spmtest:) s
+5 621 M
+(      kernelName="spmtest";) s
+5 610 M
+(      break;  ) s
+5 599 M
+(    default: // constant kernel) s
+5 588 M
+(      kernelName="constant";) s
+5 577 M
+(    }) s
+5 566 M
+(  ) s
+5 555 M
+(  // Set up output file streams) s
+5 544 M
+(  ofstream outputFile;) s
+5 533 M
+(  ofstream momentsFile;) s
+5 522 M
+(  //ofstream diamsFile;) s
+5 500 M
+(  string outputFileName=dataDir+kernelName+"_data_";) s
+5 489 M
+(  string momentsFileName=dataDir+kernelName+"_moments_";) s
+5 478 M
+(  //string diamsFileName=dataDir+"diameters_";) s
+5 467 M
+(  string ext=".txt";) s
+5 445 M
+(  string desc;) s
+5 434 M
+(  stringstream out;) s
+5 423 M
+( ) s
+5 412 M
+(  // For simplicity let's index stuff from 1 - N instead of 0 - \(N-1\)) s
+5 401 M
+(  double *n = new double[N+1];  // Allocate N ints and save ptr in n. Requires 2^{p+3-1) s
+5 390 M
+(0} Mb, i.e., ~8Gb when p=20.) s
+5 379 M
+(  double *nold = new double[N+1];) s
+5 368 M
+(  //double K[N][N];) s
+5 357 M
+(  double d, summa;) s
+5 346 M
+(  ) s
+5 335 M
+(  double n_in;) s
+5 324 M
+(  ) s
+5 313 M
+(  //vector<double> xDiam \(N\);) s
+5 302 M
+(  ) s
+5 291 M
+(  // Initialise PSD to a delta delta_{i1}, i.e., mono-dispersed) s
+5 280 M
+(  for \(unsigned long i=1; i<=N; i++\)) s
+5 269 M
+(    {  ) s
+5 258 M
+(      n[i] = 0e0;  ) s
+5 247 M
+(    }) s
+5 236 M
+(  n[1]=1e0;) s
+5 225 M
+(    ) s
+5 214 M
+(  //out << N;) s
+5 203 M
+(  out << "p" << p << "_alpha" << alpha << "_beta" << beta << "_loops" << outerItLoops;) s
+5 192 M
+(  desc=out.str\(\);) s
+5 181 M
+(  ) s
+5 170 M
+(  outputFileName+=desc+ext;) s
+5 159 M
+(  momentsFileName+=desc+ext;) s
+5 148 M
+(  //diamsFileName+=desc+ext;) s
+5 126 M
+(  outputFile.open\(outputFileName.c_str\(\), ios::out\);) s
+5 115 M
+(  momentsFile.open\(momentsFileName.c_str\(\), ios::out\);) s
+5 104 M
+(  //diamsFile.open\(diamsFileName.c_str\(\), ios::out\);) s
+5 82 M
+(  cout << "Running iterative solver \(";) s
+5 71 M
+(  if\(numberDensityRep\)) s
+5 60 M
+(    cout << "in terms of number density";) s
+5 49 M
+(  else) s
+5 38 M
+(    cout << "in massflow form";) s
+5 27 M
+(  cout << "\) with maximum particle size of " << N << " and " << L << " iterations." << ) s
+5 16 M
+(endl << endl;) s
+5 5 M
+(  kernelName[0]=toupper\(kernelName[0]\); // capitalise) s
+_R
+S
+%%Page: (7) 7
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 7 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (7) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(  cout << kernelName << " kernel selected." << endl;) s
+5 676 M
+(  cout << "Inflow rate \(1/alpha\):" << 1/alpha << endl;) s
+5 665 M
+(  cout << "Outflow rate \(1/beta\):" << 1/beta << endl;) s
+5 654 M
+(  cout << endl;) s
+5 643 M
+(  ) s
+5 632 M
+(  cout.precision\(10\);) s
+5 621 M
+(  cout.width\(20\);) s
+5 610 M
+(  //cout.fill\('0'\);) s
+5 599 M
+(  //cout.setf\(ios::showpos\); ) s
+5 588 M
+(  cout.setf\(ios::scientific\); ) s
+5 577 M
+(  outputFile.precision\(8\);) s
+5 566 M
+(  momentsFile.precision\(8\);) s
+5 544 M
+(  // Output header) s
+5 533 M
+(  cout << "Iter\\tm0\\t\\t\\tm1\\t\\t\\tm2\\t\\t\\tm3" << endl;) s
+5 522 M
+(    ) s
+5 511 M
+(  int l=1;) s
+5 500 M
+(  ) s
+5 489 M
+(  // Iterate L times) s
+5 478 M
+(  while \(l<=L\)) s
+5 467 M
+(    {) s
+5 456 M
+(      ) s
+5 445 M
+(      // Let's compute the moments of the distribution) s
+5 434 M
+(      for\(int moment=0;moment<noMoments;moment++\)) s
+5 423 M
+(        {) s
+5 412 M
+(          moments[moment]=0e0;) s
+5 401 M
+(          for\(unsigned long i=1;i<=N;i++\)) s
+5 390 M
+(            {) s
+5 379 M
+(              moments[moment]+=pow\(i,moment\)*n[i];) s
+5 368 M
+(            }) s
+5 357 M
+(        }) s
+5 346 M
+(      ) s
+5 335 M
+(      /*) s
+5 324 M
+(      for\(int i=0;i<N;i++\)) s
+5 313 M
+(        {) s
+5 302 M
+(          cout << n[i] << " ";) s
+5 291 M
+(        }) s
+5 280 M
+(      cout << endl;) s
+5 269 M
+(      ) s
+5 258 M
+(      system\("sleep 0"\);) s
+5 247 M
+(      */) s
+5 236 M
+(      ) s
+5 225 M
+(      cout << l << "\\t" << moments[0] << "\\t" <<moments[1] << "\\t" << moments[2] << "\\t) s
+5 214 M
+(" << moments[3] << endl;) s
+5 203 M
+(      momentsFile << l << "\\t" << moments[0] << "\\t" <<moments[1] << "\\t" << moments[2]) s
+5 192 M
+( << "\\t" << moments[3] << endl;) s
+5 181 M
+(      ) s
+5 170 M
+(      // Update old distribution to new distribution) s
+5 159 M
+(      for\(unsigned long i=1;i<=N;i++\)) s
+5 148 M
+(        {) s
+5 137 M
+(          nold[i]=n[i];) s
+5 126 M
+(        }) s
+5 115 M
+(      ) s
+5 104 M
+(      for\(unsigned long i=1;i<=N;i++\) // Loop over N particle sizes) s
+5 93 M
+(        {) s
+5 82 M
+(          ) s
+5 71 M
+(          // Compute sums in numerator and denominator) s
+5 60 M
+(          d=0e0;) s
+5 49 M
+(          for\(unsigned long j=1;j<=N;j++\)) s
+5 38 M
+(            {) s
+5 27 M
+(              if\(numberDensityRep\)) s
+5 16 M
+(                d+=k\(i,j\)*nold[j];) s
+5 5 M
+(              else) s
+_R
+S
+%%Page: (8) 8
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 8 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (8) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(                d+=k\(i,j\)*nold[j]/j;) s
+5 676 M
+(            }) s
+5 665 M
+(          ) s
+5 654 M
+(          summa=0e0;) s
+5 643 M
+(          for\(unsigned long j=1;j<=i-1;j++\)) s
+5 632 M
+(            {) s
+5 621 M
+(              //summa+=K[i-j][j]*nold[i-j]*nold[j];) s
+5 610 M
+(              if\(numberDensityRep\)) s
+5 599 M
+(                summa+=k\(i-j,j\)*nold[i-j]*nold[j];) s
+5 588 M
+(              else) s
+5 577 M
+(                summa+=k\(i-j,j\)*nold[i-j]*nold[j]/j;) s
+5 566 M
+(            }) s
+5 555 M
+(          ) s
+5 544 M
+(          //cout <<"i="<<i<<", d="<<d<<", summa="<<summa<<endl;) s
+5 533 M
+(          ) s
+5 522 M
+(          // Evaluate n_in \(here delta_{i1}\), i.e., clusters of size 1 flow into the do) s
+5 511 M
+(main ) s
+5 500 M
+(          if\(i==1\)) s
+5 489 M
+(            n_in=1e0;) s
+5 478 M
+(          else) s
+5 467 M
+(            n_in=0e0;) s
+5 456 M
+(          ) s
+5 445 M
+(          if\(numberDensityRep\)) s
+5 434 M
+(            summa*=0.5;) s
+5 423 M
+(                  ) s
+5 412 M
+(          // Iterate baby!) s
+5 401 M
+(          //n[i]=\(n_in/alpha+0.5*summa\)/\(1e0/beta+d\);) s
+5 390 M
+(          n[i]=\(n_in/alpha+summa\)/\(1e0/beta+d\);) s
+5 379 M
+(              ) s
+5 368 M
+(          //n[i]=0.5*summa/d; // Pure coagulation ) s
+5 357 M
+(          ) s
+5 346 M
+(        }) s
+5 335 M
+(      ) s
+5 324 M
+(      l++; // Update iteration counter) s
+5 313 M
+(      ) s
+5 302 M
+(    }) s
+5 291 M
+(  ) s
+5 280 M
+(  // Dump steady-state PSD) s
+5 269 M
+(  for\(unsigned long i=1;i<=N;i++\) // Loop over N particle sizes) s
+5 258 M
+(    {) s
+5 247 M
+(      ) s
+5 236 M
+(      outputFile << i << "\\t" << n[i] << endl;) s
+5 225 M
+(    }) s
+5 214 M
+(  ) s
+5 203 M
+(  // Close files) s
+5 192 M
+(  outputFile.close\(\);) s
+5 181 M
+(  momentsFile.close\(\);) s
+5 170 M
+(  ) s
+5 159 M
+(  ) s
+5 148 M
+(  // Clean up memory like a good boy) s
+5 137 M
+(  delete [] n;  ) s
+5 126 M
+(  n = NULL;    ) s
+5 115 M
+(  ) s
+5 104 M
+(  delete [] nold; ) s
+5 93 M
+(  nold = NULL;) s
+5 82 M
+(  ) s
+5 71 M
+(  delete [] moments;) s
+5 60 M
+(  moments = NULL; ) s
+5 49 M
+(  ) s
+5 38 M
+(  //delete [][] K;) s
+5 27 M
+(  //K=NULL; ) s
+5 16 M
+(  ) s
+5 5 M
+(  ) s
+_R
+S
+%%Page: (9) 9
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 9 def
+/fname (source/pbSolverIterative.c++) def
+/fdir (source/) def
+/ftail (pbSolverIterative.c++) def
+% User defined strings:
+/fmodstr (Tue Jun 28 16:19:05 2011) def
+/pagenumstr (9) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 687 M
+(  return 0;) s
+5 676 M
+(  ) s
+5 665 M
+(}) s
+_R
+S
+%%Trailer
+%%Pages: 9
+%%DocumentNeededResources: font Courier-Bold Courier 
+%%EOF

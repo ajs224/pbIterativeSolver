@@ -1,0 +1,11 @@
+data/
+*.o
+*.log
+*~
+source/*~
+include/*~
+code.old/
+*.txt
+Debug/
+Release
+*.gz
