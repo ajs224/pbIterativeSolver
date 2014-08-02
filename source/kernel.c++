@@ -1,12 +1,11 @@
 #include<cmath>
-#include "mfa_analytic.h"
-#include "mfa_functions.h"
+#include <cstdlib>
+#include "mfa_params.h"
 
 // Coagulation kernel definition
 double k(unsigned long int i, unsigned long int j)
 {
   
-  using namespace std;
   using namespace mfaAnalytic;
   
   switch (kernelType)
