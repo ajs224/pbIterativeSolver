@@ -32,6 +32,7 @@
 #include "random.h"
 #include "mfa_functions.h"
 #include "mfa_params.h"
+#include "Cell.h"
 
 int main(int argc, char *argv[])
 {
@@ -118,26 +119,6 @@ int main(int argc, char *argv[])
 
   string desc;
   stringstream out;
- 
-  // For simplicity let's index stuff from 1 - N instead of 0 - (N-1)
-  double *n = new double[N+1];  // Allocate N ints and save ptr in n. Requires 2^{p+3-10} Mb, i.e., ~8Gb when p=20.
-  double *nold = new double[N+1];
-  //double K[N][N];
-  double d, summa;
-  
-  double n_in;
-  
-  //vector<double> xDiam (N);
-  
-  // Initialise PSD to a delta delta_{i1}, i.e., mono-dispersed
-  for (unsigned long i=1; i<=N; i++)
-    {  
-      n[i] = 0e0;  
-    }
-  n[1]=1e0;
-    
-  //out << N;
-
   
   out << "p" << p << "_alpha" << alpha << "_beta" << beta;
   if (maxRes > 0e0)
@@ -199,12 +180,20 @@ int main(int argc, char *argv[])
 
   double currMaxRes = 0e0;
     
+  // Inialise previous moments array which is used for calculating residuals
   for(int moment=0;moment<noMoments;moment++)
     {
       momentsPrev[moment]=0e0;
     }
   
-      
+
+  
+  Cell reactorCell = Cell(alpha,beta,N);
+  reactorCell.initDist(mono); // Set initial number density distribution 
+  reactorCell.initInDist(mono); // Set distribution of inflowing particles
+
+  double d, summa;
+    
   // Iterate L times
   while (isRunning)
     {      
@@ -216,7 +205,7 @@ int main(int argc, char *argv[])
 	  moments[moment]=0e0;
       	  for(unsigned long i=1;i<=N;i++)
 	    {
-	      moments[moment]+=pow(i,moment)*n[i];
+	      moments[moment]+=pow(i,moment)*reactorCell.getNumDens(i);
 	    }
 	  
 	  double currRes = abs(moments[moment] - momentsPrev[moment]);
@@ -227,29 +216,14 @@ int main(int argc, char *argv[])
 	  momentsPrev[moment] = moments[moment];
 	  
 	}
-      
-      //cout << "Current max res = " << currMaxRes << endl;
-
-      
-      /*
-      for(int i=0;i<N;i++)
-	{
-	  cout << n[i] << " ";
-	}
-      cout << endl;
-      
-      system("sleep 0");
-      */
-      
+  
+       
       cout << l << "\t" << moments[0] << "\t" <<moments[1] << "\t" << moments[2] << "\t" << moments[3] << endl;
       momentsFile << l << "\t" << moments[0] << "\t" <<moments[1] << "\t" << moments[2] << "\t" << moments[3] << endl;
       
       // Update old distribution to new distribution
-      for(unsigned long i=1;i<=N;i++)
-	{
-     	  nold[i]=n[i];
-	}
-      
+      reactorCell.updateDist(); 
+          
       for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
 	{
 	  
@@ -258,9 +232,9 @@ int main(int argc, char *argv[])
 	  for(unsigned long j=1;j<=N;j++)
 	    {
 	      if(numberDensityRep)
-		d+=k(i,j)*nold[j];
+		d+=k(i,j)*reactorCell.getOldNumDens(j);
 	      else
-		d+=k(i,j)*nold[j]/j;
+		d+=k(i,j)*reactorCell.getOldNumDens(j)/j;
 	    }
 	  
 	  summa=0e0;
@@ -268,9 +242,9 @@ int main(int argc, char *argv[])
 	    {
 	      //summa+=K[i-j][j]*nold[i-j]*nold[j];
 	      if(numberDensityRep)
-		summa+=k(i-j,j)*nold[i-j]*nold[j];
+		summa+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j);
 	      else
-		summa+=k(i-j,j)*nold[i-j]*nold[j]/j;
+		summa+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
 	    }
 	  
 	  //cout <<"i="<<i<<", d="<<d<<", summa="<<summa<<endl;
@@ -285,25 +259,16 @@ int main(int argc, char *argv[])
 	      summa =0e0;
 	    }
 	  
-
-	  if(inDist == mono)
-	    n_in = nIn(i,1); // delta distribtion
-	  else if(inDist == uniform)
-	    n_in = nIn(i,mtrand.randInt(N-1)+1); // uniform distribtion
-	  else
-	    {
-	      cout << "m_in distribtion error!" << endl;
-	      return 0;
-	    }
-	  
-
-
-
+	  /*
+	  cout << "n_in = " << n_in << endl;
+	  cin.get();
+	  cin.sync();
+	  */
 	    
 	  
 	  // Iterate baby!
 	  //n[i]=(n_in/alpha+0.5*summa)/(1e0/beta+d);
-	  n[i]=(n_in/alpha+summa)/(1e0/beta+d);
+	  reactorCell.setNumDens(i,(reactorCell.getInDist(i)/alpha+summa)/(1e0/beta+d));
 	      
 	  //n[i]=0.5*summa/d; // Pure coagulation 
 	  
@@ -341,7 +306,7 @@ int main(int argc, char *argv[])
   for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
     {
       
-      outputFile << i << "\t" << n[i] << endl;
+      //outputFile << i << "\t" << n[i] << endl;
     }
   
   // Close files
@@ -349,12 +314,7 @@ int main(int argc, char *argv[])
   momentsFile.close();
   
   
-  // Clean up memory like a good boy
-  delete [] n;  
-  n = NULL;    
-  
-  delete [] nold; 
-  nold = NULL;
+
   
   delete [] moments;
   moments = NULL; 
