@@ -7,8 +7,8 @@ COMPILER = g++
 TARGET= pbIterativeSolver
 SRC=./source
 
-${TARGET}: ${TARGET}.o mfa_params.o n_in.o kernel.o parse_args.o Cell.o #moments.o Particle.o #theta.o
-	${COMPILER} -o ${TARGET} ${FLAGS} ${TARGET}.o mfa_params.o n_in.o kernel.o parse_args.o Cell.o
+${TARGET}: ${TARGET}.o mfa_params.o n_in.o kernel.o parse_args.o Cell.o Solver.o #moments.o Particle.o #theta.o
+	${COMPILER} -o ${TARGET} ${FLAGS} ${TARGET}.o mfa_params.o n_in.o kernel.o parse_args.o Cell.o Solver.o
 
 ${TARGET}.o: ${SRC}/${TARGET}.c++
 	${COMPILER} -c ${FLAGS} ${SRC}/${TARGET}.c++
@@ -37,6 +37,9 @@ Particle.o: ${SRC}/Particle.c++
 Cell.o:	${SRC}/Cell.c++
 	${COMPILER} -c ${FLAGS} ${SRC}/Cell.c++	
 
+Solver.o: ${SRC}/Solver.c++
+	${COMPILER} -c ${FLAGS} ${SRC}/Solver.c++	
+	
 clean:
 	rm ${TARGET} *.o
 

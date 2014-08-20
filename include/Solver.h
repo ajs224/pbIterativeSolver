@@ -8,13 +8,65 @@
 #ifndef SOLVER_H
 #define	SOLVER_H
 
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
 class Solver {
+    
+    
 public:
     Solver();
     Solver(const Solver& orig);
     virtual ~Solver();
-private:
+    
+    
+    int parseArgs(int argc, char *argv[]);
+    void setup();
+    
+    // Accessor methods
+    double getIn() {return alpha;}
+    double getOut() {return beta;}
+    
+    std::string getKernelName(){ return kernelName;}
+    const unsigned int get_p(){return p;} 
+    const unsigned long getN(){return N;}
+    const unsigned long getL(){return L;}
+    
+    bool isNumberDensityRep() {return numberDensityRep;}
+    bool isCoagOn() {return coagOn;}
+    
+    //std::ofstream & getOutputFile(){return &outputFile;};
+    //std::ofstream & getMomentsFile(){return &momentsFile;};
 
+    double getMaxRes(){return maxRes;}
+    
+    void writeMoments(int l, double * moments);
+    void writeOutput(std::string outLine);
+    
+private:
+    double alpha;
+    double beta;
+    bool numberDensityRep;
+    mfaAnalytic::distributions inDist;
+    std::string inDistName;
+    std::string kernelName;
+    bool coagOn;
+    unsigned int p;
+    unsigned int outerItLoops;
+    unsigned long int L;
+    double maxRes;
+    unsigned long N; 
+    
+    //ofstream diamsFile;
+    std::string outputFileName;
+    std::string momentsFileName;
+    
+    // Set up output file streams
+    std::ofstream outputFile;
+    std::ofstream momentsFile;
+    
 };
 
 #endif	/* SOLVER_H */

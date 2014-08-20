@@ -4,6 +4,7 @@
     <df root="." name="0">
       <df name="source">
         <in>Cell.c++</in>
+        <in>Solver.c++</in>
         <in>kernel.c++</in>
         <in>mfa_params.c++</in>
         <in>n_in.c++</in>
@@ -46,17 +47,19 @@
           </ccTool>
         </makeTool>
       </makefileType>
-      <item path="source/Cell.c++" ex="false" tool="1" flavor2="0">
+      <item path="source/Cell.c++" ex="false" tool="1" flavor2="4">
       </item>
-      <item path="source/kernel.c++" ex="false" tool="1" flavor2="0">
+      <item path="source/Solver.c++" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="source/mfa_params.c++" ex="false" tool="1" flavor2="0">
+      <item path="source/kernel.c++" ex="false" tool="1" flavor2="4">
       </item>
-      <item path="source/n_in.c++" ex="false" tool="1" flavor2="0">
+      <item path="source/mfa_params.c++" ex="false" tool="1" flavor2="4">
       </item>
-      <item path="source/parse_args.c++" ex="false" tool="1" flavor2="0">
+      <item path="source/n_in.c++" ex="false" tool="1" flavor2="4">
       </item>
-      <item path="source/pbIterativeSolver.c++" ex="false" tool="1" flavor2="0">
+      <item path="source/parse_args.c++" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="source/pbIterativeSolver.c++" ex="false" tool="1" flavor2="4">
       </item>
     </conf>
   </confs>

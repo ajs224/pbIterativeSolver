@@ -55,6 +55,7 @@
         <in>mfa_params.c++</in>
         <in>moments.c++</in>
         <in>n_in.c++</in>
+        <in>newfile.cpp</in>
         <in>parse_args.c++</in>
         <in>pbIterativeSolver.c++</in>
         <in>theta.c++</in>

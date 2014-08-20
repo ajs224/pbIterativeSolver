@@ -26,6 +26,8 @@ public:
     void setOut(double out){beta = out;}
     */
     
+
+    
      double * getDist(){return n;}
      double * getOldDist(){return nold;}
     

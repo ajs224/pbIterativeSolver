@@ -15,18 +15,7 @@ double theta(double x, double rate); // Outflow rate
 //unsigned long int mIn(unsigned long int i); // Inflowing particle distribution
 
 
-int parseArgs(int argc, char *argv[],
-	      double & alpha,
-	      double & beta,
-	      bool & numberDensityRep,
-	      mfaAnalytic::distributions & inDist,
-	      std::string & inDistName,
-	      std::string & kernelName,
-	      bool & coagOn,
-	      unsigned int & p,
-	      unsigned int & outerItLoops  ,   
-	      unsigned long int & L,
-	      double & maxRes);
+
 
 /*
 double interpMon(double evalTime, double t1, double t2, double p1, double p2)
