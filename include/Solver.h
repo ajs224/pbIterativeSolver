@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "Cell.h"
 
 class Solver {
     
@@ -43,7 +44,7 @@ public:
     double getMaxRes(){return maxRes;}
     
     void writeMoments(int l, double * moments);
-    void writeOutput(std::string outLine);
+    void writeOutput(Cell & reactorCell);
     
 private:
     double alpha;

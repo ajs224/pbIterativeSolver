@@ -1,58 +1,28 @@
-/* 
- * File:   solver.cpp
- * Author: ajs224
- * 
- * Created on 18 August 2014, 15:02
- */
-
 #include <iostream>
-#include <sstream>
-#include <fstream>
 #include <string>
 #include <cstring>
 #include <cstdlib>
 #include <cmath>
 #include "mfa_params.h" // Needed for kernelType
 #include "mfa_functions.h"
-#include "Solver.h"
-#include "Cell.h"
 
-Solver::Solver()
-{
-
-}
-
-Solver::Solver(const Solver& orig) {
-}
-
-Solver::~Solver()
-{
-    // Close files
-    outputFile.close();
-    momentsFile.close();
-}
-
-int Solver::parseArgs(int argc, char *argv[])
+int parseArgs(int argc, char *argv[],
+	      double & alpha,
+	      double & beta,
+	      bool & numberDensityRep,
+	      mfaAnalytic::distributions & inDist,
+	      std::string & inDistName,
+	      std::string & kernelName,
+	      bool & coagOn,
+	      unsigned int & p,
+	      unsigned int & outerItLoops  ,   
+	      unsigned long int & L,
+	      double & maxRes)
 {
 
   using namespace std;
   using namespace mfaAnalytic;
 
-  // Default values
-  L = 0; // no of iterations to perform
-  p=16; // Maximum cluster size N=2^p, default is 16 (over-ridden with the -p flag)
-  // Sometimes we can improve the convergence by doing more than log2(N) iterations (careful not to do too many though--div 0!)
-  outerItLoops=4; // Try increasing this to around 256 for non constant kernels (override with -loops flag) 
-  kernelType=constant; // default kernel type
-  inDistName="delta";
-  coagOn=true;
-  alpha=1e-1;
-  beta=alpha;
-  numberDensityRep=true;
-  maxRes = 0e0; // maximum residual tolerance
-  
-  
-  
   if ((argc == 1) || (strcmp(argv[1], "--help") == 0))
     {
 
@@ -201,6 +171,7 @@ int Solver::parseArgs(int argc, char *argv[])
 	{
 	  // Read number of outer convergence loops
 	  maxRes = atof(argv[++i]); //
+	  
 	}
       else if (strcmp(argv[i], "-nocoag") == 0)
 	{
@@ -257,118 +228,7 @@ int Solver::parseArgs(int argc, char *argv[])
     kernelName = "nocoag";
   
 
-  //const int L=outerItLoops*floor(log2(N)); // Number of iterations to perform
-  if(L == 0 && maxRes == 0e0)
-    {
-      L=outerItLoops*p;
-    }
-  
-  N=pow(2,p); // Max particle size, i.e., i<N in n_i. # of particles is sum_i n_i
-  // I choose a power of 2, because for pure coagulations the cluster sizes double with each iteration
-  // so we can't do more than log2(N)=p iterations before gelation occurs.
-
-  
   return 0;
 
 }
 
-void Solver::setup()
-{
-    using namespace mfaAnalytic;
-    using namespace std;
-    
-    string repType;
-    if (numberDensityRep)
-        repType="_nd";
-    else
-        repType="_mf";
-
-    outputFileName=dataDir+kernelName+"_data_";
-    momentsFileName=dataDir+kernelName+"_moments_";
-   
-    //string diamsFileName=dataDir+"diameters_";
-    string ext=".txt";
-
-    string desc;
-    stringstream out;
-  
-    out << "p" << p << "_alpha" << alpha << "_beta" << beta;
-    if (maxRes > 0e0)
-        out << "_res" << maxRes;
-    else
-        out << "_iters" << L;
-    out << "_" << inDistName;
-    
-    desc=out.str();
-  
-    outputFileName+=desc+repType+ext;
-    momentsFileName+=desc+repType+ext;
-    //diamsFileName+=desc+ext;
-
-    outputFile.open(outputFileName.c_str(), ios::out);
-    momentsFile.open(momentsFileName.c_str(), ios::out);
-    //diamsFile.open(diamsFileName.c_str(), ios::out);
-
-    cout << "Running iterative solver (";
-    if(numberDensityRep)
-        cout << "in terms of number density";
-    else
-        cout << "in massflow form";
-    cout << ") with maximum particle size of " << N;
-    if ( L != 0 )
-     {
-        cout << " for " << L << " iterations.";
-     }
-    else
-    {
-        cout << " until steady-state (with a maximum residual tolerance of "<< maxRes << ").";
-    }
-    cout << endl << endl;
-
-    kernelName[0]=toupper(kernelName[0]); // capitalise
-    if(coagOn)
-        cout << kernelName << " kernel selected." << endl;
-    else
-        cout << "Solving Cauchy problem (in/outflow only)" << endl;
-
-    cout << "Inflowing particles are " << inDistName << " distributed." << endl;
-    cout << "Inflow rate (1/alpha):" << 1/alpha << endl;
-    cout << "Outflow rate (1/beta):" << 1/beta << endl;
-    cout << endl;
-    
-    // Set output precision
-    momentsFile.precision(8);
-    momentsFile.setf(ios::scientific); 
-
-    outputFile.precision(8);
-    outputFile.setf(ios::scientific); 
-}
-
-void Solver::writeMoments(int l, double * moments)
-{
-    //std::stringstream out;
-    //out << l << "\t" << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;	
-  
-    //desc=out.str();
-    //momentsFile.write(out.str(), 3);
-    
-    std::cout << l << "\t";
-    std::cout.precision(10);
-    std::cout.width(20);
-    //std::cout.fill('0');
-    //cout.setf(ios::showpos); 
-    std::cout.setf(std::ios::scientific);  
-   
-    std::cout << moments[0] << "\t" <<moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;
-    momentsFile << l << "\t" << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;	
-}
-
-void Solver::writeOutput(Cell & reactorCell)
-{
-    outputFile.precision(8);
-     // Dump steady-state PSD
-    for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
-    {
-        outputFile << i << "\t" << reactorCell.getNumDens(i) << std::endl;
-    }
-}

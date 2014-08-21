@@ -27,28 +27,39 @@ public:
     */
     
 
+    // Accessor methods
+    double * getDist(){return n;}
+    double * getOldDist(){return nold;}
+  
+    double * getMoments() {return moments;}
     
-     double * getDist(){return n;}
-     double * getOldDist(){return nold;}
+    double getNumDens(unsigned long i) {return n[i];}
+    double getOldNumDens(unsigned long i) {return nold[i];}
+
+    void setNumDens(unsigned long i, double ni) {n[i] = ni;} 
+    double getInDist(unsigned long int i){return nIn[i];}
     
-     void updateDist();
-     void initDist(mfaAnalytic::distributions inDist);    
+        
+    void updateDist();
+    void initDist(mfaAnalytic::distributions inDist);  
+    
+    void initInDist(mfaAnalytic::distributions inDist);
+    void initInDist(double * newInDist);
+    
+    void iterate();
      
-     double getNumDens(unsigned long i) {return n[i];}
-     double getOldNumDens(unsigned long i) {return nold[i];}
-
-     void setNumDens(unsigned long i, double ni) {n[i] = ni;} 
-
-     void initInDist(mfaAnalytic::distributions inDist);
-     void initInDist(double * newInDist);
-     
-     double getInDist(unsigned long int i){return nIn[i];}
+    void initMoments();
+    double calculateMoments();
      
 private:
     
     double alpha, beta;
     unsigned long int N;
 
+      
+    double * moments;
+    double * momentsPrev;
+    
     double *nIn;
     double *n; //new double[N+1];
     double *nold; //new double[N+1];

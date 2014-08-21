@@ -20,6 +20,29 @@
 // time ./pbSolverIterative -alpha 0.1 -k additive -loops 256 -p 10
 //time ./pbSolverIterative -alpha 0.1 -k multiplicative -loops 64 -p 16
 
+/*
+ Structure of the code is as follows:
+ * The Solver class contains all of the simulation parameters and hold methods for writing moments etc * 
+ 
+ * The Cell class contains all of the data for a single cell (n, moments, etc).
+ * A vector of these Cell classes can be strung together to create a quasi-1d reactor
+ */
+
+
+
+/*
+ To do:
+ * Sort dropbox on vienna
+ * Verify code
+ * put calculate moments into class (should it be cell or solver)
+ * encapsulation tutorial
+ * put iterate into cell class
+ * add multicell functionality
+ * compare solution with non-steady solution t<->x, u = 1 m/s
+ 
+ * openFOAM
+ 
+ */
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -45,9 +68,6 @@ int main(int argc, char *argv[])
   
   // Declare a Mersenne Twister random number generator
   MTRand mtrand;// = intRand(loadRandState);
-  
-  double * moments = new double[noMoments];
-  double * momentsPrev = new double[noMoments];
    
   int maxIter = 1000;
   double resCutOff = 1e10;
@@ -72,64 +92,36 @@ int main(int argc, char *argv[])
       return 0;
     }
 
+  // Setup up filenames and print summary of parameters    
   reactorSolver.setup();
   
   // Output header
-  cout << "Iter\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
+  cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
     
-  int l=1;
+  int l=1; // iteration number
   bool isRunning  = true;
-
-  double currMaxRes = 0e0;
     
-  // Inialise previous moments array which is used for calculating residuals
-  for(int moment=0;moment<noMoments;moment++)
-    {
-      momentsPrev[moment]=0e0;
-    }
-   
   Cell reactorCell = Cell(reactorSolver.getIn(),reactorSolver.getOut(),reactorSolver.getN());
   reactorCell.initDist(mono); // Set initial number density distribution 
   reactorCell.initInDist(mono); // Set distribution of inflowing particles
-
+  reactorCell.initMoments(); // Initialise the moments array
+  
   double birthSum, deathSum;
-    
+      
   // Iterate L times
   while (isRunning)
-    {      
-      currMaxRes = 0e0;
-      // Let's compute the moments of the distribution
-      for(int moment=0;moment<noMoments;moment++)
-	{
-	  moments[moment]=0e0;
-      	  for(unsigned long i=1;i<=reactorSolver.getN();i++)
-	    {
-	      moments[moment]+=pow(i,moment)*reactorCell.getNumDens(i);
-	    }
+    {  
+      // Let's compute the moments of the distribution and get the current maximum residual
+      double currMaxRes = reactorCell.calculateMoments();
 	  
-	  double currRes = abs(moments[moment] - momentsPrev[moment]);
-	  if(currRes > currMaxRes)
-	    currMaxRes = currRes;
-	  //cout << "m"<< moment << "residual = " << currRes << endl;
-	  
-	  momentsPrev[moment] = moments[moment];
-	  
-	}
-  
-      
+      // Output the moments to screen and file
+      reactorSolver.writeMoments(l, reactorCell.getMoments());
 
-      
-  
-      reactorSolver.writeMoments(l, moments);
-                              
-      //reactorSolver.getMomentsFile() << l << "\t" << moments[0] << "\t" <<moments[1] << "\t" << moments[2] << "\t" << moments[3] << endl;
-      
       // Update old distribution to new distribution
       reactorCell.updateDist(); 
           
       for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
-	{
-	  
+	{	  
 	  // Compute sums in numerator and denominator
 	  deathSum=0e0;
 	  for(unsigned long j=1;j<=reactorSolver.getN();j++)
@@ -192,41 +184,13 @@ int main(int argc, char *argv[])
 	{
 	  cout << "Carried out " << l << " iterations, with a current residual of " << currMaxRes<< ". Check that there is a steady-state solution." << endl;
 	  isRunning = false;
-	}
-	  
-	  
-
-      
-      
-      
+	}   
     }
   
-  
-  // Dump steady-state PSD
-  for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
-    {
-      
-      //reactorSolver.getOutputFile() << i << "\t" << reactorCell.getNumDens(i) << endl;
-  /*
-       line = cstr(0) + " " + cstr(0) +
-               " " + cstr(0)+"\n ";
-        file.write(line.c_str(), line.length());
-        line = cstr(Rg)+"\n";							//write radius of gyration
-*/
-  }
-  
-  
-  
+    // Dump steady-state PSD
+    reactorSolver.writeOutput(reactorCell);   
 
-  
-  delete [] moments;
-  moments = NULL; 
-  
-  //delete [][] K;
-  //K=NULL; 
-  
-  
-  return 0;
+    return 0;
   
 }
 

@@ -6,28 +6,36 @@
  */
 
 #include<iostream>
+#include <cmath>
 #include <cstdlib>
 #include "Cell.h"
 #include "mfa_params.h"
  
 Cell::Cell() 
 {
-  alpha = 0.1;
-  beta = alpha;
-  N = 1024;
-  nIn = new double[N+1];
-  n = new double[N+1];
-  nold = new double[N+1];
+
+    using namespace mfaAnalytic;
+    alpha = 0.1;
+    beta = alpha;
+    N = 1024;
+    nIn = new double[N+1];
+    n = new double[N+1];
+    nold = new double[N+1];
+    moments = new double[noMoments];
+    momentsPrev = new double[noMoments];
 }
 
 Cell::Cell(double in, double out, unsigned long int noClusters)
 {
+    using namespace mfaAnalytic;
     alpha = in;
     beta = out;
     N = noClusters;
     nIn = new double[N+1];
     n = new double[N+1];
     nold = new double[N+1];
+    moments = new double[noMoments];
+    momentsPrev = new double[noMoments];
     
 }
 
@@ -44,6 +52,10 @@ Cell::~Cell()
   
     delete [] nold; 
     nold = NULL;  
+         
+    delete [] moments;
+    moments = NULL; 
+  
 }
 
 void Cell::updateDist()
@@ -102,3 +114,48 @@ void Cell::initInDist(double * newInDist)
 {
     nIn = newInDist;
 }
+
+void Cell::iterate()
+{
+}
+
+void Cell::initMoments()
+{
+    // Initialise previous moments array which is used for calculating residuals
+    for(int moment=0;moment<mfaAnalytic::noMoments;moment++)
+    {
+        momentsPrev[moment]=0e0;
+    }
+
+}
+
+
+
+double Cell::calculateMoments()
+{
+  
+    double currMaxRes = 0e0;
+    double currRes;
+    // Let's compute the moments of the distribution
+    for(int moment=0;moment<mfaAnalytic::noMoments;moment++)
+    {
+        moments[moment]=0e0;
+        for(unsigned long i=1;i<=N;i++)
+	{
+            moments[moment]+=pow(i,moment)*n[i];
+        }
+	  
+        currRes = std::abs(moments[moment] - momentsPrev[moment]);
+	  
+        momentsPrev[moment] = moments[moment];
+	 
+        if(currRes > currMaxRes)
+            currMaxRes = currRes;
+        
+    }
+  
+    
+    return currMaxRes;
+    
+}
+

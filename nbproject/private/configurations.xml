@@ -56,7 +56,9 @@
         <in>moments.c++</in>
         <in>n_in.c++</in>
         <in>newfile.cpp</in>
+        <in>parse_args (vienna's conflicted copy 2014-08-21).c++</in>
         <in>parse_args.c++</in>
+        <in>pbIterativeSolver (vienna's conflicted copy 2014-08-21).c++</in>
         <in>pbIterativeSolver.c++</in>
         <in>theta.c++</in>
       </df>
