@@ -8,8 +8,11 @@
 //
 // A. J. Smith (ajs224@cam.ac.uk)
 //
-// V4.5
-//
+// Multicell version of code
+// Can implement in two ways:
+// 1.) reach steady-state in each cell before marching to the next
+// 2.) iterate over all cells, reaching steady-state globally
+// Suspect 1 is most efficient
 //---------------------------------------------------------------/
 
 // To run with inflow rate=outflow rate=1, const kernel, 16 outer loops and a max cluster size of 2^10 use: 
