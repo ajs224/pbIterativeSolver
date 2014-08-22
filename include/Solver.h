@@ -14,8 +14,10 @@
 #include <sstream>
 #include "Cell.h"
 
-class Solver {
-    
+class Cell; // Forward declaration (say Cell class exists without defining it)
+
+class Solver
+{  
     
 public:
     Solver();

@@ -9,6 +9,9 @@
 #define	CELL_H
 
 #include "mfa_params.h"
+#include "Solver.h"
+
+class Solver; // Forward declaration (say Solver class exists without defining it)
 
 class Cell 
 {
@@ -45,11 +48,11 @@ public:
     
     void initInDist(mfaAnalytic::distributions inDist);
     void initInDist(double * newInDist);
-    
-    void iterate();
-     
+
     void initMoments();
     double calculateMoments();
+    
+    void iterate(Solver & reactorSolver, Cell & reactorCell, double & birthRate, double & deathRate);
      
 private:
     
