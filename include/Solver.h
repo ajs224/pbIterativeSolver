@@ -46,6 +46,7 @@ public:
     double getMaxRes(){return maxRes;}
     
     void writeMoments(int l, double * moments);
+    void writeFinalMoments(double * moments);
     void writeOutput(Cell & reactorCell);
     
 private:

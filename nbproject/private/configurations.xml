@@ -63,6 +63,38 @@
         <in>theta.c++</in>
       </df>
     </df>
+    <df root="." name="1">
+      <df name="code.old">
+        <df name="spm_iter_old_dropbox">
+          <df name="data">
+          </df>
+          <df name="data_constant_p16_alpha0.1_beta0.1_loops4">
+          </df>
+          <df name="libs">
+          </df>
+        </df>
+      </df>
+      <df name="data">
+        <df name="data_number_density">
+        </df>
+        <df name="data_original">
+          <df name="const">
+          </df>
+          <df name="Figures">
+          </df>
+        </df>
+      </df>
+      <df name="include">
+      </df>
+      <df name="old">
+        <df name="include">
+        </df>
+        <df name="source">
+        </df>
+      </df>
+      <df name="source">
+      </df>
+    </df>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -89,6 +121,8 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
+        <gdb_signals>
+        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -101,8 +135,10 @@
       <runprofile version="9">
         <runcommandpicklist>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" </runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"  -alpha 1 -beta 1 -iters 10 -p 8 -mass -k constant</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <runcommand>"${OUTPUT_PATH}"  -alpha 1 -beta 1 -iters 10 -p 8 -mass -k constant</runcommand>
         <rundir>.</rundir>
         <buildfirst>false</buildfirst>
         <terminal-type>0</terminal-type>

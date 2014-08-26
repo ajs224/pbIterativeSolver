@@ -14,7 +14,6 @@
  
 Cell::Cell() 
 {
-
     using namespace mfaAnalytic;
     alpha = 0.1;
     beta = alpha;
@@ -37,10 +36,28 @@ Cell::Cell(double in, double out, unsigned long int noClusters)
     nold = new double[N+1];
     moments = new double[noMoments];
     momentsPrev = new double[noMoments];
-    
+    //std::cout << "Called cell constructor\n";
+    //std::cout << "N = " << N;
 }
 
 Cell::Cell(const Cell& orig) {
+    using namespace mfaAnalytic;
+    alpha = orig.alpha;
+    beta = orig.beta;
+    N = orig.N;
+    nIn = new double[N+1];
+    n = new double[N+1];
+    nold = new double[N+1];
+    moments = new double[noMoments];
+    momentsPrev = new double[noMoments];
+
+    *nIn = *orig.nIn;
+    *n = *orig.n;
+    *nold = *orig.nold; 
+    *moments = *orig.moments; 
+    *momentsPrev = *orig.momentsPrev;  
+    //std::cout << "Called cell copy constructor\n";    
+    
 }
 
 Cell::~Cell() 
@@ -56,7 +73,8 @@ Cell::~Cell()
          
     delete [] moments;
     moments = NULL; 
-  
+ 
+    //std::cout << "Called cell destructor\n";
 }
 
 void Cell::updateDist()
@@ -69,7 +87,9 @@ void Cell::updateDist()
 
 void Cell::initDist(mfaAnalytic::distributions inDist)
 {
-    
+    //std::cout << "In initDist\n";
+    //std::cout << "N = " << N;
+
     if(inDist == mfaAnalytic::mono)
     {
         for(unsigned long i=1;i<=N;i++)
@@ -113,7 +133,11 @@ void Cell::initInDist(mfaAnalytic::distributions inDist)
 
 void Cell::initInDist(double * newInDist)
 {
-    nIn = newInDist;
+    //*nIn = *newInDist;
+     for(unsigned long i=1;i<=N;i++)
+	{
+            nIn[i] = newInDist[i];
+        }
 }
 
 

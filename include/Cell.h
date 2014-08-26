@@ -42,7 +42,11 @@ public:
     void setNumDens(unsigned long i, double ni) {n[i] = ni;} 
     double getInDist(unsigned long int i){return nIn[i];}
     
+    void setIORates(double in, double out){alpha = in; beta = out;}
         
+    void setId(unsigned long cellId){id = cellId;}
+    unsigned long int getId(){return id;}
+    
     void updateDist();
     void initDist(mfaAnalytic::distributions inDist);  
     
@@ -58,7 +62,7 @@ private:
     
     double alpha, beta;
     unsigned long int N;
-
+    unsigned long int id;
       
     double * moments;
     double * momentsPrev;

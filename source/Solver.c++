@@ -328,6 +328,16 @@ void Solver::writeMoments(int l, double * moments) {
     momentsFile << l << "\t" << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;
 }
 
+void Solver::writeFinalMoments(double * moments){
+    //std::cout << l << "\t";
+    std::cout.precision(10);
+    std::cout.width(20);
+    std::cout.setf(std::ios::scientific);
+
+    std::cout << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3];
+    //momentsFile << l << "\t" << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;
+}
+
 void Solver::writeOutput(Cell & reactorCell) {
     outputFile.precision(8);
     // Dump steady-state PSD
