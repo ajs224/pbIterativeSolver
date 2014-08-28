@@ -109,6 +109,7 @@ void Cell::initDist(mfaAnalytic::distributions inDist)
 
 void Cell::initInDist(mfaAnalytic::distributions inDist)
 {
+    //std::cout << "Initialising in dist to mono" << std::endl;
     if(inDist == mfaAnalytic::mono)
     {
         for(unsigned long i=1;i<=N;i++)
@@ -133,6 +134,7 @@ void Cell::initInDist(mfaAnalytic::distributions inDist)
 
 void Cell::initInDist(double * newInDist)
 {
+    //std::cout << "Initialising in dist to new dist" << std::endl;
     //*nIn = *newInDist;
      for(unsigned long i=1;i<=N;i++)
 	{
@@ -144,6 +146,7 @@ void Cell::initInDist(double * newInDist)
 void Cell::initMoments()
 {
     // Initialise previous moments array which is used for calculating residuals
+    //std::cout << "Initialising moments array" << std::endl;
     for(int moment=0;moment<mfaAnalytic::noMoments;moment++)
     {
         momentsPrev[moment]=0e0;
@@ -218,8 +221,10 @@ void Cell::iterate(Solver & reactorSolver, Cell & reactorCell, double & birthSum
         
         // Iterate baby!
         //n[i]=(n_in/alpha+0.5*summa)/(1e0/beta+d);
-        reactorCell.setNumDens(i, (reactorCell.getInDist(i) / reactorSolver.getIn() + birthSum) / (1e0 / reactorSolver.getOut() + deathSum));
-
+        //reactorCell.setNumDens(i, (reactorCell.getInDist(i) / reactorSolver.getIn() + birthSum) / (1e0 / reactorSolver.getOut() + deathSum));
+        reactorCell.setNumDens(i, (reactorCell.getInDist(i) / alpha + birthSum) / (1e0 / beta + deathSum));
+       
+        
         //n[i]=0.5*summa/d; // Pure coagulation 
 
  

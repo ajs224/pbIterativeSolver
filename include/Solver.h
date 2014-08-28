@@ -39,6 +39,10 @@ public:
     
     bool isNumberDensityRep() {return numberDensityRep;}
     bool isCoagOn() {return coagOn;}
+
+    double delta_x(){return gridLength/(double) noCells;}
+    int getNoCells() {return noCells;} 
+    double getU(){return u;}
     
     //std::ofstream & getOutputFile(){return &outputFile;};
     //std::ofstream & getMomentsFile(){return &momentsFile;};
@@ -46,12 +50,22 @@ public:
     double getMaxRes(){return maxRes;}
     
     void writeMoments(int l, double * moments);
-    void writeFinalMoments(double * moments);
+    void writeFinalMoments(int cell, double x, double u, double * moments, int iter, double res);
+    //void writeFinalMoments(double * moments);
     void writeOutput(Cell & reactorCell);
+    //void writeOutput(int cell, double x, double u, Cell & reactorCell, int iter, double res);
     
 private:
-    double alpha;
-    double beta;
+    // 0D parameters
+    double alpha; // inflow rate
+    double beta; // outflow rate
+    
+    // 1D parameters
+    int noCells;// = 100; // grid consists of 100 cells
+    double gridLength;// = 1; // grid has length 1m
+    double u;// = 1; // velocity in x direction of domain in m/s
+    
+    // Common parameters
     bool numberDensityRep;
     mfaAnalytic::distributions inDist;
     std::string inDistName;

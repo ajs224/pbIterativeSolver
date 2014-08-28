@@ -66,13 +66,8 @@ int main(int argc, char *argv[]) {
     // Declare a Mersenne Twister random number generator
     MTRand mtrand; // = intRand(loadRandState);
 
-    // Parameters
     int maxIter = 1000;
     double resCutOff = 1e10;
-    int noCells = 10; // grid consists of 100 cells
-    double gridLength = 1; // grid has length 1m
-    double u = 1; // velocity in x direction of domain in m/s
-    double delta_x = gridLength/(double) noCells;
 
     double currMaxRes;
     //bool isRunning = true;
@@ -101,27 +96,49 @@ int main(int argc, char *argv[]) {
     // Setup up filenames and print summary of parameters    
     reactorSolver.setup();
 
+    double delta_x = reactorSolver.delta_x();
+ 
     // Output header
-    //cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
-    cout << "Cell\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3\t\t# iters\t\t\tres" << endl;
+    //
+   
+    if(reactorSolver.getNoCells() <= 1)
+        cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
+    else
+        cout << "Cell\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3\t\t# iters\t\t\tres" << endl;
        
-    // Initialise a reactor as a network of noCells cells
-    vector<Cell> reactor(noCells, Cell(reactorSolver.getIn(), reactorSolver.getOut(), reactorSolver.getN()));
+    double in, out;
   
-    for(vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++)
+    if( reactorSolver.getNoCells() > 1 )
     {
-        unsigned long cellId = cellIter - reactor.begin();
-        cellIter->setId(cellId);
+        // This is a quasi 1d reactor, alpha and beta are fixed by the velocity and dimensions of the grid
+        // Inflow (alpha) and outflow rates (beta) are given by alpha^(-1) = beta^(-1) = u/delta_x
+        //cellIter->setIORates(delta_x/u,delta_x/u);
+        in = out = reactorSolver.delta_x()/reactorSolver.getU();
     }
+    else
+    {
+        in = reactorSolver.getIn();
+        out = reactorSolver.getOut();
+    }
+
+    /*
+    cout << reactorSolver.getNoCells() << endl;
+    cout << delta_x << endl;
+    cout << reactorSolver.getU() << endl;
+    cout << in << endl;
+    cout << out << endl;
+    */
     
+    // Initialise a reactor as a network of noCells cells
+    vector<Cell> reactor(reactorSolver.getNoCells(), Cell(in, out, reactorSolver.getN()));
+
     /*
     for(vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++)
     {
         unsigned long cellId = cellIter - reactor.begin();
         cellIter->setId(cellId);
     }
-
-    */
+    */  
     
     // Loop through all cells in the domain, converging to steady-state in each
     for(vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++)
@@ -146,12 +163,8 @@ int main(int argc, char *argv[]) {
             //cout << "Setting n_in distribution to steady-state distributionin cell " << cell-1 << endl;
             vector<Cell>::iterator prevCell = cellIter - 1;
             cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
-            
         }
-        
-        // Inflow (alpha) and outflow rates (beta) are given by alpha^(-1) = beta^(-1) = u/delta_x
-        cellIter->setIORates(delta_x/u,delta_x/u);
-        
+
         double cellBirthSum, cellDeathSum;
 
         int l = 1; // iteration number
@@ -163,7 +176,8 @@ int main(int argc, char *argv[]) {
             currMaxRes = cellIter->calculateMoments();
 
             // Output the moments to screen and file
-            //reactorSolver.writeMoments(l, cellIter->getMoments());
+            if(reactorSolver.getNoCells() <= 1)
+                reactorSolver.writeMoments(l, cellIter->getMoments());
 
             // Update old distribution to new distribution
             cellIter->updateDist();
@@ -190,9 +204,22 @@ int main(int argc, char *argv[]) {
         
         // Print steady-state moments in current cell
         //reactorSolver.writeFinalMoments(cellIter->getMoments());
+        
+        /*
         cout << cell << "\t"; 
         reactorSolver.writeFinalMoments(cellIter->getMoments());
         cout << "\t" << --l << "\t\t" << currMaxRes << endl;
+        */
+        
+        if(reactorSolver.getNoCells() > 1)
+            reactorSolver.writeFinalMoments(cell, cell*delta_x/2.0e0, reactorSolver.getU(), cellIter->getMoments(), --l, currMaxRes);
+
+        
+    
+        // Dump data to file
+        
+        
+    
     }
 
 
