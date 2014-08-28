@@ -153,6 +153,7 @@ int main(int argc, char *argv[]) {
         // Initialise moments in current cell
         cellIter->initMoments();
         
+        /* // Old method
         if (cell == 0)
         {
             //cout << "Setting n_in distribution to mono-dispersed" << endl;
@@ -164,12 +165,34 @@ int main(int argc, char *argv[]) {
             vector<Cell>::iterator prevCell = cellIter - 1;
             cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
         }
-
-        double cellBirthSum, cellDeathSum;
-
+        */
+        
         int l = 1; // iteration number
         bool cellConverged = false; // cell-wise convergence
-            
+        
+        
+        // First cell in domain, apply the boundary condition
+        if (cell == 0)
+        {
+            // Set n = nin
+            // Already called cellIter->initDist(mono), so just need to stop iteration for first cell
+            cellConverged = true;
+            cellIter->calculateMoments();
+            currMaxRes = 0e0;
+            //cellIter->initDist(mono);
+            //cellIter->initInDist(mono); // first cell has mono-dispersed distribution
+        }
+        else
+        {
+            //cout << "Setting n_in distribution to steady-state distributionin cell " << cell-1 << endl;
+            vector<Cell>::iterator prevCell = cellIter - 1;
+            cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
+        }
+        
+        
+        double cellBirthSum, cellDeathSum;
+
+           
         while (!cellConverged) 
         {
             // Let's compute the moments of the distribution and get the current maximum residual
@@ -200,6 +223,7 @@ int main(int argc, char *argv[]) {
                 //cout << "Carried out " << l << " iterations, with a current residual of " << currMaxRes << ". Check that there is a steady-state solution." << endl;
                 cellConverged = true;
             }
+
         }
         
         // Print steady-state moments in current cell
@@ -212,7 +236,7 @@ int main(int argc, char *argv[]) {
         */
         
         if(reactorSolver.getNoCells() > 1)
-            reactorSolver.writeFinalMoments(cell, cell*delta_x/2.0e0, reactorSolver.getU(), cellIter->getMoments(), --l, currMaxRes);
+            reactorSolver.writeFinalMoments(cell, cell*delta_x, reactorSolver.getU(), cellIter->getMoments(), --l, currMaxRes);
 
         
     
