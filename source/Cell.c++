@@ -184,14 +184,14 @@ double Cell::calculateMoments()
     
 }
 
-void Cell::iterate(Solver & reactorSolver, Cell & reactorCell, double & birthSum, double & deathSum)
+void Cell::iterate(Solver & reactorSolver, Cell & reactorCell)
 {
     
 
     for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
     {
         // Compute sums in numerator and denominator
-	deathSum=0e0;
+	double deathSum=0e0;
 	for(unsigned long j=1;j<=reactorSolver.getN();j++)
 	{
 	    if(reactorSolver.isNumberDensityRep())
@@ -200,7 +200,7 @@ void Cell::iterate(Solver & reactorSolver, Cell & reactorCell, double & birthSum
 		deathSum+=k(i,j)*reactorCell.getOldNumDens(j)/j;
 	}
 	  
-	birthSum=0e0;
+	double birthSum=0e0;
 	for(unsigned long j=1;j<=i-1;j++)
             {
                 //summa+=K[i-j][j]*nold[i-j]*nold[j];

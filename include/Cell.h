@@ -56,7 +56,7 @@ public:
     void initMoments();
     double calculateMoments();
     
-    void iterate(Solver & reactorSolver, Cell & reactorCell, double & birthRate, double & deathRate);
+    void iterate(Solver & reactorSolver, Cell & reactorCell);
      
 private:
     

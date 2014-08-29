@@ -31,16 +31,11 @@
  * A vector of these Cell classes can be strung together to create a quasi-1d reactor
  */
 
-
-
 /*
  To do:
- * encapsulation tutorial
- * put iterate into cell class
- * add multicell functionality
  * compare solution with non-steady solution t<->x, u = 1 m/s
- 
  */
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -70,7 +65,6 @@ int main(int argc, char *argv[]) {
     double resCutOff = 1e10;
 
     double currMaxRes;
-    //bool isRunning = true;
     bool converged = false; // global convergence
     int cell;
     
@@ -97,10 +91,11 @@ int main(int argc, char *argv[]) {
     reactorSolver.setup();
 
     double delta_x = reactorSolver.delta_x();
- 
+
+    enum convType{globalConvergence, cellWiseConvergence};
+    
+    
     // Output header
-    //
-   
     if(reactorSolver.getNoCells() <= 1)
         cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
     else
@@ -121,14 +116,6 @@ int main(int argc, char *argv[]) {
         out = reactorSolver.getOut();
     }
 
-    /*
-    cout << reactorSolver.getNoCells() << endl;
-    cout << delta_x << endl;
-    cout << reactorSolver.getU() << endl;
-    cout << in << endl;
-    cout << out << endl;
-    */
-    
     // Initialise a reactor as a network of noCells cells
     vector<Cell> reactor(reactorSolver.getNoCells(), Cell(in, out, reactorSolver.getN()));
 
@@ -169,8 +156,7 @@ int main(int argc, char *argv[]) {
         
         int l = 1; // iteration number
         bool cellConverged = false; // cell-wise convergence
-        
-        
+                
         // First cell in domain, apply the boundary condition
         if (cell == 0)
         {
@@ -189,16 +175,13 @@ int main(int argc, char *argv[]) {
             cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
         }
         
-        
-        double cellBirthSum, cellDeathSum;
-
-           
+        // Find steady-state solution in each cell
         while (!cellConverged) 
         {
             // Let's compute the moments of the distribution and get the current maximum residual
             currMaxRes = cellIter->calculateMoments();
 
-            // Output the moments to screen and file
+            // If this a 0D sim, output the moment convergents to screen and file
             if(reactorSolver.getNoCells() <= 1)
                 reactorSolver.writeMoments(l, cellIter->getMoments());
 
@@ -206,11 +189,14 @@ int main(int argc, char *argv[]) {
             cellIter->updateDist();
 
             // Iterate over all particle (cluster) sizes in cell
-            cellIter->iterate(reactorSolver, *cellIter, cellBirthSum, cellDeathSum);
+            cellIter->iterate(reactorSolver, *cellIter);
 
-            if (reactorSolver.getL() != 0) {
+            if (reactorSolver.getL() != 0) 
+            {
                 cellConverged = !(l <= reactorSolver.getL());
-            } else if (currMaxRes < reactorSolver.getMaxRes()) {
+            } 
+            else if (currMaxRes < reactorSolver.getMaxRes())
+            {
                 // Have reached steady-state with a tolerance of maxRes
                 //cout << "Cell: "<< cell << "Steady-state reached in " << l << " iterations, with a maximum residual of " << currMaxRes << "!" << endl;
                 cellConverged = true;
@@ -224,81 +210,24 @@ int main(int argc, char *argv[]) {
                 cellConverged = true;
             }
 
-        }
+        } // Single cell convergence loop
         
-        // Print steady-state moments in current cell
-        //reactorSolver.writeFinalMoments(cellIter->getMoments());
-        
+ 
         /*
         cout << cell << "\t"; 
         reactorSolver.writeFinalMoments(cellIter->getMoments());
         cout << "\t" << --l << "\t\t" << currMaxRes << endl;
         */
         
+        // Print steady-state moments in current cell (if this a 1D sim)
         if(reactorSolver.getNoCells() > 1)
             reactorSolver.writeFinalMoments(cell, cell*delta_x, reactorSolver.getU(), cellIter->getMoments(), --l, currMaxRes);
-
         
-    
+        
         // Dump data to file
-        
-        
+        //reactorSolver.writeOutput(reactorCell)
+        //reactorSolver.writeOutput(cell, cell*delta_x, reactorCell)   
     
-    }
+    } // Cell iterator
 
-
-
-    
-
-    
-    return 0;
-    
-    // Single cell case   
-    Cell reactorCell = Cell(reactorSolver.getIn(), reactorSolver.getOut(), reactorSolver.getN());
-    reactorCell.initDist(mono); // Set initial number density distribution 
-    reactorCell.initInDist(mono); // Set distribution of inflowing particles
-    reactorCell.initMoments(); // Initialise the moments array
-    
-    
-    int l = 1;
-    double birthSum, deathSum;
-
-    bool isRunning = true;
-    
-    // Iterate L times
-    while (isRunning) {
-        // Let's compute the moments of the distribution and get the current maximum residual
-        double currMaxRes = reactorCell.calculateMoments();
-
-        // Output the moments to screen and file
-        reactorSolver.writeMoments(l, reactorCell.getMoments());
-
-        // Update old distribution to new distribution
-        reactorCell.updateDist();
-
-        // Iterate over all particle (cluster) sizes in cell
-        reactorCell.iterate(reactorSolver, reactorCell, birthSum, deathSum);
-
-        if (reactorSolver.getL() != 0) {
-            isRunning = (l <= reactorSolver.getL());
-        } else if (currMaxRes < reactorSolver.getMaxRes()) {
-            // Have reached steady-state with a tolerance of maxRes
-            cout << "Steady-state reached in " << l << " iterations, with a maximum residual of " << currMaxRes << "!" << endl;
-            isRunning = false;
-        }
-
-
-        l++; // Update iteration counter
-
-        if (l > maxIter || currMaxRes > resCutOff) {
-            cout << "Carried out " << l << " iterations, with a current residual of " << currMaxRes << ". Check that there is a steady-state solution." << endl;
-            isRunning = false;
-        }
-    }
-
-    // Dump steady-state PSD
-    reactorSolver.writeOutput(reactorCell);
-
-    return 0;
-
-}
+} //Main
