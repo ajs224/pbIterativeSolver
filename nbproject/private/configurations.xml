@@ -101,7 +101,7 @@
     <conf name="Default" type="0">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
-        <platform>2</platform>
+        <platform>4</platform>
       </toolsSet>
       <compile>
         <compiledirpicklist>
@@ -121,8 +121,6 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
-        <gdb_signals>
-        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -137,8 +135,10 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" </runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"  -alpha 1 -beta 1 -iters 10 -p 8 -mass -k constant</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"  -cell 10 -u 1 -length 1 -res 1e-10 -p 10 -mass -k constant</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"  -cells 10 -u 1 -length 1 -res 1e-10 -p 10 -mass -k constant</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}"  -alpha 1 -beta 1 -iters 10 -p 8 -mass -k constant</runcommand>
+        <runcommand>"${OUTPUT_PATH}"  -cells 10 -u 1 -length 1 -res 1e-10 -p 10 -mass -k constant</runcommand>
         <rundir>.</rundir>
         <buildfirst>false</buildfirst>
         <terminal-type>0</terminal-type>
