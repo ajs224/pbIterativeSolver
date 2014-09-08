@@ -1,0 +1,12 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ns/call  ns/call  name    
+ 56.98      6.71     6.71 301965312    22.21    22.21  k(unsigned long, unsigned long)
+ 41.81     11.63     4.92                             Cell::iterate(Solver&, Cell&)
+  1.23     11.77     0.15                             nIn(unsigned long, unsigned long)
+  0.00     11.77     0.00        6     0.00     0.00  std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.00     11.77     0.00        5     0.00     0.00  main
+  0.00     11.77     0.00        2     0.00     0.00  Cell::~Cell()
+  0.00     11.77     0.00        1     0.00     0.00  std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*>(char*, char*, std::allocator<char> const&)

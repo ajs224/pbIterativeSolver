@@ -191,38 +191,41 @@ void Cell::iterate(Solver & reactorSolver, Cell & reactorCell)
     for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
     {
         // Compute sums in numerator and denominator
-	double deathSum=0e0;
+	double coagDeathSum=0e0;
 	for(unsigned long j=1;j<=reactorSolver.getN();j++)
 	{
 	    if(reactorSolver.isNumberDensityRep())
-                deathSum+=k(i,j)*reactorCell.getOldNumDens(j);
+                coagDeathSum+=k(i,j)*reactorCell.getOldNumDens(j);
 	    else
-		deathSum+=k(i,j)*reactorCell.getOldNumDens(j)/j;
+		coagDeathSum+=k(i,j)*reactorCell.getOldNumDens(j)/j;
 	}
 	  
-	double birthSum=0e0;
+	double coagBirthSum=0e0;
 	for(unsigned long j=1;j<=i-1;j++)
             {
                 //summa+=K[i-j][j]*nold[i-j]*nold[j];
                 if(reactorSolver.isNumberDensityRep())
-                    birthSum+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j);
+                    coagBirthSum+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j);
                 else
-                    birthSum+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
+                    coagBirthSum+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
             }
 
 	if(reactorSolver.isNumberDensityRep())
-            birthSum*=0.5;
+            coagBirthSum*=0.5;
 
 	if (!reactorSolver.isCoagOn())
             {
-                deathSum = 0e0;
-                birthSum =0e0;
+                coagDeathSum = 0e0;
+                coagBirthSum =0e0;
 	    }
+        
+        double birthSum = reactorCell.getInDist(i) / alpha + coagBirthSum;
+        double deathSum = 1e0 / beta + coagDeathSum;
         
         // Iterate baby!
         //n[i]=(n_in/alpha+0.5*summa)/(1e0/beta+d);
         //reactorCell.setNumDens(i, (reactorCell.getInDist(i) / reactorSolver.getIn() + birthSum) / (1e0 / reactorSolver.getOut() + deathSum));
-        reactorCell.setNumDens(i, (reactorCell.getInDist(i) / alpha + birthSum) / (1e0 / beta + deathSum));
+        reactorCell.setNumDens(i,  birthSum/deathSum);
        
         
         //n[i]=0.5*summa/d; // Pure coagulation 

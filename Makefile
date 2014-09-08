@@ -1,7 +1,11 @@
-# MFA Makefile
+# pbIterativeSolver Makefile
 # A. J. Smith (ajs224@cam.ac.uk)
 #
-FLAGS = -g -I./include #-fast
+DEBUG = #-g
+PROFILE = -pg
+OPTS = O3
+OPTS = -Ofast -flto -fwhole-program -mtune=native
+FLAGS = -I./include ${OPTS} ${PROFILE} ${DEBUG}
 COMPILER = g++
 #COMPILER = /opt/intel/Compiler/11.0/083/bin/intel64/icc
 TARGET= pbIterativeSolver
@@ -38,8 +42,8 @@ Cell.o:	${SRC}/Cell.c++
 	${COMPILER} -c ${FLAGS} ${SRC}/Cell.c++	
 
 Solver.o: ${SRC}/Solver.c++
-	${COMPILER} -c ${FLAGS} ${SRC}/Solver.c++	
-	
+	${COMPILER} -c ${FLAGS} ${SRC}/Solver.c++
+
 clean:
 	rm ${TARGET} *.o
 

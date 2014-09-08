@@ -11,7 +11,8 @@ double k(unsigned long int i, unsigned long int j)
   switch (kernelType)
     {
     case continuum: // Brownian motion (continuum regime)
-      return (pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0));
+      return 0.1*(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0));
+      //return (pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0));
       break;
     case freemolecular: // Brownian motion (free molecular regime)
       return pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*pow(pow(i,-1e0/3e0)+pow(j,-1e0/3e0),1e0/2e0);
