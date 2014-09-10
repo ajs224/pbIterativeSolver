@@ -6,7 +6,7 @@
 
 // Function headers
 //double k(double x, double y); // Collision kernel
-double k(unsigned long int i, unsigned long int j); // Collision kernel
+//double k(unsigned long int i, unsigned long int j); // Collision kernel
 double nIn(unsigned long i, unsigned long j); // Distribution of inflowing particles
 
 //double kt(double x, double y); // Majorant kernel

@@ -2,17 +2,20 @@
 # A. J. Smith (ajs224@cam.ac.uk)
 #
 DEBUG = #-g
-PROFILE = -pg
-OPTS = O3
-OPTS = -Ofast -flto -fwhole-program -mtune=native
+#PROFILE = -pg
+#OPTS = O3
+#OPTS = -Ofast -flto -fwhole-program -mtune=native # satsuma
+#OPTS = -O3 -ffast-math # banksy
+OPTS = -Ofast -flto -fwhole-program -mtune=native # minsky
+
 FLAGS = -I./include ${OPTS} ${PROFILE} ${DEBUG}
 COMPILER = g++
 #COMPILER = /opt/intel/Compiler/11.0/083/bin/intel64/icc
 TARGET= pbIterativeSolver
 SRC=./source
 
-${TARGET}: ${TARGET}.o mfa_params.o n_in.o kernel.o parse_args.o Cell.o Solver.o #moments.o Particle.o #theta.o
-	${COMPILER} -o ${TARGET} ${FLAGS} ${TARGET}.o mfa_params.o n_in.o kernel.o parse_args.o Cell.o Solver.o
+${TARGET}: ${TARGET}.o mfa_params.o n_in.o parse_args.o Cell.o Solver.o #moments.o Particle.o #theta.o kernel.o
+	${COMPILER} -o ${TARGET} ${FLAGS} ${TARGET}.o mfa_params.o n_in.o parse_args.o Cell.o Solver.o #kernel.o
 
 ${TARGET}.o: ${SRC}/${TARGET}.c++
 	${COMPILER} -c ${FLAGS} ${SRC}/${TARGET}.c++

@@ -3,7 +3,7 @@
 
 namespace mfaAnalytic
 {
-  kernelTypes kernelType; // Read from command line with -k flag.  Default is constant
+  //kernelTypes kernelType; // Read from command line with -k flag.  Default is constant
   distributions inDist = mono;
   
   const int noMoments=4; // Number of moments to compute

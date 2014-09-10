@@ -13,6 +13,7 @@
 #include <iostream>
 #include <sstream>
 #include "Cell.h"
+#include "Kernel.h"
 
 class Cell; // Forward declaration (say Cell class exists without defining it)
 
@@ -32,7 +33,7 @@ public:
     double getIn() {return alpha;}
     double getOut() {return beta;}
     
-    std::string getKernelName(){ return kernelName;}
+    //std::string getKernelName(){ return kernelName;}
     const unsigned int get_p(){return p;} 
     const unsigned long getN(){return N;}
     const unsigned long getL(){return L;}
@@ -48,6 +49,9 @@ public:
     //std::ofstream & getMomentsFile(){return &momentsFile;};
 
     double getMaxRes(){return maxRes;}
+    
+    double k(unsigned long int i, unsigned long int j){return kernel->k(i,j);}
+    
     
     void writeMoments(int l, double * moments);
     void writeFinalMoments(int cell, double x, double u, double * moments, int iter, double res);
@@ -69,7 +73,10 @@ private:
     bool numberDensityRep;
     mfaAnalytic::distributions inDist;
     std::string inDistName;
-    std::string kernelName;
+    //std::string kernelName;
+    
+    Kernel * kernel;
+    
     bool coagOn;
     unsigned int p;
     unsigned int outerItLoops;

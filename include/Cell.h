@@ -57,6 +57,8 @@ public:
     double calculateMoments();
     
     void iterate(Solver & reactorSolver, Cell & reactorCell);
+    void iterateND(Solver & reactorSolver, Cell & reactorCell);
+    void iterateMD(Solver & reactorSolver, Cell & reactorCell);
      
 private:
     

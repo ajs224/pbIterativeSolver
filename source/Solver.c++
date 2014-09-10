@@ -15,6 +15,7 @@
 #include "mfa_params.h" // Needed for kernelType
 #include "mfa_functions.h"
 #include "Solver.h"
+#include "Kernel.h"
 
 Solver::Solver() {
 
@@ -27,6 +28,7 @@ Solver::~Solver() {
     // Close files
     outputFile.close();
     momentsFile.close();
+    delete kernel;
 }
 
 int Solver::parseArgs(int argc, char *argv[]) {
@@ -39,7 +41,8 @@ int Solver::parseArgs(int argc, char *argv[]) {
     p = 16; // Maximum cluster size N=2^p, default is 16 (over-ridden with the -p flag)
     // Sometimes we can improve the convergence by doing more than log2(N) iterations (careful not to do too many though--div 0!)
     outerItLoops = 4; // Try increasing this to around 256 for non constant kernels (override with -loops flag) 
-    kernelType = constant; // default kernel type
+    //kernelType = constant; // default kernel type
+    kernel = NULL;
     inDistName = "delta";
     coagOn = true;
     numberDensityRep = true;
@@ -171,31 +174,31 @@ int Solver::parseArgs(int argc, char *argv[]) {
             // Just read one of the 3 basic kernel types with analytic solution for now
             char *kArg = argv[++i];
             if (strcmp(kArg, "additive") == 0)
-                kernelType = additive;
+                kernel = new Additive(1.0); //kernelType = additive;
             else if (strcmp(kArg, "multiplicative") == 0)
-                kernelType = multiplicative;
+                kernel = new Multiplicative(1.0); //kernelType = multiplicative;
             else if (strcmp(kArg, "continuum") == 0)
-                kernelType = continuum;
+                kernel = new Continuum(0.1); //kernelType = continuum;
             else if (strcmp(kArg, "freemolecular") == 0)
-                kernelType = freemolecular;
+                kernel = new Freemolecular(0.1); //kernelType = freemolecular;
             else if (strcmp(kArg, "kinetic") == 0)
-                kernelType = kinetic;
+                kernel = new Kinetic(1.0); //kernelType = kinetic;
             else if (strcmp(kArg, "shearlinear") == 0)
-                kernelType = shearlinear;
+                kernel = new Shearlinear(1.0); //kernelType = shearlinear;
             else if (strcmp(kArg, "shearnonlinear") == 0)
-                kernelType = shearnonlinear;
+                kernel = new Shearnonlinear(1.0); //kernelType = shearnonlinear;
             else if (strcmp(kArg, "settling") == 0)
-                kernelType = settling;
+                kernel = new Settling(1.0); //kernelType = settling;
             else if (strcmp(kArg, "inertiasettling") == 0)
-                kernelType = inertiasettling;
+                kernel = new Inertiasettling(1.0); //kernelType = inertiasettling;
             else if (strcmp(kArg, "berry") == 0)
-                kernelType = berry;
+                kernel = new Berry(1.0); //kernelType = berry;
             else if (strcmp(kArg, "condensation") == 0)
-                kernelType = condensation;
+                kernel = new Condensation(1.0); //kernelType = condensation;
             else if (strcmp(kArg, "spmtest") == 0)
-                kernelType = spmtest;
+                kernel = new SPMtest(1.0); //kernelType = spmtest;
             else
-                kernelType = constant; // actually this is default anyway
+                kernel = new Constant(1.0); //kernelType = constant; // actually this is default anyway
         } else if (strcmp(argv[i], "-p") == 0) {
             // Read p, where the maximum cluster size, N=2^p
             p = atoi(argv[++i]); // default 16
@@ -211,9 +214,11 @@ int Solver::parseArgs(int argc, char *argv[]) {
         } else if (strcmp(argv[i], "-nocoag") == 0) {
             // Read number of outer convergence loops
             coagOn = false; //
+            kernel = new Constant(0.0);
         }
     }
 
+    /*
     // Find out which kernel type is selected
     switch (kernelType) {
         case continuum:
@@ -259,7 +264,7 @@ int Solver::parseArgs(int argc, char *argv[]) {
 
     if (!coagOn)
         kernelName = "nocoag";
-
+    */
 
     //const int L=outerItLoops*floor(log2(N)); // Number of iterations to perform
     if (L == 0 && maxRes == 0e0) {
@@ -290,6 +295,8 @@ void Solver::setup() {
     else
         repType = "_mf";
 
+    string kernelName = kernel->Name();
+    
     outputFileName = dataDir + kernelName + "_data_";
     momentsFileName = dataDir + kernelName + "_moments_";
 

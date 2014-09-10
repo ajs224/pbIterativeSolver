@@ -8,7 +8,6 @@
 #include<iostream>
 #include <cmath>
 #include <cstdlib>
-#include "Kernel.h"
 #include "Cell.h"
 #include "mfa_functions.h"
 #include "mfa_params.h"
@@ -196,9 +195,9 @@ void Cell::iterate(Solver & reactorSolver, Cell & reactorCell)
 	for(unsigned long j=1;j<=reactorSolver.getN();j++)
 	{
 	    if(reactorSolver.isNumberDensityRep())
-                coagDeathSum+=reactorSolver.k(i,j)*reactorCell.getOldNumDens(j);
+                coagDeathSum+=k(i,j)*reactorCell.getOldNumDens(j);
 	    else
-		coagDeathSum+=reactorSolver.k(i,j)*reactorCell.getOldNumDens(j)/j;
+		coagDeathSum+=k(i,j)*reactorCell.getOldNumDens(j)/j;
 	}
 	  
 	double coagBirthSum=0e0;
@@ -206,9 +205,9 @@ void Cell::iterate(Solver & reactorSolver, Cell & reactorCell)
             {
                 //summa+=K[i-j][j]*nold[i-j]*nold[j];
                 if(reactorSolver.isNumberDensityRep())
-                    coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j);
+                    coagBirthSum+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j);
                 else
-                    coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
+                    coagBirthSum+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
             }
 
 	if(reactorSolver.isNumberDensityRep())
@@ -245,11 +244,11 @@ void Cell::iterateND(Solver & reactorSolver, Cell & reactorCell)
         // Compute sums in numerator and denominator
 	double coagDeathSum=0e0;
 	for(unsigned long j=1;j<=reactorSolver.getN();j++)
-            coagDeathSum+=reactorSolver.k(i,j)*reactorCell.getOldNumDens(j);
+            coagDeathSum+=k(i,j)*reactorCell.getOldNumDens(j);
 
 	double coagBirthSum=0e0;
 	for(unsigned long j=1;j<=i-1;j++)
-            coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j);
+            coagBirthSum+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j);
               
 	coagBirthSum*=0.5;
 
@@ -280,24 +279,16 @@ void Cell::iterateMD(Solver & reactorSolver, Cell & reactorCell)
     // Note implementing separate number density rep ands mass density iterate routines
     // is faster (according to profiler) though the binary will take more space
 
-    /*
-    std::cout << "k(3,4) = " << reactorSolver.k(3,4)<<std::endl;
-    
-    std::cin.sync();
-    std::cin.get();
-    */     
-    
-    
     for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
     {
         // Compute sums in numerator and denominator
 	double coagDeathSum=0e0;
 	for(unsigned long j=1;j<=reactorSolver.getN();j++)
-            coagDeathSum+=reactorSolver.k(i,j)*reactorCell.getOldNumDens(j)/j;
+            coagDeathSum+=k(i,j)*reactorCell.getOldNumDens(j)/j;
 		  
 	double coagBirthSum=0e0;
 	for(unsigned long j=1;j<=i-1;j++)
-            coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
+            coagBirthSum+=k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
             
 
         /*        

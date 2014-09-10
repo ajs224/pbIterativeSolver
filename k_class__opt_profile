@@ -1,0 +1,33 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 97.65     18.08    18.08                             _ZN9Continuum1kEmm.local.26
+  2.43     18.53     0.45                             _ZN7Kinetic1kEmm.local.25
+  0.00     18.53     0.00        6     0.00     0.00  _ZN8Constant1kEmm.local.36
+  0.00     18.53     0.00        2     0.00     0.00  Cell::~Cell()
+
+			Call graph
+
+
+granularity: each sample hit covers 2 byte(s) for 0.05% of 18.53 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     97.6   18.08    0.00                 _ZN9Continuum1kEmm.local.26 [1]
+-----------------------------------------------
+                                                 <spontaneous>
+[2]      2.4    0.45    0.00                 _ZN7Kinetic1kEmm.local.25 [2]
+-----------------------------------------------
+                0.00    0.00       6/6           _ZN6Solver5setupEv.constprop.153 [21]
+[9]      0.0    0.00    0.00       6         _ZN8Constant1kEmm.local.36 [9]
+-----------------------------------------------
+                0.00    0.00       2/2           _ZNSt6vectorI4CellSaIS0_EED2Ev.local.77.constprop.161 [29]
+[10]     0.0    0.00    0.00       2         Cell::~Cell() [10]
+-----------------------------------------------
+
+Index by function name
+
+  [10] Cell::~Cell()           [9] _ZN8Constant1kEmm.local.36
+   [2] _ZN7Kinetic1kEmm.local.25 [1] _ZN9Continuum1kEmm.local.26

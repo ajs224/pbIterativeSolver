@@ -6,11 +6,11 @@
 
 namespace mfaAnalytic
 {
-  enum kernelTypes { constant, additive, multiplicative, continuum, freemolecular, kinetic, shearlinear, shearnonlinear, settling, inertiasettling, berry, condensation, spmtest};
+  //enum kernelTypes { constant, additive, multiplicative, continuum, freemolecular, kinetic, shearlinear, shearnonlinear, settling, inertiasettling, berry, condensation, spmtest};
   
   enum distributions { mono, uniform };
   
-  extern kernelTypes kernelType; // Read from command line with -k flag.  Default is constant
+  //extern kernelTypes kernelType; // Read from command line with -k flag.  Default is constant
   
   extern distributions inDist;
    

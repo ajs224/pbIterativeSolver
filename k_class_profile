@@ -1,0 +1,586 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 26.45      7.17     7.17       12     0.60     2.22  Cell::iterateMD(Solver&, Cell&)
+ 24.01     13.68     6.51 301965312     0.00     0.00  Continuum::k(unsigned long, unsigned long)
+ 22.79     19.87     6.18 301965312     0.00     0.00  Solver::k(unsigned long, unsigned long)
+ 21.59     25.72     5.86 402604032     0.00     0.00  Cell::getOldNumDens(unsigned long)
+  3.36     26.63     0.91 201424909     0.00     0.00  Solver::getN()
+  0.74     26.83     0.20        1     0.20     0.20  Continuum::Continuum(double)
+  0.50     26.97     0.14                             Solver::isCoagOn()
+  0.48     27.10     0.13        1     0.13     0.13  Solver::getOut()
+  0.04     27.11     0.01    49152     0.00     0.00  Cell::getInDist(unsigned long)
+  0.04     27.12     0.01       13     0.00     0.00  Cell::calculateMoments()
+  0.04     27.13     0.01       12     0.00     0.00  Cell::updateDist()
+  0.00     27.13     0.00    49152     0.00     0.00  Cell::setNumDens(unsigned long, double)
+  0.00     27.13     0.00      624     0.00     0.00  MTRand::hiBit(unsigned long) const
+  0.00     27.13     0.00      624     0.00     0.00  MTRand::loBit(unsigned long) const
+  0.00     27.13     0.00      624     0.00     0.00  MTRand::magic(unsigned long) const
+  0.00     27.13     0.00      624     0.00     0.00  MTRand::twist(unsigned long, unsigned long, unsigned long) const
+  0.00     27.13     0.00      624     0.00     0.00  MTRand::loBits(unsigned long) const
+  0.00     27.13     0.00      624     0.00     0.00  MTRand::mixBits(unsigned long, unsigned long) const
+  0.00     27.13     0.00       55     0.00     0.00  __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator->() const
+  0.00     27.13     0.00       52     0.00     0.00  std::abs(double)
+  0.00     27.13     0.00       17     0.00     0.00  Solver::getNoCells()
+  0.00     27.13     0.00       14     0.00     0.00  std::ios_base::setf(std::_Ios_Fmtflags)
+  0.00     27.13     0.00       14     0.00     0.00  std::ios_base::precision(long)
+  0.00     27.13     0.00       14     0.00     0.00  std::operator|=(std::_Ios_Fmtflags&, std::_Ios_Fmtflags)
+  0.00     27.13     0.00       14     0.00     0.00  std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags)
+  0.00     27.13     0.00       12     0.00     0.00  Cell::getMoments()
+  0.00     27.13     0.00       12     0.00     0.00  Solver::writeMoments(int, double*)
+  0.00     27.13     0.00       12     0.00     0.00  Solver::isNumberDensityRep()
+  0.00     27.13     0.00       12     0.00     0.00  Solver::getL()
+  0.00     27.13     0.00       12     0.00     0.00  Solver::getMaxRes()
+  0.00     27.13     0.00       12     0.00     0.00  __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator*() const
+  0.00     27.13     0.00       12     0.00     0.00  std::ios_base::width(long)
+  0.00     27.13     0.00       10     0.00     0.00  __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::base() const
+  0.00     27.13     0.00        9     0.00     0.00  __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::__normal_iterator(Cell* const&)
+  0.00     27.13     0.00        6     0.00     0.00  std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.00     27.13     0.00        4     0.00     0.00  Cell* std::__addressof<Cell>(Cell&)
+  0.00     27.13     0.00        3     0.00     0.00  Cell::~Cell()
+  0.00     27.13     0.00        3     0.00     0.00  bool __gnu_cxx::operator!=<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&)
+  0.00     27.13     0.00        3     0.00     0.00  std::vector<Cell, std::allocator<Cell> >::end()
+  0.00     27.13     0.00        3     0.00     0.00  std::vector<Cell, std::allocator<Cell> >::begin()
+  0.00     27.13     0.00        2     0.00     0.00  Cell::initMoments()
+  0.00     27.13     0.00        2     0.00     0.00  Cell::initDist(mfaAnalytic::distributions)
+  0.00     27.13     0.00        2     0.00     0.00  Cell::Cell(Cell const&)
+  0.00     27.13     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<Cell>::~new_allocator()
+  0.00     27.13     0.00        2     0.00     0.00  __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator++(int)
+  0.00     27.13     0.00        2     0.00     0.00  __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::difference_type __gnu_cxx::operator-<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&)
+  0.00     27.13     0.00        2     0.00     0.00  std::allocator<Cell>::~allocator()
+  0.00     27.13     0.00        2     0.00     0.00  std::_Vector_base<Cell, std::allocator<Cell> >::_M_get_Tp_allocator()
+  0.00     27.13     0.00        2     0.00     0.00  void std::_Construct<Cell, Cell>(Cell*, Cell const&)
+  0.00     27.13     0.00        2     0.00     0.00  void std::_Destroy<Cell>(Cell*)
+  0.00     27.13     0.00        2     0.00     0.00  std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  0.00     27.13     0.00        2     0.00     0.00  operator new(unsigned long, void*)
+  0.00     27.13     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN11mfaAnalytic6inDistE
+  0.00     27.13     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN4CellC2Ev
+  0.00     27.13     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN6SolverC2Ev
+  0.00     27.13     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
+  0.00     27.13     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     27.13     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     27.13     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     27.13     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     27.13     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     27.13     0.00        1     0.00     0.00  Cell::initInDist(double*)
+  0.00     27.13     0.00        1     0.00     0.00  Cell::getDist()
+  0.00     27.13     0.00        1     0.00     0.00  Cell::Cell(double, double, unsigned long)
+  0.00     27.13     0.00        1     0.00     0.00  Kernel::Name()
+  0.00     27.13     0.00        1     0.00     0.00  Kernel::Kernel(double, std::string)
+  0.00     27.13     0.00        1     0.00     0.00  Kernel::~Kernel()
+  0.00     27.13     0.00        1     0.00     0.00  MTRand::initialize(unsigned long)
+  0.00     27.13     0.00        1     0.00     0.00  MTRand::seed(unsigned long*, unsigned long)
+  0.00     27.13     0.00        1     0.00     0.00  MTRand::seed()
+  0.00     27.13     0.00        1     0.00     0.00  MTRand::reload()
+  0.00     27.13     0.00        1     0.00     0.00  MTRand::MTRand()
+  0.00     27.13     0.00        1     0.00     0.00  Solver::getIn()
+  0.00     27.13     0.00        1     0.00     0.00  Solver::setup()
+  0.00     27.13     0.00        1     0.00     0.00  Solver::delta_x()
+  0.00     27.13     0.00        1     0.00     0.20  Solver::parseArgs(int, char**)
+  0.00     27.13     0.00        1     0.00     0.00  Solver::Solver()
+  0.00     27.13     0.00        1     0.00     0.00  Solver::~Solver()
+  0.00     27.13     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<Cell>::deallocate(Cell*, unsigned long)
+  0.00     27.13     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<Cell>::allocate(unsigned long, void const*)
+  0.00     27.13     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<Cell>::new_allocator(__gnu_cxx::new_allocator<Cell> const&)
+  0.00     27.13     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<Cell>::new_allocator()
+  0.00     27.13     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<Cell>::max_size() const
+  0.00     27.13     0.00        1     0.00     0.00  __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator-(long const&) const
+  0.00     27.13     0.00        1     0.00     0.00  std::allocator<Cell>::allocator(std::allocator<Cell> const&)
+  0.00     27.13     0.00        1     0.00     0.00  std::allocator<Cell>::allocator()
+  0.00     27.13     0.00        1     0.00     0.00  void std::_Destroy_aux<false>::__destroy<Cell*>(Cell*, Cell*)
+  0.00     27.13     0.00        1     0.00     0.00  std::_Vector_base<Cell, std::allocator<Cell> >::_M_allocate(unsigned long)
+  0.00     27.13     0.00        1     0.00     0.00  std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::_Vector_impl(std::allocator<Cell> const&)
+  0.00     27.13     0.00        1     0.00     0.00  std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::~_Vector_impl()
+  0.00     27.13     0.00        1     0.00     0.00  std::_Vector_base<Cell, std::allocator<Cell> >::_M_deallocate(Cell*, unsigned long)
+  0.00     27.13     0.00        1     0.00     0.00  std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_base(unsigned long, std::allocator<Cell> const&)
+  0.00     27.13     0.00        1     0.00     0.00  std::_Vector_base<Cell, std::allocator<Cell> >::~_Vector_base()
+  0.00     27.13     0.00        1     0.00     0.00  void std::__uninitialized_fill_n<false>::__uninit_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&)
+  0.00     27.13     0.00        1     0.00     0.00  std::vector<Cell, std::allocator<Cell> >::_M_fill_initialize(unsigned long, Cell const&)
+  0.00     27.13     0.00        1     0.00     0.00  std::vector<Cell, std::allocator<Cell> >::vector(unsigned long, Cell const&, std::allocator<Cell> const&)
+  0.00     27.13     0.00        1     0.00     0.00  std::vector<Cell, std::allocator<Cell> >::~vector()
+  0.00     27.13     0.00        1     0.00     0.00  void std::uninitialized_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&)
+  0.00     27.13     0.00        1     0.00     0.00  void std::__uninitialized_fill_n_a<Cell*, unsigned long, Cell, Cell>(Cell*, unsigned long, Cell const&, std::allocator<Cell>&)
+  0.00     27.13     0.00        1     0.00     0.00  __gnu_cxx::__promote_2<int, unsigned int, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<unsigned int, std::__is_integer<unsigned int>::__value>::__type>::__type std::pow<int, unsigned int>(int, unsigned int)
+  0.00     27.13     0.00        1     0.00     0.00  void std::_Destroy<Cell*>(Cell*, Cell*)
+  0.00     27.13     0.00        1     0.00     0.00  void std::_Destroy<Cell*, Cell>(Cell*, Cell*, std::allocator<Cell>&)
+  0.00     27.13     0.00        1     0.00     0.00  std::operator|(std::_Ios_Openmode, std::_Ios_Openmode)
+
+			Call graph
+
+
+granularity: each sample hit covers 2 byte(s) for 0.04% of 27.13 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     99.5    0.00   26.99                 main [1]
+                7.17   19.47      12/12          Cell::iterateMD(Solver&, Cell&) [2]
+                0.00    0.20       1/1           Solver::parseArgs(int, char**) [7]
+                0.13    0.00       1/1           Solver::getOut() [10]
+                0.01    0.00      13/13          Cell::calculateMoments() [12]
+                0.01    0.00      12/12          Cell::updateDist() [13]
+                0.00    0.00       1/201424909     Solver::getN() [6]
+                0.00    0.00      55/55          __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator->() const [25]
+                0.00    0.00      17/17          Solver::getNoCells() [27]
+                0.00    0.00      12/12          Cell::getMoments() [32]
+                0.00    0.00      12/12          Solver::writeMoments(int, double*) [33]
+                0.00    0.00      12/12          Solver::isNumberDensityRep() [34]
+                0.00    0.00      12/12          __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator*() const [37]
+                0.00    0.00      12/12          Solver::getL() [35]
+                0.00    0.00      12/12          Solver::getMaxRes() [36]
+                0.00    0.00       3/3           std::vector<Cell, std::allocator<Cell> >::begin() [46]
+                0.00    0.00       3/3           std::vector<Cell, std::allocator<Cell> >::end() [45]
+                0.00    0.00       3/3           bool __gnu_cxx::operator!=<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&) [44]
+                0.00    0.00       2/2           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::difference_type __gnu_cxx::operator-<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&) [52]
+                0.00    0.00       2/2           Cell::initDist(mfaAnalytic::distributions) [48]
+                0.00    0.00       2/2           Cell::initMoments() [47]
+                0.00    0.00       2/2           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator++(int) [51]
+                0.00    0.00       1/1           MTRand::MTRand() [78]
+                0.00    0.00       1/1           Solver::Solver() [82]
+                0.00    0.00       1/1           Solver::setup() [80]
+                0.00    0.00       1/1           Solver::delta_x() [81]
+                0.00    0.00       1/1           Solver::getIn() [79]
+                0.00    0.00       1/1           std::allocator<Cell>::allocator() [91]
+                0.00    0.00       1/1           Cell::Cell(double, double, unsigned long) [70]
+                0.00    0.00       1/1           std::vector<Cell, std::allocator<Cell> >::vector(unsigned long, Cell const&, std::allocator<Cell> const&) [101]
+                0.00    0.00       1/3           Cell::~Cell() [43]
+                0.00    0.00       1/2           std::allocator<Cell>::~allocator() [53]
+                0.00    0.00       1/1           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator-(long const&) const [89]
+                0.00    0.00       1/1           Cell::getDist() [69]
+                0.00    0.00       1/1           Cell::initInDist(double*) [68]
+                0.00    0.00       1/1           std::vector<Cell, std::allocator<Cell> >::~vector() [102]
+                0.00    0.00       1/1           Solver::~Solver() [83]
+-----------------------------------------------
+                7.17   19.47      12/12          main [1]
+[2]     98.2    7.17   19.47      12         Cell::iterateMD(Solver&, Cell&) [2]
+                6.18    6.51 301965312/301965312     Solver::k(unsigned long, unsigned long) [3]
+                5.86    0.00 402604032/402604032     Cell::getOldNumDens(unsigned long) [5]
+                0.91    0.00 201424908/201424909     Solver::getN() [6]
+                0.01    0.00   49152/49152       Cell::getInDist(unsigned long) [11]
+                0.00    0.00   49152/49152       Cell::setNumDens(unsigned long, double) [18]
+-----------------------------------------------
+                6.18    6.51 301965312/301965312     Cell::iterateMD(Solver&, Cell&) [2]
+[3]     46.8    6.18    6.51 301965312         Solver::k(unsigned long, unsigned long) [3]
+                6.51    0.00 301965312/301965312     Continuum::k(unsigned long, unsigned long) [4]
+-----------------------------------------------
+                6.51    0.00 301965312/301965312     Solver::k(unsigned long, unsigned long) [3]
+[4]     24.0    6.51    0.00 301965312         Continuum::k(unsigned long, unsigned long) [4]
+-----------------------------------------------
+                5.86    0.00 402604032/402604032     Cell::iterateMD(Solver&, Cell&) [2]
+[5]     21.6    5.86    0.00 402604032         Cell::getOldNumDens(unsigned long) [5]
+-----------------------------------------------
+                0.00    0.00       1/201424909     main [1]
+                0.91    0.00 201424908/201424909     Cell::iterateMD(Solver&, Cell&) [2]
+[6]      3.4    0.91    0.00 201424909         Solver::getN() [6]
+-----------------------------------------------
+                0.00    0.20       1/1           main [1]
+[7]      0.7    0.00    0.20       1         Solver::parseArgs(int, char**) [7]
+                0.20    0.00       1/1           Continuum::Continuum(double) [8]
+                0.00    0.00       1/1           __gnu_cxx::__promote_2<int, unsigned int, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<unsigned int, std::__is_integer<unsigned int>::__value>::__type>::__type std::pow<int, unsigned int>(int, unsigned int) [105]
+-----------------------------------------------
+                0.20    0.00       1/1           Solver::parseArgs(int, char**) [7]
+[8]      0.7    0.20    0.00       1         Continuum::Continuum(double) [8]
+                0.00    0.00       1/1           Kernel::Kernel(double, std::string) [72]
+-----------------------------------------------
+                                                 <spontaneous>
+[9]      0.5    0.14    0.00                 Solver::isCoagOn() [9]
+-----------------------------------------------
+                0.13    0.00       1/1           main [1]
+[10]     0.5    0.13    0.00       1         Solver::getOut() [10]
+-----------------------------------------------
+                0.01    0.00   49152/49152       Cell::iterateMD(Solver&, Cell&) [2]
+[11]     0.0    0.01    0.00   49152         Cell::getInDist(unsigned long) [11]
+-----------------------------------------------
+                0.01    0.00      13/13          main [1]
+[12]     0.0    0.01    0.00      13         Cell::calculateMoments() [12]
+                0.00    0.00      52/52          std::abs(double) [26]
+-----------------------------------------------
+                0.01    0.00      12/12          main [1]
+[13]     0.0    0.01    0.00      12         Cell::updateDist() [13]
+-----------------------------------------------
+                0.00    0.00   49152/49152       Cell::iterateMD(Solver&, Cell&) [2]
+[18]     0.0    0.00    0.00   49152         Cell::setNumDens(unsigned long, double) [18]
+-----------------------------------------------
+                0.00    0.00     624/624         MTRand::mixBits(unsigned long, unsigned long) const [24]
+[19]     0.0    0.00    0.00     624         MTRand::hiBit(unsigned long) const [19]
+-----------------------------------------------
+                0.00    0.00     624/624         MTRand::magic(unsigned long) const [21]
+[20]     0.0    0.00    0.00     624         MTRand::loBit(unsigned long) const [20]
+-----------------------------------------------
+                0.00    0.00     624/624         MTRand::twist(unsigned long, unsigned long, unsigned long) const [22]
+[21]     0.0    0.00    0.00     624         MTRand::magic(unsigned long) const [21]
+                0.00    0.00     624/624         MTRand::loBit(unsigned long) const [20]
+-----------------------------------------------
+                0.00    0.00     624/624         MTRand::reload() [77]
+[22]     0.0    0.00    0.00     624         MTRand::twist(unsigned long, unsigned long, unsigned long) const [22]
+                0.00    0.00     624/624         MTRand::mixBits(unsigned long, unsigned long) const [24]
+                0.00    0.00     624/624         MTRand::magic(unsigned long) const [21]
+-----------------------------------------------
+                0.00    0.00     624/624         MTRand::mixBits(unsigned long, unsigned long) const [24]
+[23]     0.0    0.00    0.00     624         MTRand::loBits(unsigned long) const [23]
+-----------------------------------------------
+                0.00    0.00     624/624         MTRand::twist(unsigned long, unsigned long, unsigned long) const [22]
+[24]     0.0    0.00    0.00     624         MTRand::mixBits(unsigned long, unsigned long) const [24]
+                0.00    0.00     624/624         MTRand::hiBit(unsigned long) const [19]
+                0.00    0.00     624/624         MTRand::loBits(unsigned long) const [23]
+-----------------------------------------------
+                0.00    0.00      55/55          main [1]
+[25]     0.0    0.00    0.00      55         __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator->() const [25]
+-----------------------------------------------
+                0.00    0.00      52/52          Cell::calculateMoments() [12]
+[26]     0.0    0.00    0.00      52         std::abs(double) [26]
+-----------------------------------------------
+                0.00    0.00      17/17          main [1]
+[27]     0.0    0.00    0.00      17         Solver::getNoCells() [27]
+-----------------------------------------------
+                0.00    0.00       2/14          Solver::setup() [80]
+                0.00    0.00      12/14          Solver::writeMoments(int, double*) [33]
+[28]     0.0    0.00    0.00      14         std::ios_base::setf(std::_Ios_Fmtflags) [28]
+                0.00    0.00      14/14          std::operator|=(std::_Ios_Fmtflags&, std::_Ios_Fmtflags) [30]
+-----------------------------------------------
+                0.00    0.00       2/14          Solver::setup() [80]
+                0.00    0.00      12/14          Solver::writeMoments(int, double*) [33]
+[29]     0.0    0.00    0.00      14         std::ios_base::precision(long) [29]
+-----------------------------------------------
+                0.00    0.00      14/14          std::ios_base::setf(std::_Ios_Fmtflags) [28]
+[30]     0.0    0.00    0.00      14         std::operator|=(std::_Ios_Fmtflags&, std::_Ios_Fmtflags) [30]
+                0.00    0.00      14/14          std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags) [31]
+-----------------------------------------------
+                0.00    0.00      14/14          std::operator|=(std::_Ios_Fmtflags&, std::_Ios_Fmtflags) [30]
+[31]     0.0    0.00    0.00      14         std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags) [31]
+-----------------------------------------------
+                0.00    0.00      12/12          main [1]
+[32]     0.0    0.00    0.00      12         Cell::getMoments() [32]
+-----------------------------------------------
+                0.00    0.00      12/12          main [1]
+[33]     0.0    0.00    0.00      12         Solver::writeMoments(int, double*) [33]
+                0.00    0.00      12/14          std::ios_base::precision(long) [29]
+                0.00    0.00      12/12          std::ios_base::width(long) [38]
+                0.00    0.00      12/14          std::ios_base::setf(std::_Ios_Fmtflags) [28]
+-----------------------------------------------
+                0.00    0.00      12/12          main [1]
+[34]     0.0    0.00    0.00      12         Solver::isNumberDensityRep() [34]
+-----------------------------------------------
+                0.00    0.00      12/12          main [1]
+[35]     0.0    0.00    0.00      12         Solver::getL() [35]
+-----------------------------------------------
+                0.00    0.00      12/12          main [1]
+[36]     0.0    0.00    0.00      12         Solver::getMaxRes() [36]
+-----------------------------------------------
+                0.00    0.00      12/12          main [1]
+[37]     0.0    0.00    0.00      12         __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator*() const [37]
+-----------------------------------------------
+                0.00    0.00      12/12          Solver::writeMoments(int, double*) [33]
+[38]     0.0    0.00    0.00      12         std::ios_base::width(long) [38]
+-----------------------------------------------
+                0.00    0.00       4/10          __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::difference_type __gnu_cxx::operator-<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&) [52]
+                0.00    0.00       6/10          bool __gnu_cxx::operator!=<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&) [44]
+[39]     0.0    0.00    0.00      10         __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::base() const [39]
+-----------------------------------------------
+                0.00    0.00       1/9           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator-(long const&) const [89]
+                0.00    0.00       2/9           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator++(int) [51]
+                0.00    0.00       3/9           std::vector<Cell, std::allocator<Cell> >::begin() [46]
+                0.00    0.00       3/9           std::vector<Cell, std::allocator<Cell> >::end() [45]
+[40]     0.0    0.00    0.00       9         __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::__normal_iterator(Cell* const&) [40]
+-----------------------------------------------
+                0.00    0.00       6/6           Solver::setup() [80]
+[41]     0.0    0.00    0.00       6         std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [41]
+-----------------------------------------------
+                0.00    0.00       2/4           void std::_Destroy_aux<false>::__destroy<Cell*>(Cell*, Cell*) [92]
+                0.00    0.00       2/4           void std::__uninitialized_fill_n<false>::__uninit_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&) [99]
+[42]     0.0    0.00    0.00       4         Cell* std::__addressof<Cell>(Cell&) [42]
+-----------------------------------------------
+                0.00    0.00       1/3           main [1]
+                0.00    0.00       2/3           void std::_Destroy<Cell>(Cell*) [56]
+[43]     0.0    0.00    0.00       3         Cell::~Cell() [43]
+-----------------------------------------------
+                0.00    0.00       3/3           main [1]
+[44]     0.0    0.00    0.00       3         bool __gnu_cxx::operator!=<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&) [44]
+                0.00    0.00       6/10          __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::base() const [39]
+-----------------------------------------------
+                0.00    0.00       3/3           main [1]
+[45]     0.0    0.00    0.00       3         std::vector<Cell, std::allocator<Cell> >::end() [45]
+                0.00    0.00       3/9           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::__normal_iterator(Cell* const&) [40]
+-----------------------------------------------
+                0.00    0.00       3/3           main [1]
+[46]     0.0    0.00    0.00       3         std::vector<Cell, std::allocator<Cell> >::begin() [46]
+                0.00    0.00       3/9           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::__normal_iterator(Cell* const&) [40]
+-----------------------------------------------
+                0.00    0.00       2/2           main [1]
+[47]     0.0    0.00    0.00       2         Cell::initMoments() [47]
+-----------------------------------------------
+                0.00    0.00       2/2           main [1]
+[48]     0.0    0.00    0.00       2         Cell::initDist(mfaAnalytic::distributions) [48]
+-----------------------------------------------
+                0.00    0.00       2/2           void std::_Construct<Cell, Cell>(Cell*, Cell const&) [55]
+[49]     0.0    0.00    0.00       2         Cell::Cell(Cell const&) [49]
+-----------------------------------------------
+                0.00    0.00       2/2           std::allocator<Cell>::~allocator() [53]
+[50]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<Cell>::~new_allocator() [50]
+-----------------------------------------------
+                0.00    0.00       2/2           main [1]
+[51]     0.0    0.00    0.00       2         __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator++(int) [51]
+                0.00    0.00       2/9           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::__normal_iterator(Cell* const&) [40]
+-----------------------------------------------
+                0.00    0.00       2/2           main [1]
+[52]     0.0    0.00    0.00       2         __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::difference_type __gnu_cxx::operator-<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&) [52]
+                0.00    0.00       4/10          __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::base() const [39]
+-----------------------------------------------
+                0.00    0.00       1/2           main [1]
+                0.00    0.00       1/2           std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::~_Vector_impl() [95]
+[53]     0.0    0.00    0.00       2         std::allocator<Cell>::~allocator() [53]
+                0.00    0.00       2/2           __gnu_cxx::new_allocator<Cell>::~new_allocator() [50]
+-----------------------------------------------
+                0.00    0.00       1/2           std::vector<Cell, std::allocator<Cell> >::~vector() [102]
+                0.00    0.00       1/2           std::vector<Cell, std::allocator<Cell> >::_M_fill_initialize(unsigned long, Cell const&) [100]
+[54]     0.0    0.00    0.00       2         std::_Vector_base<Cell, std::allocator<Cell> >::_M_get_Tp_allocator() [54]
+-----------------------------------------------
+                0.00    0.00       2/2           void std::__uninitialized_fill_n<false>::__uninit_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&) [99]
+[55]     0.0    0.00    0.00       2         void std::_Construct<Cell, Cell>(Cell*, Cell const&) [55]
+                0.00    0.00       2/2           operator new(unsigned long, void*) [58]
+                0.00    0.00       2/2           Cell::Cell(Cell const&) [49]
+-----------------------------------------------
+                0.00    0.00       2/2           void std::_Destroy_aux<false>::__destroy<Cell*>(Cell*, Cell*) [92]
+[56]     0.0    0.00    0.00       2         void std::_Destroy<Cell>(Cell*) [56]
+                0.00    0.00       2/3           Cell::~Cell() [43]
+-----------------------------------------------
+                0.00    0.00       2/2           Solver::setup() [80]
+[57]     0.0    0.00    0.00       2         std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [57]
+-----------------------------------------------
+                0.00    0.00       2/2           void std::_Construct<Cell, Cell>(Cell*, Cell const&) [55]
+[58]     0.0    0.00    0.00       2         operator new(unsigned long, void*) [58]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [154]
+[59]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN11mfaAnalytic6inDistE [59]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [64]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [154]
+[60]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN4CellC2Ev [60]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [66]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [154]
+[61]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN6SolverC2Ev [61]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [67]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [154]
+[62]     0.0    0.00    0.00       1         _GLOBAL__sub_I_main [62]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [63]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I_main [62]
+[63]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [63]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN11mfaAnalytic6inDistE [59]
+[64]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [64]
+-----------------------------------------------
+                                   1             __static_initialization_and_destruction_0(int, int) [65]
+                0.00    0.00       1/1           __libc_csu_init [154]
+[65]     0.0    0.00    0.00       1+1       __static_initialization_and_destruction_0(int, int) [65]
+                                   1             __static_initialization_and_destruction_0(int, int) [65]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN4CellC2Ev [60]
+[66]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [66]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN6SolverC2Ev [61]
+[67]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [67]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[68]     0.0    0.00    0.00       1         Cell::initInDist(double*) [68]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[69]     0.0    0.00    0.00       1         Cell::getDist() [69]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[70]     0.0    0.00    0.00       1         Cell::Cell(double, double, unsigned long) [70]
+-----------------------------------------------
+                0.00    0.00       1/1           Solver::setup() [80]
+[71]     0.0    0.00    0.00       1         Kernel::Name() [71]
+-----------------------------------------------
+                0.00    0.00       1/1           Continuum::Continuum(double) [8]
+[72]     0.0    0.00    0.00       1         Kernel::Kernel(double, std::string) [72]
+-----------------------------------------------
+                0.00    0.00       1/1           Solver::~Solver() [83]
+[73]     0.0    0.00    0.00       1         Kernel::~Kernel() [73]
+-----------------------------------------------
+                0.00    0.00       1/1           MTRand::seed(unsigned long*, unsigned long) [75]
+[74]     0.0    0.00    0.00       1         MTRand::initialize(unsigned long) [74]
+-----------------------------------------------
+                0.00    0.00       1/1           MTRand::seed() [76]
+[75]     0.0    0.00    0.00       1         MTRand::seed(unsigned long*, unsigned long) [75]
+                0.00    0.00       1/1           MTRand::initialize(unsigned long) [74]
+                0.00    0.00       1/1           MTRand::reload() [77]
+-----------------------------------------------
+                0.00    0.00       1/1           MTRand::MTRand() [78]
+[76]     0.0    0.00    0.00       1         MTRand::seed() [76]
+                0.00    0.00       1/1           MTRand::seed(unsigned long*, unsigned long) [75]
+-----------------------------------------------
+                0.00    0.00       1/1           MTRand::seed(unsigned long*, unsigned long) [75]
+[77]     0.0    0.00    0.00       1         MTRand::reload() [77]
+                0.00    0.00     624/624         MTRand::twist(unsigned long, unsigned long, unsigned long) const [22]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[78]     0.0    0.00    0.00       1         MTRand::MTRand() [78]
+                0.00    0.00       1/1           MTRand::seed() [76]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[79]     0.0    0.00    0.00       1         Solver::getIn() [79]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[80]     0.0    0.00    0.00       1         Solver::setup() [80]
+                0.00    0.00       6/6           std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [41]
+                0.00    0.00       2/2           std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [57]
+                0.00    0.00       2/14          std::ios_base::precision(long) [29]
+                0.00    0.00       2/14          std::ios_base::setf(std::_Ios_Fmtflags) [28]
+                0.00    0.00       1/1           Kernel::Name() [71]
+                0.00    0.00       1/1           std::operator|(std::_Ios_Openmode, std::_Ios_Openmode) [108]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[81]     0.0    0.00    0.00       1         Solver::delta_x() [81]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[82]     0.0    0.00    0.00       1         Solver::Solver() [82]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[83]     0.0    0.00    0.00       1         Solver::~Solver() [83]
+                0.00    0.00       1/1           Kernel::~Kernel() [73]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_M_deallocate(Cell*, unsigned long) [96]
+[84]     0.0    0.00    0.00       1         __gnu_cxx::new_allocator<Cell>::deallocate(Cell*, unsigned long) [84]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_M_allocate(unsigned long) [93]
+[85]     0.0    0.00    0.00       1         __gnu_cxx::new_allocator<Cell>::allocate(unsigned long, void const*) [85]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<Cell>::max_size() const [88]
+-----------------------------------------------
+                0.00    0.00       1/1           std::allocator<Cell>::allocator(std::allocator<Cell> const&) [90]
+[86]     0.0    0.00    0.00       1         __gnu_cxx::new_allocator<Cell>::new_allocator(__gnu_cxx::new_allocator<Cell> const&) [86]
+-----------------------------------------------
+                0.00    0.00       1/1           std::allocator<Cell>::allocator() [91]
+[87]     0.0    0.00    0.00       1         __gnu_cxx::new_allocator<Cell>::new_allocator() [87]
+-----------------------------------------------
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<Cell>::allocate(unsigned long, void const*) [85]
+[88]     0.0    0.00    0.00       1         __gnu_cxx::new_allocator<Cell>::max_size() const [88]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[89]     0.0    0.00    0.00       1         __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator-(long const&) const [89]
+                0.00    0.00       1/9           __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::__normal_iterator(Cell* const&) [40]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::_Vector_impl(std::allocator<Cell> const&) [94]
+[90]     0.0    0.00    0.00       1         std::allocator<Cell>::allocator(std::allocator<Cell> const&) [90]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<Cell>::new_allocator(__gnu_cxx::new_allocator<Cell> const&) [86]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[91]     0.0    0.00    0.00       1         std::allocator<Cell>::allocator() [91]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<Cell>::new_allocator() [87]
+-----------------------------------------------
+                0.00    0.00       1/1           void std::_Destroy<Cell*>(Cell*, Cell*) [106]
+[92]     0.0    0.00    0.00       1         void std::_Destroy_aux<false>::__destroy<Cell*>(Cell*, Cell*) [92]
+                0.00    0.00       2/4           Cell* std::__addressof<Cell>(Cell&) [42]
+                0.00    0.00       2/2           void std::_Destroy<Cell>(Cell*) [56]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_base(unsigned long, std::allocator<Cell> const&) [97]
+[93]     0.0    0.00    0.00       1         std::_Vector_base<Cell, std::allocator<Cell> >::_M_allocate(unsigned long) [93]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<Cell>::allocate(unsigned long, void const*) [85]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_base(unsigned long, std::allocator<Cell> const&) [97]
+[94]     0.0    0.00    0.00       1         std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::_Vector_impl(std::allocator<Cell> const&) [94]
+                0.00    0.00       1/1           std::allocator<Cell>::allocator(std::allocator<Cell> const&) [90]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::~_Vector_base() [98]
+[95]     0.0    0.00    0.00       1         std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::~_Vector_impl() [95]
+                0.00    0.00       1/2           std::allocator<Cell>::~allocator() [53]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::~_Vector_base() [98]
+[96]     0.0    0.00    0.00       1         std::_Vector_base<Cell, std::allocator<Cell> >::_M_deallocate(Cell*, unsigned long) [96]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<Cell>::deallocate(Cell*, unsigned long) [84]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<Cell, std::allocator<Cell> >::vector(unsigned long, Cell const&, std::allocator<Cell> const&) [101]
+[97]     0.0    0.00    0.00       1         std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_base(unsigned long, std::allocator<Cell> const&) [97]
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::_Vector_impl(std::allocator<Cell> const&) [94]
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_M_allocate(unsigned long) [93]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<Cell, std::allocator<Cell> >::~vector() [102]
+[98]     0.0    0.00    0.00       1         std::_Vector_base<Cell, std::allocator<Cell> >::~_Vector_base() [98]
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_M_deallocate(Cell*, unsigned long) [96]
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::~_Vector_impl() [95]
+-----------------------------------------------
+                0.00    0.00       1/1           void std::uninitialized_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&) [103]
+[99]     0.0    0.00    0.00       1         void std::__uninitialized_fill_n<false>::__uninit_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&) [99]
+                0.00    0.00       2/4           Cell* std::__addressof<Cell>(Cell&) [42]
+                0.00    0.00       2/2           void std::_Construct<Cell, Cell>(Cell*, Cell const&) [55]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<Cell, std::allocator<Cell> >::vector(unsigned long, Cell const&, std::allocator<Cell> const&) [101]
+[100]    0.0    0.00    0.00       1         std::vector<Cell, std::allocator<Cell> >::_M_fill_initialize(unsigned long, Cell const&) [100]
+                0.00    0.00       1/2           std::_Vector_base<Cell, std::allocator<Cell> >::_M_get_Tp_allocator() [54]
+                0.00    0.00       1/1           void std::__uninitialized_fill_n_a<Cell*, unsigned long, Cell, Cell>(Cell*, unsigned long, Cell const&, std::allocator<Cell>&) [104]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[101]    0.0    0.00    0.00       1         std::vector<Cell, std::allocator<Cell> >::vector(unsigned long, Cell const&, std::allocator<Cell> const&) [101]
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_base(unsigned long, std::allocator<Cell> const&) [97]
+                0.00    0.00       1/1           std::vector<Cell, std::allocator<Cell> >::_M_fill_initialize(unsigned long, Cell const&) [100]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[102]    0.0    0.00    0.00       1         std::vector<Cell, std::allocator<Cell> >::~vector() [102]
+                0.00    0.00       1/2           std::_Vector_base<Cell, std::allocator<Cell> >::_M_get_Tp_allocator() [54]
+                0.00    0.00       1/1           void std::_Destroy<Cell*, Cell>(Cell*, Cell*, std::allocator<Cell>&) [107]
+                0.00    0.00       1/1           std::_Vector_base<Cell, std::allocator<Cell> >::~_Vector_base() [98]
+-----------------------------------------------
+                0.00    0.00       1/1           void std::__uninitialized_fill_n_a<Cell*, unsigned long, Cell, Cell>(Cell*, unsigned long, Cell const&, std::allocator<Cell>&) [104]
+[103]    0.0    0.00    0.00       1         void std::uninitialized_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&) [103]
+                0.00    0.00       1/1           void std::__uninitialized_fill_n<false>::__uninit_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&) [99]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<Cell, std::allocator<Cell> >::_M_fill_initialize(unsigned long, Cell const&) [100]
+[104]    0.0    0.00    0.00       1         void std::__uninitialized_fill_n_a<Cell*, unsigned long, Cell, Cell>(Cell*, unsigned long, Cell const&, std::allocator<Cell>&) [104]
+                0.00    0.00       1/1           void std::uninitialized_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&) [103]
+-----------------------------------------------
+                0.00    0.00       1/1           Solver::parseArgs(int, char**) [7]
+[105]    0.0    0.00    0.00       1         __gnu_cxx::__promote_2<int, unsigned int, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<unsigned int, std::__is_integer<unsigned int>::__value>::__type>::__type std::pow<int, unsigned int>(int, unsigned int) [105]
+-----------------------------------------------
+                0.00    0.00       1/1           void std::_Destroy<Cell*, Cell>(Cell*, Cell*, std::allocator<Cell>&) [107]
+[106]    0.0    0.00    0.00       1         void std::_Destroy<Cell*>(Cell*, Cell*) [106]
+                0.00    0.00       1/1           void std::_Destroy_aux<false>::__destroy<Cell*>(Cell*, Cell*) [92]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<Cell, std::allocator<Cell> >::~vector() [102]
+[107]    0.0    0.00    0.00       1         void std::_Destroy<Cell*, Cell>(Cell*, Cell*, std::allocator<Cell>&) [107]
+                0.00    0.00       1/1           void std::_Destroy<Cell*>(Cell*, Cell*) [106]
+-----------------------------------------------
+                0.00    0.00       1/1           Solver::setup() [80]
+[108]    0.0    0.00    0.00       1         std::operator|(std::_Ios_Openmode, std::_Ios_Openmode) [108]
+-----------------------------------------------
+
+Index by function name
+
+  [59] _GLOBAL__sub_I__ZN11mfaAnalytic6inDistE [35] Solver::getL() [53] std::allocator<Cell>::~allocator()
+  [60] _GLOBAL__sub_I__ZN4CellC2Ev [6] Solver::getN()     [92] void std::_Destroy_aux<false>::__destroy<Cell*>(Cell*, Cell*)
+  [61] _GLOBAL__sub_I__ZN6SolverC2Ev [79] Solver::getIn() [93] std::_Vector_base<Cell, std::allocator<Cell> >::_M_allocate(unsigned long)
+  [62] _GLOBAL__sub_I_main    [80] Solver::setup()        [94] std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::_Vector_impl(std::allocator<Cell> const&)
+  [63] __static_initialization_and_destruction_0(int, int) [10] Solver::getOut() [95] std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_impl::~_Vector_impl()
+  [64] __static_initialization_and_destruction_0(int, int) [81] Solver::delta_x() [96] std::_Vector_base<Cell, std::allocator<Cell> >::_M_deallocate(Cell*, unsigned long)
+  [65] __static_initialization_and_destruction_0(int, int) [9] Solver::isCoagOn() [54] std::_Vector_base<Cell, std::allocator<Cell> >::_M_get_Tp_allocator()
+  [66] __static_initialization_and_destruction_0(int, int) [36] Solver::getMaxRes() [97] std::_Vector_base<Cell, std::allocator<Cell> >::_Vector_base(unsigned long, std::allocator<Cell> const&)
+  [67] __static_initialization_and_destruction_0(int, int) [7] Solver::parseArgs(int, char**) [98] std::_Vector_base<Cell, std::allocator<Cell> >::~_Vector_base()
+  [32] Cell::getMoments()     [82] Solver::Solver()       [99] void std::__uninitialized_fill_n<false>::__uninit_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&)
+  [68] Cell::initInDist(double*) [83] Solver::~Solver()  [100] std::vector<Cell, std::allocator<Cell> >::_M_fill_initialize(unsigned long, Cell const&)
+  [18] Cell::setNumDens(unsigned long, double) [4] Continuum::k(unsigned long, unsigned long) [45] std::vector<Cell, std::allocator<Cell> >::end()
+  [13] Cell::updateDist()      [8] Continuum::Continuum(double) [46] std::vector<Cell, std::allocator<Cell> >::begin()
+  [47] Cell::initMoments()    [84] __gnu_cxx::new_allocator<Cell>::deallocate(Cell*, unsigned long) [101] std::vector<Cell, std::allocator<Cell> >::vector(unsigned long, Cell const&, std::allocator<Cell> const&)
+   [5] Cell::getOldNumDens(unsigned long) [85] __gnu_cxx::new_allocator<Cell>::allocate(unsigned long, void const*) [102] std::vector<Cell, std::allocator<Cell> >::~vector()
+  [12] Cell::calculateMoments() [86] __gnu_cxx::new_allocator<Cell>::new_allocator(__gnu_cxx::new_allocator<Cell> const&) [28] std::ios_base::setf(std::_Ios_Fmtflags)
+  [69] Cell::getDist()        [87] __gnu_cxx::new_allocator<Cell>::new_allocator() [38] std::ios_base::width(long)
+  [48] Cell::initDist(mfaAnalytic::distributions) [50] __gnu_cxx::new_allocator<Cell>::~new_allocator() [29] std::ios_base::precision(long)
+  [11] Cell::getInDist(unsigned long) [40] __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::__normal_iterator(Cell* const&) [55] void std::_Construct<Cell, Cell>(Cell*, Cell const&)
+   [2] Cell::iterateMD(Solver&, Cell&) [51] __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator++(int) [42] Cell* std::__addressof<Cell>(Cell&)
+  [49] Cell::Cell(Cell const&) [52] __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::difference_type __gnu_cxx::operator-<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&) [103] void std::uninitialized_fill_n<Cell*, unsigned long, Cell>(Cell*, unsigned long, Cell const&)
+  [70] Cell::Cell(double, double, unsigned long) [44] bool __gnu_cxx::operator!=<Cell*, std::vector<Cell, std::allocator<Cell> > >(__gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&, __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > > const&) [104] void std::__uninitialized_fill_n_a<Cell*, unsigned long, Cell, Cell>(Cell*, unsigned long, Cell const&, std::allocator<Cell>&)
+  [43] Cell::~Cell()          [19] MTRand::hiBit(unsigned long) const [26] std::abs(double)
+  [71] Kernel::Name()         [20] MTRand::loBit(unsigned long) const [105] __gnu_cxx::__promote_2<int, unsigned int, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<unsigned int, std::__is_integer<unsigned int>::__value>::__type>::__type std::pow<int, unsigned int>(int, unsigned int)
+  [72] Kernel::Kernel(double, std::string) [21] MTRand::magic(unsigned long) const [56] void std::_Destroy<Cell>(Cell*)
+  [73] Kernel::~Kernel()      [22] MTRand::twist(unsigned long, unsigned long, unsigned long) const [106] void std::_Destroy<Cell*>(Cell*, Cell*)
+  [74] MTRand::initialize(unsigned long) [23] MTRand::loBits(unsigned long) const [107] void std::_Destroy<Cell*, Cell>(Cell*, Cell*, std::allocator<Cell>&)
+  [75] MTRand::seed(unsigned long*, unsigned long) [24] MTRand::mixBits(unsigned long, unsigned long) const [30] std::operator|=(std::_Ios_Fmtflags&, std::_Ios_Fmtflags)
+  [76] MTRand::seed()         [88] __gnu_cxx::new_allocator<Cell>::max_size() const [31] std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags)
+  [77] MTRand::reload()       [39] __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::base() const [108] std::operator|(std::_Ios_Openmode, std::_Ios_Openmode)
+  [78] MTRand::MTRand()       [37] __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator*() const [57] std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  [27] Solver::getNoCells()   [89] __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator-(long const&) const [41] std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  [33] Solver::writeMoments(int, double*) [25] __gnu_cxx::__normal_iterator<Cell*, std::vector<Cell, std::allocator<Cell> > >::operator->() const [58] operator new(unsigned long, void*)
+  [34] Solver::isNumberDensityRep() [90] std::allocator<Cell>::allocator(std::allocator<Cell> const&)
+   [3] Solver::k(unsigned long, unsigned long) [91] std::allocator<Cell>::allocator()

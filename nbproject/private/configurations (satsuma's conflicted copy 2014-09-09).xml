@@ -24,10 +24,10 @@
       </df>
       <df name="include">
         <in>Cell.h</in>
-        <in>Kernel.h</in>
         <in>MersenneTwister.h</in>
         <in>Particle.h</in>
         <in>Solver.h</in>
+        <in>kernel.h</in>
         <in>mfa_analytic.h</in>
         <in>mfa_functions.h</in>
         <in>mfa_params.h</in>
@@ -52,6 +52,7 @@
         <in>Cell.c++</in>
         <in>Particle.c++</in>
         <in>Solver.c++</in>
+        <in>kernel.c++</in>
         <in>mfa_params.c++</in>
         <in>moments.c++</in>
         <in>n_in.c++</in>

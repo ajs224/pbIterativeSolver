@@ -184,8 +184,11 @@ int main(int argc, char *argv[]) {
                 cellIter->updateDist();
 
                 // Iterate over all particle (cluster) sizes in cell
-                cellIter->iterate(reactorSolver, *cellIter);
-
+                if(reactorSolver.isNumberDensityRep())
+                    cellIter->iterateND(reactorSolver, *cellIter);
+                else
+                    cellIter->iterateMD(reactorSolver, *cellIter);   
+                
                 if (reactorSolver.getL() != 0) {
                     cellConverged = !(l <= reactorSolver.getL());
                 }

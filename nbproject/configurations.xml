@@ -2,10 +2,12 @@
 <configurationDescriptor version="94">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
+      <df name="include">
+        <in>Kernel.h</in>
+      </df>
       <df name="source">
         <in>Cell.c++</in>
         <in>Solver.c++</in>
-        <in>kernel.c++</in>
         <in>mfa_params.c++</in>
         <in>n_in.c++</in>
         <in>parse_args.c++</in>
@@ -56,11 +58,11 @@
           </ccTool>
         </makeTool>
       </makefileType>
+      <item path="include/Kernel.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="source/Cell.c++" ex="false" tool="1" flavor2="4">
       </item>
       <item path="source/Solver.c++" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="source/kernel.c++" ex="false" tool="1" flavor2="4">
       </item>
       <item path="source/mfa_params.c++" ex="false" tool="1" flavor2="4">
       </item>
