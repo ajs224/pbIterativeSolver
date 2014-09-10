@@ -49,6 +49,7 @@
         </df>
       </df>
       <df name="source">
+        <in>Cell (satsuma's conflicted copy 2014-09-09).c++</in>
         <in>Cell.c++</in>
         <in>Particle.c++</in>
         <in>Solver.c++</in>

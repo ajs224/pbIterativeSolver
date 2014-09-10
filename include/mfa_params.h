@@ -28,7 +28,7 @@ namespace MFA
     extern const double PI;
     extern const double ONE_THIRD;
     extern const double TWO_THIRDS;
-
+    
 } //namespace MFA
 
 

@@ -59,7 +59,9 @@ public:
     void iterate(Solver & reactorSolver, Cell & reactorCell);
     void iterateND(Solver & reactorSolver, Cell & reactorCell);
     void iterateMD(Solver & reactorSolver, Cell & reactorCell);
-     
+    void iterateAitkenMD(Solver & reactorSolver, Cell & reactorCell);
+    void iterateAccelMD(Solver & reactorSolver, Cell & reactorCell);
+    
 private:
     
     double alpha, beta;
@@ -72,7 +74,7 @@ private:
     double *nIn;
     double *n; //new double[N+1];
     double *nold; //new double[N+1];
-    
+ 
 };
 
 #endif	/* CELL_H */

@@ -8,6 +8,7 @@
 #include<iostream>
 #include <cmath>
 #include <cstdlib>
+#include <limits> // for machine epsilon std::numeric_limits<T>::epsilon()
 #include "Kernel.h"
 #include "Cell.h"
 #include "mfa_functions.h"
@@ -274,20 +275,12 @@ void Cell::iterateND(Solver & reactorSolver, Cell & reactorCell)
     }
 }
 
-
+// original version of the code
 void Cell::iterateMD(Solver & reactorSolver, Cell & reactorCell)
 {
     // Note implementing separate number density rep ands mass density iterate routines
     // is faster (according to profiler) though the binary will take more space
-
-    /*
-    std::cout << "k(3,4) = " << reactorSolver.k(3,4)<<std::endl;
-    
-    std::cin.sync();
-    std::cin.get();
-    */     
-    
-    
+  
     for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
     {
         // Compute sums in numerator and denominator
@@ -300,13 +293,7 @@ void Cell::iterateMD(Solver & reactorSolver, Cell & reactorCell)
             coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
             
 
-        /*        
-	if (!reactorSolver.isCoagOn())
-            {
-                coagDeathSum = 0e0;
-                coagBirthSum =0e0;
-	    }
-        */
+       
         //double birthSum = reactorCell.getInDist(i) / alpha + coagBirthSum;
         //double deathSum = 1e0 / beta + coagDeathSum;
         
@@ -321,3 +308,152 @@ void Cell::iterateMD(Solver & reactorSolver, Cell & reactorCell)
  
     }
 }
+
+        
+        
+// This version uses Aitkin's delta squared process to accelerate convergence
+void Cell::iterateAitkenMD(Solver & reactorSolver, Cell & reactorCell)
+{
+    // Note implementing separate number density rep ands mass density iterate routines
+    // is faster (according to profiler) though the binary will take more space
+
+    double n1[reactorSolver.getN()];
+    
+    // calculate n^(1) = F(n^(0))
+    for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
+    {
+        // Compute sums in numerator and denominator
+	double coagDeathSum=0e0, coagBirthSum=0e0;
+	for(unsigned long j=1;j<=reactorSolver.getN();j++)
+        {
+            coagDeathSum+=reactorSolver.k(i,j)*reactorCell.getOldNumDens(j)/j;
+            //if(j<=i-1)
+            //    coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
+            
+            // dodgy acceleration strategy - careful here
+            if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
+                break;
+        }
+         
+        
+	//double coagBirthSum=0e0;
+	for(unsigned long j=1;j<=i-1;j++)
+        {
+            coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
+            if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
+                break;
+        }
+        
+        //reactorCell.setNumDens(i,  (reactorCell.getInDist(i) / alpha + coagBirthSum)/(1e0 / beta + coagDeathSum));
+        n1[i] = (reactorCell.getInDist(i) / alpha + coagBirthSum)/(1e0 / beta + coagDeathSum);
+        //std::cout<<"n1[" << i << "] = " << n1[i] << std::endl; 
+    }
+
+    
+    
+    double n2[reactorSolver.getN()];
+    
+    // calculate n^(2) = F(n^(1)
+    for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
+    {
+        // Compute sums in numerator and denominator
+	double coagDeathSum=0e0,coagBirthSum=0e0;
+	for(unsigned long j=1;j<=reactorSolver.getN();j++)
+        {
+            coagDeathSum+=reactorSolver.k(i,j)*n1[j]/j;
+            //if(j<=i-1)
+            //    coagBirthSum+=reactorSolver.k(i-j,j)*n1[i-j]*n1[j]/j;
+            
+            // dodgy acceleration strategy - careful here
+            if (n1[j] < std::numeric_limits<long double>::epsilon())
+                break;
+        }
+        
+	//double coagBirthSum=0e0;
+	for(unsigned long j=1;j<=i-1;j++)
+        {
+            coagBirthSum+=reactorSolver.k(i-j,j)*n1[i-j]*n1[j]/j;
+            // dodgy acceleration strategy - careful here
+            if (n1[j] < std::numeric_limits<long double>::epsilon())
+                break;
+        }
+            
+        n2[i] = (reactorCell.getInDist(i) / alpha + coagBirthSum)/(1e0 / beta + coagDeathSum);
+        //std::cout<<"n2[" << i << "] = " << n2[i] << std::endl; 
+    }
+
+
+ 
+    
+    double nAitken[reactorSolver.getN()];
+    // calculate nAitken = n^(2) - (n^(2)-n^(1))^2)/deltaSqrd
+    for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
+    {
+        double deltaSqrt = n2[i] - 2*n2[i]+getOldNumDens(i); // getOldNumDens(i) is n0[i]
+        
+        if (abs(deltaSqrt) > std::numeric_limits<long double>::epsilon()) // don't want to divide by a number which is too small
+            nAitken[i] = n2[i] - pow((n2[i]-n1[i]),2)/deltaSqrt;
+        else
+            nAitken[i] = n2[i];
+            //std::cerr << "Warning: denominator too small" << std::endl;
+        
+        
+        /*
+        std::cout<<"nAitken[" << i << "] = " << nAitken[i] << std::endl;
+        std::cout<<"deltaSqrt = " << deltaSqrt << std::endl;
+        std::cout<<"pow((n2[i]-n1[i]),2) = " << pow((n2[i]-n1[i]),2) << std::endl;
+        */
+        reactorCell.setNumDens(i,  nAitken[i]);
+    }
+
+    /*
+    std::cin.sync();
+    std::cin.get();
+    */
+
+} 
+
+
+void Cell::iterateAccelMD(Solver & reactorSolver, Cell & reactorCell)
+{
+    // Note implementing separate number density rep ands mass density iterate routines
+    // is faster (according to profiler) though the binary will take more space
+      
+    //std::cout << "eps = " << std::numeric_limits<long double>::epsilon() << std::endl;
+    
+    
+    for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
+    {
+        // Compute sums in numerator and denominator
+	double coagDeathSum=0e0;
+	for(unsigned long j=1;j<=reactorSolver.getN();j++)
+        {
+            coagDeathSum+=reactorSolver.k(i,j)*reactorCell.getOldNumDens(j)/j;
+            // dodgy acceleration strategy - careful here
+            if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
+                break;
+        }
+	double coagBirthSum=0e0;
+	for(unsigned long j=1;j<=i-1;j++)
+        {    
+            coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j)/j;
+            // dodgy acceleration strategy - careful here
+            if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
+                break;
+        }   
+       
+        //double birthSum = reactorCell.getInDist(i) / alpha + coagBirthSum;
+        //double deathSum = 1e0 / beta + coagDeathSum;
+        
+        // Iterate baby!
+        //n[i]=(n_in/alpha+0.5*summa)/(1e0/beta+d);
+        //reactorCell.setNumDens(i, (reactorCell.getInDist(i) / reactorSolver.getIn() + birthSum) / (1e0 / reactorSolver.getOut() + deathSum));
+        //reactorCell.setNumDens(i,  birthSum/deathSum);
+       reactorCell.setNumDens(i,  (reactorCell.getInDist(i) / alpha + coagBirthSum)/(1e0 / beta + coagDeathSum));
+        
+        //n[i]=0.5*summa/d; // Pure coagulation 
+
+ 
+    }
+}
+

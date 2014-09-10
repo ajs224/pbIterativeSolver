@@ -187,8 +187,12 @@ int main(int argc, char *argv[]) {
                 if(reactorSolver.isNumberDensityRep())
                     cellIter->iterateND(reactorSolver, *cellIter);
                 else
-                    cellIter->iterateMD(reactorSolver, *cellIter);   
-                
+                {
+                    //cellIter->iterateMD(reactorSolver, *cellIter);   
+                    //cellIter->iterateAitkenMD(reactorSolver, *cellIter);   
+                    cellIter->iterateAccelMD(reactorSolver, *cellIter);   
+                }
+                    
                 if (reactorSolver.getL() != 0) {
                     cellConverged = !(l <= reactorSolver.getL());
                 }
