@@ -61,9 +61,15 @@ class Freemolecular: public Kernel
 {
  public:
  Freemolecular(double val) : Kernel(val, "freemolecular") {}
-  double k(unsigned long int i, unsigned long int j) { return A*pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*pow(pow(i,-1e0/3e0)+pow(j,-1e0/3e0),1e0/2e0);}
+  double k(unsigned long int i, unsigned long int j) { return A*pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*sqrt((1e0/i)+(1e0/j));}
 };
-
+// Transition kernel
+class Transition: public Kernel
+{
+ public:
+ Transition(double val) : Kernel(val, "transition") {}
+  double k(unsigned long int i, unsigned long int j){ return A*(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0))*1e0/(1e0+(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0))/(pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*sqrt((1e0/i)+(1e0/j))));};
+};
 
 // Based on kinetic theory
 class Kinetic: public Kernel

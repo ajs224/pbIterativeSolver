@@ -50,8 +50,10 @@ public:
 
     double getMaxRes(){return maxRes;}
     
-    double k(unsigned long int i, unsigned long int j){return kernel->k(i,j);}
-    
+    void precalculateK();
+        
+    //double k(unsigned long int i, unsigned long int j){return kernel->k(i,j);}// Calculates each time   
+    double k(unsigned long int i, unsigned long int j){return precalculatedK[i][j];}// Used precalculated values for speed  
     
     void writeMoments(int l, double * moments);
     void writeFinalMoments(int cell, double x, double u, double * moments, int iter, double res);
@@ -91,6 +93,8 @@ private:
     // Set up output file streams
     std::ofstream outputFile;
     std::ofstream momentsFile;
+    double ** precalculatedK;
+    
     
 };
 

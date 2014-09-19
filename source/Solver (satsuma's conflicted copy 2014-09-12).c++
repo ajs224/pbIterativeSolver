@@ -29,13 +29,6 @@ Solver::~Solver() {
     outputFile.close();
     momentsFile.close();
     delete kernel;
-    
-   for(unsigned long int i = 0; i < N; ++i)
-   {
-        delete [] precalculatedK[i];
-    }
-    delete [] precalculatedK; 
-    
 }
 
 int Solver::parseArgs(int argc, char *argv[]) {
@@ -188,8 +181,6 @@ int Solver::parseArgs(int argc, char *argv[]) {
                 kernel = new Continuum(0.1); //kernelType = continuum;
             else if (strcmp(kArg, "freemolecular") == 0)
                 kernel = new Freemolecular(0.1); //kernelType = freemolecular;
-            else if (strcmp(kArg, "transition") == 0)
-                kernel = new Transition(0.1); //kernelType = transition;
             else if (strcmp(kArg, "kinetic") == 0)
                 kernel = new Kinetic(1.0); //kernelType = kinetic;
             else if (strcmp(kArg, "shearlinear") == 0)
@@ -438,31 +429,11 @@ void Solver::writeOutput(Cell & reactorCell) {
 //double k(unsigned long int i, unsigned long int j){return kernel->k(i,j);}
 void Solver::precalculateK()
 {
-    precalculatedK = new double*[N];
-    for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
-    {
-        precalculatedK[i] = new double[N];
-    }
-      
-    for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
-    {
-        for(unsigned long j=i;j<=N;j++) // Loop over N particle sizes
-        {
-            //if 
-            precalculatedK[i][j] = kernel->k(i,j);
-            if(i != j)
-                precalculatedK[j][i] = precalculatedK[i][j];
-
-        }
-    }
-    /*
     for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
     {
         for(unsigned long j=1;j<=N;j++) // Loop over N particle sizes
         {
-            std::cout << "(" << i << ", " << j<< ") = " << precalculatedK[i][j]<< " ";
         }
-        std::cout << std::endl;
+
     }
-    */
 }

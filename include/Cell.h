@@ -59,8 +59,11 @@ public:
     void iterate(Solver & reactorSolver, Cell & reactorCell);
     void iterateND(Solver & reactorSolver, Cell & reactorCell);
     void iterateMD(Solver & reactorSolver, Cell & reactorCell);
+
+    // Methods which attempt to accelerate the iteration speed
     void iterateAitkenMD(Solver & reactorSolver, Cell & reactorCell);
     void iterateAccelMD(Solver & reactorSolver, Cell & reactorCell);
+    void iterateAccelND(Solver & reactorSolver, Cell & reactorCell);
     
 private:
     

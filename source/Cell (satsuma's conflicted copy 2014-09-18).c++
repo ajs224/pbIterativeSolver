@@ -430,11 +430,11 @@ void Cell::iterateAccelND(Solver & reactorSolver, Cell & reactorCell)
             //if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
             //    break;
              
-            
-            //std::cout<<"k("<<i<<","<<j<<") = " << reactorSolver.k(i,j)<< std::endl;
-            //std::cin.sync();
-            //std::cin.get();
-                     
+            /*
+            std::cout<<"k("<<i<<","<<j<<") = " << reactorSolver.k(i,j)<< std::endl;
+            std::cin.sync();
+            std::cin.get();
+            */         
        }
         
 	double coagBirthSum=0e0;

@@ -89,7 +89,11 @@ int main(int argc, char *argv[]) {
 
     // Setup up filenames and print summary of parameters    
     reactorSolver.setup();
-
+    
+    cout << "Precalculating kernel values..." << endl;
+    reactorSolver.precalculateK();
+    cout << "Done!" << endl;
+    
     double delta_x = reactorSolver.delta_x();
 
     enum convergenceTypes {globalConvergence, cellWise};
@@ -185,7 +189,10 @@ int main(int argc, char *argv[]) {
 
                 // Iterate over all particle (cluster) sizes in cell
                 if(reactorSolver.isNumberDensityRep())
-                    cellIter->iterateND(reactorSolver, *cellIter);
+                {
+                    //cellIter->iterateND(reactorSolver, *cellIter);
+                    cellIter->iterateAccelND(reactorSolver, *cellIter);
+                }
                 else
                 {
                     //cellIter->iterateMD(reactorSolver, *cellIter);   

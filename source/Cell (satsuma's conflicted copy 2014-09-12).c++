@@ -98,8 +98,7 @@ void Cell::initDist(mfaAnalytic::distributions inDist)
 	{
             n[i] = 0e0;
         }// delta distribution (nIn(i,a) is delta dist about cluster of size a)
-        //n[1] = 1e0;
-        n[4] = 1e0; // n_i = \delta_{Ii}, with I=4 to match DQMoMIC titania code
+        n[1] = 1e0;
     } 
     else if(inDist == mfaAnalytic::uniform)
     {
@@ -416,8 +415,6 @@ void Cell::iterateAitkenMD(Solver & reactorSolver, Cell & reactorCell)
 
 void Cell::iterateAccelND(Solver & reactorSolver, Cell & reactorCell)
 {
-  
-    
     // Note implementing separate number density rep ands mass density iterate routines
     // is faster (according to profiler) though the binary will take more space
     for(unsigned long i=1;i<=reactorSolver.getN();i++) // Loop over N particle sizes
@@ -427,24 +424,18 @@ void Cell::iterateAccelND(Solver & reactorSolver, Cell & reactorCell)
 	for(unsigned long j=1;j<=reactorSolver.getN();j++)
         {
             coagDeathSum+=reactorSolver.k(i,j)*reactorCell.getOldNumDens(j);
-            //if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
-            //    break;
-             
-            
-            //std::cout<<"k("<<i<<","<<j<<") = " << reactorSolver.k(i,j)<< std::endl;
-            //std::cin.sync();
-            //std::cin.get();
-                     
-       }
+            if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
+                break;
+        }
         
 	double coagBirthSum=0e0;
 	for(unsigned long j=1;j<=i-1;j++)
         {
             coagBirthSum+=reactorSolver.k(i-j,j)*reactorCell.getOldNumDens(i-j)*reactorCell.getOldNumDens(j);
-            //if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
-            //    break;
+            if (getOldNumDens(j) < std::numeric_limits<long double>::epsilon())
+                break;
         }   
-        
+            
 	coagBirthSum*=0.5;
 
         reactorCell.setNumDens(i,  (reactorCell.getInDist(i) / alpha + coagBirthSum)/(1e0 / beta + coagDeathSum));
