@@ -45,6 +45,7 @@
 #include <vector>
 #include <iterator>
 
+#include "blurb.h"
 #include "random.h"
 #include "mfa_functions.h"
 #include "mfa_params.h"
@@ -67,25 +68,29 @@ int main(int argc, char *argv[]) {
     double currMaxRes;
     bool converged = false; // global convergence
     int cell;
+
+    // Output program blurb and check if correct nuymber of command line arguments passed
+    if(blurb(argc, argv))
+      {
+	// Didn't enter any arguments, graciously exit the program
+        return 0;
+      }
     
-    // Output blurb
-    cout << endl;
-    cout << "Iterative PBE Solver - A. J. Smith (ajs224@cam.ac.uk)" << endl;
-    cout << endl;
-    cout << "This code solves the discrete Smoluchowski equation with in/outflow" << endl;
-    cout << "and coagulation described by constant, additive and multiplicative kernels " << endl;
-    cout << "(admitting analytic solutions) in addition to a range of more physically " << endl;
-    cout << "realistic kernels (run with --help for additional information)." << endl;
-    cout << endl;
+    // Valid parameters where entered, call the solver constructor and parse the arguments
 
     // Create new single cell simulation
     Solver reactorSolver;
+    reactorSolver.parseArgs(argc, argv);
+
+     
+    // Create new single cell simulation
+    //Solver reactorSolver;
 
     // Parse command line arguments
-    if (reactorSolver.parseArgs(argc, argv)) {
-        // Didn't enter any arguments
-        return 0;
-    }
+    //if (reactorSolver.parseArgs(argc, argv)) {
+    //    // Didn't enter any arguments
+    //    return 0;
+	//}
 
     // Setup up filenames and print summary of parameters    
     reactorSolver.setup();
@@ -363,3 +368,5 @@ int main(int argc, char *argv[]) {
         
 
 } //Main
+
+
