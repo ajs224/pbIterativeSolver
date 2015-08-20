@@ -82,16 +82,6 @@ int main(int argc, char *argv[]) {
     Solver reactorSolver;
     reactorSolver.parseArgs(argc, argv);
 
-     
-    // Create new single cell simulation
-    //Solver reactorSolver;
-
-    // Parse command line arguments
-    //if (reactorSolver.parseArgs(argc, argv)) {
-    //    // Didn't enter any arguments
-    //    return 0;
-	//}
-
     // Setup up filenames and print summary of parameters    
     reactorSolver.setup();
     

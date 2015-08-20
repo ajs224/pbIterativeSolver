@@ -64,17 +64,22 @@ Cell::Cell(const Cell& orig) {
 
 Cell::~Cell() 
 {
-    delete [] nIn;  
-    nIn = NULL;  
 
-    delete [] n;  
-    n = NULL;    
+  delete [] momentsPrev;
+  momentsPrev = NULL; 
   
-    delete [] nold; 
-    nold = NULL;  
-         
-    delete [] moments;
-    moments = NULL; 
+  delete [] moments;
+  moments = NULL; 
+  
+  delete [] nold; 
+  nold = NULL;
+  
+  delete [] n;  
+  n = NULL;   
+  
+  delete [] nIn;  
+  nIn = NULL;       
+   
  
     //std::cout << "Called cell destructor\n";
 }

@@ -1,12 +1,12 @@
 # pbIterativeSolver Makefile
 # A. J. Smith (ajs224@cam.ac.uk)
 #
-DEBUG = #-g
+DEBUG = -g #-lefence #-g
 #PROFILE = -pg
 #OPTS = O3
 #OPTS = -Ofast -flto -fwhole-program -mtune=native # satsuma
 #OPTS = -O3 -ffast-math # banksy
-OPTS = -Ofast -flto -fwhole-program -mtune=native # minsky
+OPTS = -Ofast -flto -fwhole-program -mtune=native # new cluster
 
 FLAGS = -I./include ${OPTS} ${PROFILE} ${DEBUG}
 COMPILER = g++
