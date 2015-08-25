@@ -23,6 +23,7 @@ class Kernel
  Kernel(double val, std::string name) : A(val), kernelName(name) {}
   virtual double k(unsigned long int i, unsigned long int j) =0;
   void setA(double val){ A = val;}
+  double getA(void){ return A;}
   std::string Name() {return kernelName;}
 };
 

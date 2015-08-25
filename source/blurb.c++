@@ -5,7 +5,7 @@
 int blurb(int argc, char *argv[])
 {
   using namespace std;
-    
+  
   // Output blurb
   cout << endl;
   cout << "Iterative PBE Solver - A. J. Smith (ajs224@cam.ac.uk)" << endl;
@@ -49,12 +49,12 @@ int blurb(int argc, char *argv[])
     cout << "\t\t" << "spmtest" << "\t\t\t" << "Kernel used to test the Single Particle Method (SPM)" << endl;
     cout << endl<< endl;
     
-    cout << "For a zero-dimensional reactor, provide:";
+    cout << "For a zero-dimensional reactor, provide:" << endl << endl;
     cout << "\t" << "-alpha" << "\t\t" << "inflow factor" << endl;
     cout << "\t" << "-beta" << "\t\t" << "outflow factor (=alpha if omitted)" << endl;
-    cout << endl<< endl;
+    cout << endl;
     
-    cout << "For a quasi 1D reactor, provide:";
+    cout << "For a quasi 1D reactor, provide:" << endl << endl;
     cout << "\t" << "-cells" << "\t\t" << "number of cells" << endl;
     cout << "\t" << "-length" << "\t\t" << "length of domain in x direction" << endl;
     cout << "\t" << "-u" << "\t\t" << "uniform velocity in x direction" << endl;
@@ -81,9 +81,7 @@ int blurb(int argc, char *argv[])
     cout << "1D Examples:" << endl << endl;
     cout << "* To run a reactor of length 1m, with 100 cells and uniform velocity of u=1m/s, constant kernel, a max cluster size of 2^10 with max residual 1e-10 use (in mass flow form):" << endl;
     cout << "\ttime " << argv[0] << " -cells 100 -length 1 -u 1 -k constant -p 10 -res 1e-10 -mass"  << endl;
-    
-    
-    
+   
     cout << endl<< endl;
     cout << "\ttime N.B., you should use one of -loops, -iters, or -res." << endl;
     cout << endl;
