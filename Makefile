@@ -8,7 +8,9 @@ DEBUG = -g #-lefence #-g
 #OPTS = -O3 -ffast-math # banksy
 OPTS = -Ofast -flto -fwhole-program -mtune=native # new cluster
 
-FLAGS = -I./include ${OPTS} ${PROFILE} ${DEBUG}
+INC = -I/opt/boost/1.58.0/include -I./include
+BOOSTFLAGS = -L/opt/boost/1.58.0/lib -lboost_filesystem -lboost_system
+FLAGS = ${INC} ${OPTS} ${PROFILE} ${DEBUG} ${BOOSTFLAGS}
 COMPILER = g++
 #COMPILER = /opt/intel/Compiler/11.0/083/bin/intel64/icc
 TARGET= pbIterativeSolver

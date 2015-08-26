@@ -92,6 +92,12 @@ int main(int argc, char *argv[])
   cout << "Precalculating kernel values..." << endl;
   reactorSolver.precalculateK();
   cout << "Done!" << endl;
+
+  cout << "Calling writeK()..." << endl;
+  reactorSolver.writeK();
+  cout << "Done!" << endl;
+  
+
   
   double delta_x = reactorSolver.delta_x();
   

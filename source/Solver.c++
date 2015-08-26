@@ -16,6 +16,8 @@
 #include "mfa_functions.h"
 #include "Solver.h"
 #include "Kernel.h"
+#include <boost/filesystem.hpp>
+#include <exception>      // std::exception, std::terminate
 
 Solver::Solver() {
 }
@@ -339,4 +341,44 @@ void Solver::precalculateK()
   
 }
 
+void Solver::writeK()
+{
+  std::stringstream out;
+  std::string kernelsPath = "kernels/";
+  
+  out << kernelsPath << kernel->Name() << "_" << getN() << ".dat";
+  std::string fileName = out.str();
 
+  boost::filesystem::path p(kernelsPath);
+
+  if (!boost::filesystem::exists(p) || !boost::filesystem::is_directory(p))    // does p actually exist?
+    {      
+      std::cerr << "Directory " << p << " does not exist!" << std::endl;
+      // Abort here
+    }
+  else
+    std::cout << "Writing precalculated kernel to " << fileName << std::endl;
+    
+  double Kij;
+    
+  std::ofstream kernelData(fileName.c_str(), std::ios::out|std::ios::binary);
+
+  for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
+    {
+      for(unsigned long j=i;j<=N;j++) // Loop over N particle sizes
+        {
+	  Kij = precalculatedK[i][j];
+	  kernelData.write( reinterpret_cast <const char*> (&Kij), sizeof( Kij ) );
+	}
+    }
+
+  kernelData.close();
+
+   
+}
+
+bool Solver::readK()
+{
+  return false;
+  
+}

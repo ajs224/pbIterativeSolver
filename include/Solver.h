@@ -51,6 +51,9 @@ public:
     double getMaxRes(){return maxRes;}
     
     void precalculateK();
+    void writeK();
+    bool readK();
+    
         
     //double k(unsigned long int i, unsigned long int j){return kernel->k(i,j);}// Calculates each time   
     double k(unsigned long int i, unsigned long int j){return precalculatedK[i][j];}// Used precalculated values for speed  
