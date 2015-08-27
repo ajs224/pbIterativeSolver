@@ -51,7 +51,8 @@ public:
     double getMaxRes(){return maxRes;}
     
     void precalculateK();
-    void writeK();
+    bool checkDir();
+    bool writeK();
     bool readK();
     
         

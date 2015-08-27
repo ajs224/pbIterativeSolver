@@ -16,7 +16,7 @@ namespace mfaAnalytic
    
   extern const int noMoments; // Number of moments to compute
   extern const std::string dataDir; // Output directory
-  
+  extern const std::string kernelsDir; // Precalculated kernels directory
 } //namespace mfaAnalytic
 
 

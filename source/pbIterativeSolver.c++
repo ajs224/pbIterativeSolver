@@ -85,19 +85,21 @@ int main(int argc, char *argv[])
   // Create new single cell simulation
   Solver reactorSolver;
   reactorSolver.parseArgs(argc, argv);
-  
+
+  //string kernelsDir = "kernels/";
+  if(!reactorSolver.checkDir())
+    {
+      cerr << "I/O error! The directory " << dataDir << " does not exist!" << endl;
+      return 1;
+    }
+
   // Setup up filenames and print summary of parameters    
   reactorSolver.setup();
   
-  cout << "Precalculating kernel values..." << endl;
+  // Precalculate kernel values (or load from a binary file if it exists)
   reactorSolver.precalculateK();
-  cout << "Done!" << endl;
-
-  cout << "Calling writeK()..." << endl;
-  reactorSolver.writeK();
-  cout << "Done!" << endl;
-  
-
+    
+  cout << endl;
   
   double delta_x = reactorSolver.delta_x();
   

@@ -20,25 +20,33 @@
 #include <exception>      // std::exception, std::terminate
 
 Solver::Solver() {
+  precalculatedK = NULL;
 }
 
-Solver::Solver(const Solver& orig) {  
+
+Solver::Solver(const Solver& orig) {
+  precalculatedK = NULL;
 }
+
 
 Solver::~Solver() {
-  
+
   // Close files
   outputFile.close();
   momentsFile.close();
+  
   delete kernel;
-  
-  for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
+
+  // Check if we've allocated memory for precalculated kernel before deleting it!
+  if (precalculatedK != NULL)
     {
-      delete [] precalculatedK[i];
+      for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
+	delete [] precalculatedK[i];
+	
+      delete [] precalculatedK;
     }
-  delete [] precalculatedK; 
-  
 }
+
 
 int Solver::parseArgs(int argc, char *argv[]) {
   
@@ -172,6 +180,7 @@ int Solver::parseArgs(int argc, char *argv[]) {
   
 }
 
+
 void Solver::setup() {
 
   using namespace mfaAnalytic;
@@ -270,6 +279,7 @@ void Solver::setup() {
   outputFile.setf(ios::scientific);
 }
 
+
 void Solver::writeMoments(int l, double * moments) {
   //std::stringstream out;
   //out << l << "\t" << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;	
@@ -287,6 +297,7 @@ void Solver::writeMoments(int l, double * moments) {
   std::cout << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;
   momentsFile << l << "\t" << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;
 }
+
 
 //void Solver::writeFinalMoments(double * moments)
 void Solver::writeFinalMoments(int cell, double x, double u, double * moments, int iter, double res)
@@ -309,6 +320,7 @@ void Solver::writeFinalMoments(int cell, double x, double u, double * moments, i
   //momentsFile << l << "\t" << moments[0] << "\t" << moments[1] << "\t" << moments[2] << "\t" << moments[3] << std::endl;
 }
 
+
 void Solver::writeOutput(Cell & reactorCell) {
   outputFile.precision(8);
   // Dump steady-state PSD
@@ -318,43 +330,65 @@ void Solver::writeOutput(Cell & reactorCell) {
     }
 }
 
+
 //double k(unsigned long int i, unsigned long int j){return kernel->k(i,j);}
 void Solver::precalculateK()
 {
+  using namespace mfaAnalytic; // For kernelsDir
+    
+  // Allocate memory for precalculated kernel data
   precalculatedK = new double*[N+1];
   for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
     {
       precalculatedK[i] = new double[N+1];
     }
   
-  for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
+  if(!readK()) // if failed to load kernel data
     {
-      for(unsigned long j=i;j<=N;j++) // Loop over N particle sizes
-        {
-	  //if 
-	  precalculatedK[i][j] = kernel->k(i,j);
-	  if(i != j)
-	    precalculatedK[j][i] = precalculatedK[i][j];
-	  
-        }
-    }
-  
+      // Binary kernel data file does not exists - precalculate from scratch
+      std::cout << "Precalculating kernel values..." << std::endl;
+      for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
+	{
+	  for(unsigned long j=i;j<=N;j++) // Loop over N particle sizes
+	    {
+	      precalculatedK[i][j] = kernel->k(i,j);
+	      if(i != j)
+		precalculatedK[j][i] = precalculatedK[i][j];
+	    }
+	}
+      std::cout << "Done!" << std::endl;
+      
+      if(!writeK())
+	std::cout << "Not writing precalculated kernel data to binary file." << std::endl;
+    } 
 }
 
-void Solver::writeK()
+
+bool Solver::checkDir()
+{
+  boost::filesystem::path p(mfaAnalytic::dataDir);
+  if (!boost::filesystem::exists(p) || !boost::filesystem::is_directory(p))    // does p actually exist?
+    return false;
+  else
+    return true;
+}
+  
+
+bool Solver::writeK()
 {
   std::stringstream out;
-  std::string kernelsPath = "kernels/";
+  //std::string kernelsPath = "kernels/";
   
-  out << kernelsPath << kernel->Name() << "_" << getN() << ".dat";
+  out << mfaAnalytic::kernelsDir << kernel->Name() << "_" << getN() << ".dat";
   std::string fileName = out.str();
 
-  boost::filesystem::path p(kernelsPath);
+  boost::filesystem::path p(mfaAnalytic::kernelsDir);
 
   if (!boost::filesystem::exists(p) || !boost::filesystem::is_directory(p))    // does p actually exist?
     {      
-      std::cerr << "Directory " << p << " does not exist!" << std::endl;
+      std::cerr << "Directory " << p << " does not exist! ";
       // Abort here
+      return false;
     }
   else
     std::cout << "Writing precalculated kernel to " << fileName << std::endl;
@@ -373,12 +407,50 @@ void Solver::writeK()
     }
 
   kernelData.close();
-
-   
+  
+  return true;
+  
 }
+
 
 bool Solver::readK()
 {
-  return false;
+  std::stringstream out;
+  //std::string kernelsPath = "kernels/";
   
+  out << mfaAnalytic::kernelsDir << kernel->Name() << "_" << getN() << ".dat";
+  std::string fileName = out.str();
+  
+  boost::filesystem::path p(fileName);
+  
+  if (boost::filesystem::is_regular_file(p))
+    {
+      std::cout << "Reading precalculated kernel data from " << fileName << "." << std::endl;
+      // Read in precalculated kernel data here
+      // don't forget K_ij=K_ji for i!=j
+      std::ifstream kernelData(fileName.c_str(), std::ios::in|std::ios::binary);
+      
+      double Kij;
+
+      //std::cout << "Attempting to read kernel data from binary file"  << std::endl;
+      for(unsigned long i=1;i<=N;i++) // Loop over N particle sizes
+	{
+	  for(unsigned long j=i;j<=N;j++) // Loop over N particle sizes
+	    {
+	      kernelData.read(reinterpret_cast<char*>( &Kij ), sizeof(Kij) );
+	      //std::cout <<  Kij << " ";
+	      precalculatedK[i][j] = Kij;
+	      if(i != j)
+		precalculatedK[j][i] = Kij;
+	    }
+	  //  std::cout << precalculatedK[i][j]  << " ";
+	  //std::cout << std::endl;
+	}
+      
+      //std::cout << "Done"  << std::endl;
+      kernelData.close();
+      return true;
+    }
+  else // Binary kernel data does not exists
+    return false;
 }

@@ -8,7 +8,7 @@ namespace mfaAnalytic
   
   const int noMoments=4; // Number of moments to compute
   const std::string dataDir="data/"; // Output directory
-  
+  const std::string kernelsDir = "/scratch/ajs224/pbIterativeSolver/kernels/"; // Precalculated kernels directory
 } //namespace mfaAnalytic
 
 
