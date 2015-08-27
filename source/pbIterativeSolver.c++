@@ -14,17 +14,27 @@
 // 2.) iterate over all cells, reaching steady-state globally
 // Suspect 1 is most efficient - this is correct
 //
-// This version of the code precalculates the kernel, which is more effcient for complex kernels
+// * This version of the code precalculates the kernel, which is more effcient for complex kernels
+// * If the directory kernelsDir exists and contains previously calculated kernel data in a binary file
+// this is read rather the re-calculating, which will speed up repeat calculations with the same number of particles (but say different lengths, numbers of cells or residual tolerances)
 //
 //---------------------------------------------------------------/
 
+// Example runs:
 // To run with inflow rate=outflow rate=1, const kernel, 16 outer loops and a max cluster size of 2^10 use: 
 // time ./pbSolverIterative -alpha 1 -k constant -loops 16 -p 10
+
 // To run with the additive kernel and defaul in/outflow rates use:
 // time ./pbSolverIterative -k additive -loops 256 -p 20
+
 // In order to achieve convergence with the additive (and multiplicative?) kernels lower the inflow rate:
 // time ./pbSolverIterative -alpha 0.1 -k additive -loops 256 -p 10
 //time ./pbSolverIterative -alpha 0.1 -k multiplicative -loops 64 -p 16
+
+// Simulate coagulation in the continuum regime in a fluid flowing at 1m/s in a pipe of length 1m (using 100 cells)
+//(time ./pbIterativeSolver -cells 100 -length 1 -u 1 -k continuum -res 1e-12 -p 12 -mass -nin mono) &> data/continuum_p12_res1e-12_delta_cells100_length1_u1_mf.log &
+
+
 
 /*
  Structure of the code is as follows:
@@ -63,7 +73,7 @@ int main(int argc, char *argv[])
   bool loadRandState = false; // Generate a new set of seeds
   bool saveRandState = true; // Write the state so we can rewread later
   
-  // Declare a Mersenne Twister random number generator
+  // Declare a Mersenne Twister random number generator - used for uniform distribution of inflowing particles
   MTRand mtrand; // = intRand(loadRandState);
   
   int maxIter = 1000;
@@ -73,7 +83,7 @@ int main(int argc, char *argv[])
   bool converged = false; // global convergence
   int cell;
   
-  // Output program blurb and check if correct nuymber of command line arguments passed
+  // Output program blurb and check if correct number of command line arguments passed
   if(blurb(argc, argv))
     {
       // Didn't enter any arguments, graciously exit the program
@@ -86,7 +96,7 @@ int main(int argc, char *argv[])
   Solver reactorSolver;
   reactorSolver.parseArgs(argc, argv);
 
-  //string kernelsDir = "kernels/";
+  // Check if dataDir exists
   if(!reactorSolver.checkDir())
     {
       cerr << "I/O error! The directory " << dataDir << " does not exist!" << endl;
@@ -110,24 +120,25 @@ int main(int argc, char *argv[])
   
   if (convergenceType == cellWise) {
     // Output header
-    if (reactorSolver.getNoCells() <= 1)
+    if (reactorSolver.getNoCells() <= 1) // Print 0d reactor header
       cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
-    else
+    else // Print quasi-1d reactor header
       cout << "Cell\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3\t\t# iters\t\t\tres" << endl;
     
     double in, out;
     
     if (reactorSolver.getNoCells() > 1) {
-      // This is a quasi 1d reactor, alpha and beta are fixed by the velocity and dimensions of the grid
+      // This is a quasi-1d reactor, alpha and beta are fixed by the velocity and dimensions of the grid
       // Inflow (alpha) and outflow rates (beta) are given by alpha^(-1) = beta^(-1) = u/delta_x
       //cellIter->setIORates(delta_x/u,delta_x/u);
-      in = out = reactorSolver.delta_x() / reactorSolver.getU();
+      in = out = delta_x / reactorSolver.getU();
     } else {
+      // This is a 0d reactor with prescribed in and outflow rates
       in = reactorSolver.getIn();
       out = reactorSolver.getOut();
     }
     
-    // Initialise a reactor as a network of noCells cells
+    // Initialise a reactor as a network of noCells cells (1 in the 0d case)
     vector<Cell> reactor(reactorSolver.getNoCells()+1, Cell(in, out, reactorSolver.getN()));
     
     /*
@@ -144,7 +155,7 @@ int main(int argc, char *argv[])
       
       //cout << "Initialising cell " << cell << endl;
       
-      // Initialise initial distribution of particles in current cell
+      // Initialise initial distribution of particles in current cell to delta distribution (mono-dispersed)
       cellIter->initDist(mono);
       
       // Initialise moments in current cell
@@ -177,7 +188,7 @@ int main(int argc, char *argv[])
 	//cellIter->initDist(mono);
 	// not following line was commented out before
 	cellIter->initInDist(mono); // first cell has mono-dispersed distribution
-      } else {
+      } else { // Not the fist cell in domain, set n_in to steady-state distribution from pevious cell
 	//cout << "Setting n_in distribution to steady-state distributionin cell " << cell-1 << endl;
 	vector<Cell>::iterator prevCell = cellIter - 1;
 	cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
@@ -196,12 +207,12 @@ int main(int argc, char *argv[])
 	cellIter->updateDist();
 	
 	// Iterate over all particle (cluster) sizes in cell
-	if(reactorSolver.isNumberDensityRep())
+	if(reactorSolver.isNumberDensityRep()) // Number density representation
 	  {
 	    //cellIter->iterateND(reactorSolver, *cellIter);
 	    cellIter->iterateAccelND(reactorSolver, *cellIter);
 	  }
-	else
+	else // Mass density representation
 	  {
 	    cellIter->iterateMD(reactorSolver, *cellIter);   
 	    //cellIter->iterateAitkenMD(reactorSolver, *cellIter);   
@@ -245,7 +256,9 @@ int main(int argc, char *argv[])
     } // Cell iterator
   }
   
-  
+
+  // This method turns out to be less efficient than cell-wise convergence in most cases, so this section
+  // of the code is largely ignored
   else if (convergenceType == globalConvergence) 
     {
       double in, out;
