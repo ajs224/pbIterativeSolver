@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
       //cout << "Initialising cell " << cell << endl;
       
       // Initialise initial distribution of particles in current cell to delta distribution (mono-dispersed)
-      cellIter->initDist(mono);
+      cellIter->initDist(mono); // Always use mono-dispersed initial conditions
       
       // Initialise moments in current cell
       cellIter->initMoments();
@@ -183,11 +183,21 @@ int main(int argc, char *argv[])
 	// Set n = nin
 	// Already called cellIter->initDist(mono), so just need to stop iteration for first cell
 	cellConverged = true;
+
+	// Set Inflowing distribution (0D case) or boundary condition (1D case)
+	// In the 1D case, this is not relevant, the infowing distribtuion
+	// becomes a boundary conditions, i.e., initDist for cell 0
+	cellIter->initInDist(reactorSolver.getInDist()); // first cell has inDist distribution (from -nin arg)
+	cellIter->initDist(reactorSolver.getInDist()); // first cell has inDist distribution (from -nin arg)
+
+	//cellIter->initInDist(uniform); // first cell has mono-dispersed distribution
+	//cellIter->initDist(uniform); // first cell has mono-dispersed distribution
+	//cout << "In dist = " << reactorSolver.getInDist() << endl;
+	
 	cellIter->calculateMoments();
 	currMaxRes = 0e0;
-	//cellIter->initDist(mono);
-	// not following line was commented out before
-	cellIter->initInDist(mono); // first cell has mono-dispersed distribution
+
+	
       } else { // Not the fist cell in domain, set n_in to steady-state distribution from pevious cell
 	//cout << "Setting n_in distribution to steady-state distributionin cell " << cell-1 << endl;
 	vector<Cell>::iterator prevCell = cellIter - 1;
@@ -214,9 +224,11 @@ int main(int argc, char *argv[])
 	  }
 	else // Mass density representation
 	  {
-	    cellIter->iterateMD(reactorSolver, *cellIter);   
-	    //cellIter->iterateAitkenMD(reactorSolver, *cellIter);   
-	    //cellIter->iterateAccelMD(reactorSolver, *cellIter);   
+	    //cout << "Iterate with Aitken accelerated process" << endl;
+	    
+	    cellIter->iterateMD(reactorSolver, *cellIter); // No acceleration   
+	    //cellIter->iterateAitkenMD(reactorSolver, *cellIter); // Aitken acceleration  
+	    //cellIter->iterateAccelMD(reactorSolver, *cellIter); // Dangerous acceleration  
 	  }
 	
 	if (reactorSolver.getL() != 0) {

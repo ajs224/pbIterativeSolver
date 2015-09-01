@@ -30,6 +30,8 @@ public:
     void setup();
     
     // Accessor methods
+    const mfaAnalytic::distributions getInDist(){return inDist;}
+
     double getIn() {return alpha;}
     double getOut() {return beta;}
     

@@ -98,12 +98,12 @@ int Solver::parseArgs(int argc, char *argv[]) {
     }// n_in distribution
     else if (strcmp(argv[i], "-nin") == 0) {
       char *ninDist = argv[++i];
-      if (strcmp(ninDist, "mono") == 0) {
-	inDist = mono;
-	inDistName = "delta";
-      } else {
+      if (strcmp(ninDist, "uniform") == 0) {
 	inDist = uniform;
 	inDistName = "uniform";
+      } else {
+	inDist = mono;
+	inDistName = "delta";
       }
     }// Kernel
     else if (strcmp(argv[i], "-k") == 0) {
