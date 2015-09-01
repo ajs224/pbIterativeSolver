@@ -224,11 +224,15 @@ int main(int argc, char *argv[])
 	  }
 	else // Mass density representation
 	  {
-	    //cout << "Iterate with Aitken accelerated process" << endl;
-	    
-	    cellIter->iterateMD(reactorSolver, *cellIter); // No acceleration   
-	    //cellIter->iterateAitkenMD(reactorSolver, *cellIter); // Aitken acceleration  
-	    //cellIter->iterateAccelMD(reactorSolver, *cellIter); // Dangerous acceleration  
+	    //cellIter->iterateMD(reactorSolver, *cellIter); // No acceleration   
+	    //cellIter->iterateAitkenMD(reactorSolver, *cellIter); // Aitken acceleration
+
+	    // Not it's legitimate to use continue to skip over small values of oldNumDens
+	    // which won't affect the coagSum much, but dangerous to break out of the loop all together
+	    // when numDens is small for remaining clusters
+	    // Note currently the dangerous acceleration method is implemented to should be aware if this
+	    // if there's large discrepancies in the calculation
+	    cellIter->iterateAccelMD(reactorSolver, *cellIter); // Dangerous acceleration  
 	  }
 	
 	if (reactorSolver.getL() != 0) {
