@@ -60,6 +60,7 @@ int Solver::parseArgs(int argc, char *argv[]) {
   outerItLoops = 4; // Try increasing this to around 256 for non constant kernels (override with -loops flag) 
   //kernelType = constant; // default kernel type
   kernel = NULL;
+  inDist = mono;
   inDistName = "delta";
   coagOn = true;
   numberDensityRep = true;
@@ -141,7 +142,7 @@ int Solver::parseArgs(int argc, char *argv[]) {
       else if (strcmp(kArg, "spmtest") == 0)
 	kernel = new SPMtest(1.0); //kernelType = spmtest;
       else
-	kernel = new Constant(2.0); //kernelType = constant; // actually this is default anyway
+	kernel = new Constant(1.0); //kernelType = constant; // actually this is default anyway
     } else if (strcmp(argv[i], "-p") == 0) {
       // Read p, where the maximum cluster size, N=2^p
       p = atoi(argv[++i]); // default 16

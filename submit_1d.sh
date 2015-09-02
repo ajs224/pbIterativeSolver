@@ -27,8 +27,8 @@ if [ -z "$KERNEL" ]; then
 fi
 
 # Args
-ARGS="-cells 100 -length 1 -u 1 -k $KERNEL -p 12 -res 1e-12 -mass -nin mono"
-LOGFILE="$KERNEL"_p12_res1e-12_delta_cells100_length1_u1_mf.log
+ARGS="-cells 100 -length 1 -u 1 -k $KERNEL -p 16 -res 1e-12 -mass -nin mono"
+LOGFILE="$KERNEL"_p16_res1e-12_delta_cells100_length1_u1_mf.log
 
 # Check for directories
 #BASEDIR="/scratch/ajs224/pbIterativeSolver/tst"
@@ -59,12 +59,12 @@ BIN="/home/userspace/ajs224/C++/pbIterativeSolver/pbIterativeSolver"
 module load boost
 module load mpi
 
-srun $BIN $ARGS &> $LOGFILE
+srun $BIN $ARGS &> $DATADIR"/"$LOGFILE
 
-echo "" >> $LOGFILE
+echo "" >> $DATADIR"/"$LOGFILE
 
 # N.B. Can use sacct, in order to find lots of information about CPU times, memory use and disk access, using for example
-sacct --job $SLURM_JOBID --format "JobName,Submit,Elapsed,AveCPU,CPUTime,UserCPU,TotalCPU,NodeList,NTasks,AveDiskRead,AveDiskWrite" >> $LOGFILE
+sacct --job $SLURM_JOBID --format "JobName,Submit,Elapsed,AveCPU,CPUTime,UserCPU,TotalCPU,NodeList,NTasks,AveDiskRead,AveDiskWrite" >> $DATADIR"/"$LOGFILE
 
 
 
