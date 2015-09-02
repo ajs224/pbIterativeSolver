@@ -1,4 +1,4 @@
-# Install script for directory: /home/userspace/ajs224/Dropbox/Code/pbIterativeSolver
+# Install script for directory: /home/userspace/ajs224/C++/pbIterativeSolver
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/userspace/ajs224/C++/pbIterativeSolver/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

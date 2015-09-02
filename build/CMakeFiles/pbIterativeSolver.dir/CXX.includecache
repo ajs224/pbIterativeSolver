@@ -66,7 +66,7 @@ string
 MersenneTwister.h
 ../include/MersenneTwister.h
 
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Cell.c++
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Cell.c++
 iostream
 -
 cmath
@@ -76,23 +76,23 @@ cstdlib
 limits
 -
 Kernel.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Kernel.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Kernel.h
 Cell.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Cell.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Cell.h
 mfa_functions.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_functions.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_functions.h
 mfa_params.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_params.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_params.h
 
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Particle.c++
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Particle.c++
 cmath
 -
 Particle.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Particle.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Particle.h
 mfa_params.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_params.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_params.h
 
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Solver.c++
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Solver.c++
 iostream
 -
 sstream
@@ -108,17 +108,19 @@ cstdlib
 cmath
 -
 mfa_params.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_params.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_params.h
 mfa_functions.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_functions.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_functions.h
 Solver.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Solver.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Solver.h
 Kernel.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Kernel.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Kernel.h
 boost/filesystem.hpp
 -
+exception
+-
 
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/blurb.c++
+/home/userspace/ajs224/C++/pbIterativeSolver/source/blurb.c++
 blurb.h
 -
 iostream
@@ -126,37 +128,21 @@ iostream
 string.h
 -
 
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_params.c++
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_params.c++
 mfa_params.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_params.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_params.h
 
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/moments.c++
+/home/userspace/ajs224/C++/pbIterativeSolver/source/moments.c++
 iostream
 -
 cmath
 -
 
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/n_in.c++
+/home/userspace/ajs224/C++/pbIterativeSolver/source/n_in.c++
 mfa_params.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_params.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_params.h
 
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/parse_args.c++
-iostream
--
-string
--
-cstring
--
-cstdlib
--
-cmath
--
-mfa_params.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_params.h
-mfa_functions.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_functions.h
-
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/pbIterativeSolver.c++
+/home/userspace/ajs224/C++/pbIterativeSolver/source/pbIterativeSolver.c++
 iostream
 -
 sstream
@@ -174,15 +160,15 @@ vector
 iterator
 -
 blurb.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/blurb.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/blurb.h
 random.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/random.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/random.h
 mfa_functions.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_functions.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_functions.h
 mfa_params.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/mfa_params.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/mfa_params.h
 Solver.h
-/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/Solver.h
+/home/userspace/ajs224/C++/pbIterativeSolver/source/Solver.h
 
 /opt/boost/1.58.0/include/boost/assert.hpp
 boost/config.hpp
