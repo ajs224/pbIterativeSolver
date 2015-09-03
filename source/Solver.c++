@@ -118,7 +118,7 @@ int Solver::parseArgs(int argc, char *argv[]) {
       if (strcmp(kArg, "additive") == 0)
 	kernel = new Additive(1.0); //kernelType = additive;
       else if (strcmp(kArg, "multiplicative") == 0)
-	kernel = new Multiplicative(1.0); //kernelType = multiplicative;
+	kernel = new Multiplicative(6.25e-2); //kernelType = multiplicative;
       else if (strcmp(kArg, "continuum") == 0)
 	kernel = new Continuum(0.1); //kernelType = continuum;
       else if (strcmp(kArg, "freemolecular") == 0)

@@ -1,7 +1,7 @@
 #!/bin/bash
 ####################################################################
 #                                                                  #
-#  PB Iterative Solver runs (1D Case)                              #
+#  PB Iterative Solver runs (quasi-1D Case)                        #
 #  A. J. Smith (ajs224@cam.ac.uk)                                  #
 #  20/06/2015                                                      #
 #                                                                  #
@@ -23,18 +23,26 @@
 KERNEL=$1
 if [ -z "$KERNEL" ]; then 
     echo "No collision kernel specified!";
+    srun false
     exit
 fi
 
-# Args
-ARGS="-cells 100 -length 1 -u 1 -k $KERNEL -p 16 -res 1e-12 -mass -nin mono"
-LOGFILE="$KERNEL"_p16_res1e-12_delta_cells100_length1_u1_mf.log
+# Run parameters
+CELLS=1000
+LENGTH=10
+u=1
+p=16
+res=1e-12
 
 # Check for directories
 #BASEDIR="/scratch/ajs224/pbIterativeSolver/tst"
 BASEDIR="." # From working dir
 DATADIR=$BASEDIR"/data"
 KERNELSDIR=$BASEDIR"/kernels"
+
+# Args
+ARGS="-cells $CELLS -length $LENGTH -u $u -k $KERNEL -p $p -res $res -mass -nin mono"
+LOGFILE=$DATADIR"/""$KERNEL"_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_mf.log
 
 # WORKDIR must exist before script submission
 #if [ ! -d $BASEDIR ]; then
@@ -53,18 +61,21 @@ if [ ! -d $KERNELSDIR ]; then
 fi
 
 # Specify binary
-BIN="/home/userspace/ajs224/C++/pbIterativeSolver/pbIterativeSolver"
+BINDIR="/home/userspace/ajs224/C++/pbIterativeSolver"
+BIN=$BINDIR"/pbIterativeSolver"
 
 # Load modules
 module load boost
 module load mpi
 
-srun $BIN $ARGS &> $DATADIR"/"$LOGFILE
+srun $BIN $ARGS &> $LOGFILE
 
-echo "" >> $DATADIR"/"$LOGFILE
+echo "" >> $LOGFILE
 
 # N.B. Can use sacct, in order to find lots of information about CPU times, memory use and disk access, using for example
 sacct --job $SLURM_JOBID --format "JobName,Submit,Elapsed,AveCPU,CPUTime,UserCPU,TotalCPU,NodeList,NTasks,AveDiskRead,AveDiskWrite" >> $DATADIR"/"$LOGFILE
 
-
-
+# Copy back to userspace
+MOMSFILE=$DATADIR"/""$KERNEL"_moments_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_mf.txt
+DATAFILE=$DATADIR"/""$KERNEL"_data_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_mf.txt
+cp $LOGFILE $MOMSFILE $DATAFILE $BINDIR"/data/"
