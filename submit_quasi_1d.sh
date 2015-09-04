@@ -7,8 +7,6 @@
 #                                                                  #
 ####################################################################
 
-# Continuum kernel, alpha=1/10 (=beta, implicitly), N=16384, L=1, t=12.0s    
-
 #SBATCH -p cares.cluster                     # partition (queue)
 #SBATCH --nodes=1                            # -N number of nodes
 #SBATCH --ntasks-per-node=1                  # -n number of cores
@@ -29,7 +27,7 @@ fi
 
 # Run parameters
 CELLS=1000
-LENGTH=10
+LENGTH=1
 u=1
 p=16
 res=1e-12
@@ -75,7 +73,7 @@ echo "" >> $LOGFILE
 # N.B. Can use sacct, in order to find lots of information about CPU times, memory use and disk access, using for example
 sacct --job $SLURM_JOBID --format "JobName,Submit,Elapsed,AveCPU,CPUTime,UserCPU,TotalCPU,NodeList,NTasks,AveDiskRead,AveDiskWrite" >> $DATADIR"/"$LOGFILE
 
-# Copy back to userspace
+# Copy data back to userspace
 MOMSFILE=$DATADIR"/""$KERNEL"_moments_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_mf.txt
 DATAFILE=$DATADIR"/""$KERNEL"_data_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_mf.txt
 cp $LOGFILE $MOMSFILE $DATAFILE $BINDIR"/data/"
