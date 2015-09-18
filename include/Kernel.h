@@ -54,7 +54,12 @@ class Continuum: public Kernel
 {
  public:
  Continuum(double val) : Kernel(val, "continuum") {}
-  double k(unsigned long int i, unsigned long int j) { return A*(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0));}
+  double k(unsigned long int i, unsigned long int j) {
+    double q = i/(double) j;
+    double p = pow(q,0.33333333);
+    return A*(2+p+1/p);
+    // Raw calculation is slow
+    //return A*(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0));}
 };
 
 // Brownian motion (freemolecular regime)
