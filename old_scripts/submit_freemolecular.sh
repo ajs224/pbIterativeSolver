@@ -20,18 +20,21 @@
 #SBATCH --mail-user=ajs224@cam.ac.uk         # send-to address
 #SBATCH --workdir=/home/userspace/ajs224/C++/pbIterativeSolver 
 
-KERNEL="continuum"
+KERNEL="freemolecular"
+LOGFILE=$KERNEL"_p16_res1e-12_delta_cells1000_length1_u1_nd.log"
 
 #(time srun ./pbSolve -t 12 -N 16384 -L 1 -alpha 0.1 -k continuum) &> data/continuum_N16384_L1_alpha0.1_t12.log
 
-srun ./pbIterativeSolver -cells 100 -length 1 -u 1 -k continuum -p 16 -res 1e-12 -mass -nin mono &> continuum_p16_res1e-12_delta_cells100_length1_u1_mf.log
+# Mass density representation
+#srun ./pbIterativeSolver -cells 1000 -length 1 -u 1 -k $KERNEL -p 16 -res 1e-12 -mass -nin mono &> $LOGFILE
 
-#srun ./pbSolve -t 12 -N 16384 -L 1 -alpha 0.1 -k continuum &> data/continuum_N16384_L1_alpha0.1_t12.log
+# Number density representation
+srun ./pbIterativeSolver -cells 1000 -length 1 -u 1 -k $KERNEL -p 16 -res 1e-12 -nin mono &> $LOGFILE
 
-echo "" >> continuum_p16_res1e-12_delta_cells100_length1_u1_mf.log
+echo "" >> $LOGFILE
 
 # N.B. Can use sacct, in order to find lots of information about CPU times, memory use and disk access, using for example
-sacct --job $SLURM_JOBID --format "JobName,Submit,Elapsed,AveCPU,CPUTime,UserCPU,TotalCPU,NodeList,NTasks,AveDiskRead,AveDiskWrite" >> continuum_p16_res1e-12_delta_cells100_length1_u1_mf.log
+sacct --job $SLURM_JOBID --format "JobName,Submit,Elapsed,AveCPU,CPUTime,UserCPU,TotalCPU,NodeList,NTasks,AveDiskRead,AveDiskWrite" >> $LOGFILE
 
 
 

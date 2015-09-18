@@ -69,8 +69,18 @@ class Transition: public Kernel
 {
  public:
  Transition(double val) : Kernel(val, "transition") {}
-  double k(unsigned long int i, unsigned long int j){ return A*(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0))*1e0/(1e0+(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0))/(pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*sqrt((1e0/i)+(1e0/j))));};
-};
+  double k(unsigned long int i, unsigned long int j)
+  {
+    double q = i/(double) j;
+    double p = pow(q,0.33333333);
+    double beta_c = (2+p+1/p);
+    double beta_f = pow(j,0.16666666)*sqrt(1+1/q)*pow(1+p,2);
+    return A*beta_c*beta_f/(beta_c+beta_f);
+
+    // Raw calculation is slow
+    //return A*(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0))*1e0/(1e0+(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0))/(pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*sqrt((1e0/i)+(1e0/j))));};
+
+  };
 
 // Based on kinetic theory
 class Kinetic: public Kernel

@@ -31,6 +31,8 @@ LENGTH=1
 u=1
 p=16
 res=1e-12
+rep="nd" # nd or mf
+
 
 # Check for directories
 #BASEDIR="/scratch/ajs224/pbIterativeSolver/tst"
@@ -39,8 +41,16 @@ DATADIR=$BASEDIR"/data"
 KERNELSDIR=$BASEDIR"/kernels"
 
 # Args
-ARGS="-cells $CELLS -length $LENGTH -u $u -k $KERNEL -p $p -res $res -mass -nin mono"
-LOGFILE=$DATADIR"/""$KERNEL"_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_mf.log
+if [ $rep == "mf" ]; then
+	ARGS="-cells $CELLS -length $LENGTH -u $u -k $KERNEL -p $p -res $res -mass -nin mono" 
+else
+	ARGS="-cells $CELLS -length $LENGTH -u $u -k $KERNEL -p $p -res $res -nin mono" 
+fi
+
+# Files
+LOGFILE=$DATADIR"/""$KERNEL"_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_$rep".log"
+MOMSFILE=$DATADIR"/""$KERNEL"_moments_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_$rep.txt
+DATAFILE=$DATADIR"/""$KERNEL"_data_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_$rep.txt
 
 # WORKDIR must exist before script submission
 #if [ ! -d $BASEDIR ]; then
@@ -71,9 +81,7 @@ srun $BIN $ARGS &> $LOGFILE
 echo "" >> $LOGFILE
 
 # N.B. Can use sacct, in order to find lots of information about CPU times, memory use and disk access, using for example
-sacct --job $SLURM_JOBID --format "JobName,Submit,Elapsed,AveCPU,CPUTime,UserCPU,TotalCPU,NodeList,NTasks,AveDiskRead,AveDiskWrite" >> $DATADIR"/"$LOGFILE
+sacct --job $SLURM_JOBID --format "JobName,Submit,Elapsed,AveCPU,CPUTime,UserCPU,TotalCPU,NodeList,NTasks,AveDiskRead,AveDiskWrite" >> $LOGFILE
 
 # Copy data back to userspace
-MOMSFILE=$DATADIR"/""$KERNEL"_moments_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_mf.txt
-DATAFILE=$DATADIR"/""$KERNEL"_data_p"$p"_res"$res"_delta_cells"$CELLS"_length"$LENGTH"_u"$u"_mf.txt
 cp $LOGFILE $MOMSFILE $DATAFILE $BINDIR"/data/"
