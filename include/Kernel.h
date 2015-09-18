@@ -61,6 +61,7 @@ class Continuum: public Kernel
     // Raw calculation is slow
     //return A*(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0));}
 };
+};
 
 // Brownian motion (freemolecular regime)
 class Freemolecular: public Kernel
@@ -81,7 +82,7 @@ class Transition: public Kernel
     double beta_c = (2+p+1/p);
     double beta_f = pow(j,0.16666666)*sqrt(1+1/q)*pow(1+p,2);
     return A*beta_c*beta_f/(beta_c+beta_f);
-
+};
     // Raw calculation is slow
     //return A*(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0))*1e0/(1e0+(pow(i,1e0/3e0)+pow(j,1e0/3e0))*(pow(i,-1e0/3e0)+pow(j,-1e0/3e0))/(pow(pow(i,1e0/3e0)+pow(j,1e0/3e0),2e0)*sqrt((1e0/i)+(1e0/j))));};
 
