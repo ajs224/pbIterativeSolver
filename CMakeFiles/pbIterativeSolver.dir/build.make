@@ -249,6 +249,30 @@ CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o.provides: CMakeFiles/pbIter
 CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o.provides.build: CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o
 
 
+CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o: CMakeFiles/pbIterativeSolver.dir/flags.make
+CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o: source/readGrid.c++
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o -c /home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/readGrid.c++
+
+CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/readGrid.c++ > CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.i
+
+CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/readGrid.c++ -o CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.s
+
+CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o.requires:
+
+.PHONY : CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o.requires
+
+CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o.provides: CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o.requires
+	$(MAKE) -f CMakeFiles/pbIterativeSolver.dir/build.make CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o.provides.build
+.PHONY : CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o.provides
+
+CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o.provides.build: CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o
+
+
 # Object files for target pbIterativeSolver
 pbIterativeSolver_OBJECTS = \
 "CMakeFiles/pbIterativeSolver.dir/source/pbIterativeSolver.c++.o" \
@@ -258,31 +282,33 @@ pbIterativeSolver_OBJECTS = \
 "CMakeFiles/pbIterativeSolver.dir/source/Particle.c++.o" \
 "CMakeFiles/pbIterativeSolver.dir/source/blurb.c++.o" \
 "CMakeFiles/pbIterativeSolver.dir/source/mfa_params.c++.o" \
-"CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o"
+"CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o" \
+"CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o"
 
 # External object files for target pbIterativeSolver
 pbIterativeSolver_EXTERNAL_OBJECTS =
 
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/pbIterativeSolver.c++.o
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/Cell.c++.o
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/moments.c++.o
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/n_in.c++.o
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/Particle.c++.o
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/blurb.c++.o
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/mfa_params.c++.o
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/build.make
-bin/pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_regex.so
-bin/pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_serialization.so
-bin/pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_filesystem.so
-bin/pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_system.so
-bin/pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_program_options.so
-bin/pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable bin/pbIterativeSolver"
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/pbIterativeSolver.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/Cell.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/moments.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/n_in.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/Particle.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/blurb.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/mfa_params.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/build.make
+pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_regex.so
+pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_serialization.so
+pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_filesystem.so
+pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_system.so
+pbIterativeSolver: /opt/boost/1.58.0/lib/libboost_program_options.so
+pbIterativeSolver: CMakeFiles/pbIterativeSolver.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable pbIterativeSolver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/pbIterativeSolver.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/pbIterativeSolver.dir/build: bin/pbIterativeSolver
+CMakeFiles/pbIterativeSolver.dir/build: pbIterativeSolver
 
 .PHONY : CMakeFiles/pbIterativeSolver.dir/build
 
@@ -294,6 +320,7 @@ CMakeFiles/pbIterativeSolver.dir/requires: CMakeFiles/pbIterativeSolver.dir/sour
 CMakeFiles/pbIterativeSolver.dir/requires: CMakeFiles/pbIterativeSolver.dir/source/blurb.c++.o.requires
 CMakeFiles/pbIterativeSolver.dir/requires: CMakeFiles/pbIterativeSolver.dir/source/mfa_params.c++.o.requires
 CMakeFiles/pbIterativeSolver.dir/requires: CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o.requires
+CMakeFiles/pbIterativeSolver.dir/requires: CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o.requires
 
 .PHONY : CMakeFiles/pbIterativeSolver.dir/requires
 

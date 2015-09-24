@@ -17,6 +17,9 @@
 // * This version of the code precalculates the kernel, which is more effcient for complex kernels
 // * If the directory kernelsDir exists and contains previously calculated kernel data in a binary file
 // this is read rather the re-calculating, which will speed up repeat calculations with the same number of particles (but say different lengths, numbers of cells or residual tolerances)
+// BEWARE IF MAKING CHANGES TO THE KERNEL THAT APPROPRIATE kernel/<kernel.dat> is deleted
+//
+// * This version can read in a grid of x and u values using the -grid cmdline argument
 //
 //---------------------------------------------------------------/
 
@@ -34,13 +37,13 @@
 // Simulate coagulation in the continuum regime in a fluid flowing at 1m/s in a pipe of length 1m (using 100 cells)
 //(time ./pbIterativeSolver -cells 100 -length 1 -u 1 -k continuum -res 1e-12 -p 12 -mass -nin mono) &> data/continuum_p12_res1e-12_delta_cells100_length1_u1_mf.log &
 
-
+//(time ./pbIterativeSolver -grid grid_1000cells_log.dat -k transition -p 16 -res 1e-12) &> data/continuum_p16_res1e-12_delta_grid_1000cells_log_nd.log &
 
 /*
  Structure of the code is as follows:
- * The Solver class contains all of the simulation parameters and hold methods for writing moments etc * 
- 
- * The Cell class contains all of the data for a single cell (n, moments, etc).
+ * The Solver class contains all of the simulation parameters and hold methods for writing moments etc
+ * 
+  * The Cell class contains all of the data for a single cell (n, moments, etc).
  * A vector of these Cell classes can be strung together to create a quasi-1d reactor
  */
 
@@ -94,7 +97,11 @@ int main(int argc, char *argv[])
   
   // Create new single cell simulation
   Solver reactorSolver;
-  reactorSolver.parseArgs(argc, argv);
+  if(reactorSolver.parseArgs(argc, argv))
+	{
+	   // Didn't enter correct params
+      return 0;
+	}
 
   // Check if dataDir exists
   if(!reactorSolver.checkDir())
@@ -112,42 +119,48 @@ int main(int argc, char *argv[])
   cout << endl;
   
   double delta_x = reactorSolver.delta_x();
+
+  std::vector<std::vector<double> > cfdGrid; // Create a CFD grid to hold x and u
   
   enum convergenceTypes {globalConvergence, cellWise};
   
   //convergenceTypes convergenceType = globalConvergence;
   convergenceTypes convergenceType = cellWise; // As we may expect cellwise is more efficient
   
-  if (convergenceType == cellWise) {
-    // Output header
-    if (reactorSolver.getNoCells() <= 1) // Print 0d reactor header
-      cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
+  if (convergenceType == cellWise){
+	
+	// Initialise reactor
+	double in, out;
+	if (reactorSolver.getNoCells() > 1) {
+	  // This is a quasi-1d reactor, alpha and beta are fixed by the velocity and dimensions of the grid
+	  // Inflow (alpha) and outflow rates (beta) are given by alpha^(-1) = beta^(-1) = u/delta_x
+	  //cellIter->setIORates(delta_x/u,delta_x/u);
+	  in = out = delta_x / reactorSolver.getU();
+	} else {
+	  // This is a 0d reactor with prescribed in and outflow rates
+	  in = reactorSolver.getIn();
+	  out = reactorSolver.getOut();
+	}
+
+	// Initialise a reactor as a network of noCells cells (1 in the 0d case)
+	vector<Cell> reactor(reactorSolver.getNoCells()+1, Cell(in, out, reactorSolver.getN()));
+
+	// A CFD grid has been supplied.
+	// Initialise a reactor as a network of noCells cells read in from gridFileName
+	if(reactorSolver.getGridFileName() != "")
+	  {
+		// Clear the exisitng reactor
+		reactor.clear();
+		
+		// Read grid and initialise reactor
+		cfdGrid = reactorSolver.readGrid(reactor);
+	  }
+	
+	// Output header
+    if ((reactorSolver.getNoCells() > 1))// || reactorSolver.getGridFileName() != "") // Print 0d reactor header
+	  cout << "Cell\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3\t\t# iters\t\t\tres" << endl;
     else // Print quasi-1d reactor header
-      cout << "Cell\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3\t\t# iters\t\t\tres" << endl;
-    
-    double in, out;
-    
-    if (reactorSolver.getNoCells() > 1) {
-      // This is a quasi-1d reactor, alpha and beta are fixed by the velocity and dimensions of the grid
-      // Inflow (alpha) and outflow rates (beta) are given by alpha^(-1) = beta^(-1) = u/delta_x
-      //cellIter->setIORates(delta_x/u,delta_x/u);
-      in = out = delta_x / reactorSolver.getU();
-    } else {
-      // This is a 0d reactor with prescribed in and outflow rates
-      in = reactorSolver.getIn();
-      out = reactorSolver.getOut();
-    }
-    
-    // Initialise a reactor as a network of noCells cells (1 in the 0d case)
-    vector<Cell> reactor(reactorSolver.getNoCells()+1, Cell(in, out, reactorSolver.getN()));
-    
-    /*
-      for(vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++)
-      {
-      unsigned long cellId = cellIter - reactor.begin();
-      cellIter->setId(cellId);
-      }
-    */
+	  cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
     
     // Loop through all cells in the domain, converging to steady-state in each
     for (vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++) {
@@ -162,11 +175,11 @@ int main(int argc, char *argv[])
       cellIter->initMoments();
       
       /* // Old method
-	 if (cell == 0)
-	 {
-	 //cout << "Setting n_in distribution to mono-dispersed" << endl;
-	 cellIter->initInDist(mono); // first cell has mono-dispersed distribution
-	 }
+		 if (cell == 0)
+		 {
+		 //cout << "Setting n_in distribution to mono-dispersed" << endl;
+		 cellIter->initInDist(mono); // first cell has mono-dispersed distribution
+		 }
 	 else
 	 {
 	 //cout << "Setting n_in distribution to steady-state distributionin cell " << cell-1 << endl;
@@ -176,94 +189,101 @@ int main(int argc, char *argv[])
       */
       
       int l = 1; // iteration number
-      bool cellConverged = false; // cell-wise convergence
-      
+      bool cellConverged = false; // cell-wise convergence  
+	  
       // First cell in domain, apply the boundary condition
       if (cell == 0) {
-	// Set n = nin
-	// Already called cellIter->initDist(mono), so just need to stop iteration for first cell
-	cellConverged = true;
+		// Set n = nin
+		// Already called cellIter->initDist(mono), so just need to stop iteration for first cell
+		cellConverged = true;
+		
+		// Set Inflowing distribution (0D case) or boundary condition (1D case)
+		// In the 1D case, this is not relevant, the infowing distribtuion
+		// becomes a boundary conditions, i.e., initDist for cell 0
+		cellIter->initInDist(reactorSolver.getInDist()); // first cell has inDist distribution (from -nin arg)
+		cellIter->initDist(reactorSolver.getInDist()); // first cell has inDist distribution (from -nin arg)
+		
+		//cellIter->initInDist(uniform); // first cell has mono-dispersed distribution
+		//cellIter->initDist(uniform); // first cell has mono-dispersed distribution
+		//cout << "In dist = " << reactorSolver.getInDist() << endl;
+		
+		cellIter->calculateMoments();
+		currMaxRes = 0e0;
+	  }
+	  else {
+		// Not the first cell in domain, set n_in to steady-state distribution from pevious cell
+		//cout << "Setting n_in distribution to steady-state distributionin cell " << cell-1 << endl;
+		vector<Cell>::iterator prevCell = cellIter - 1;
+		cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
 
-	// Set Inflowing distribution (0D case) or boundary condition (1D case)
-	// In the 1D case, this is not relevant, the infowing distribtuion
-	// becomes a boundary conditions, i.e., initDist for cell 0
-	cellIter->initInDist(reactorSolver.getInDist()); // first cell has inDist distribution (from -nin arg)
-	cellIter->initDist(reactorSolver.getInDist()); // first cell has inDist distribution (from -nin arg)
-
-	//cellIter->initInDist(uniform); // first cell has mono-dispersed distribution
-	//cellIter->initDist(uniform); // first cell has mono-dispersed distribution
-	//cout << "In dist = " << reactorSolver.getInDist() << endl;
-	
-	cellIter->calculateMoments();
-	currMaxRes = 0e0;
-
-	
-      } else { // Not the fist cell in domain, set n_in to steady-state distribution from pevious cell
-	//cout << "Setting n_in distribution to steady-state distributionin cell " << cell-1 << endl;
-	vector<Cell>::iterator prevCell = cellIter - 1;
-	cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
-      }
+		// If we have a CFD grid, set in and outrate of current cell = delta_x/u
+		if(reactorSolver.getGridFileName() != "")
+		  cellIter->setIORates(cfdGrid[cell][2]/cfdGrid[cell][1], cfdGrid[cell][2]/cfdGrid[cell][1]);
+				
+	  }
       
       // Find steady-state solution in each cell
       while (!cellConverged) {
-	// Let's compute the moments of the distribution and get the current maximum residual
-	currMaxRes = cellIter->calculateMoments();
-	
-	// If this a 0D sim, output the moment convergents to screen and file
-	if (reactorSolver.getNoCells() <= 1)
-	  reactorSolver.writeMoments(l, cellIter->getMoments());
-	
-	// Update old distribution to new distribution
-	cellIter->updateDist();
-	
-	// Iterate over all particle (cluster) sizes in cell
-	if(reactorSolver.isNumberDensityRep()) // Number density representation
-	  {
-	    //cellIter->iterateND(reactorSolver, *cellIter);
-	    cellIter->iterateAccelND(reactorSolver, *cellIter);
-	  }
-	else // Mass density representation
-	  {
-	    //cellIter->iterateMD(reactorSolver, *cellIter); // No acceleration   
-	    //cellIter->iterateAitkenMD(reactorSolver, *cellIter); // Aitken acceleration
-
-	    // Not it's legitimate to use continue to skip over small values of oldNumDens
-	    // which won't affect the coagSum much, but dangerous to break out of the loop all together
-	    // when numDens is small for remaining clusters
-	    // Note currently the dangerous acceleration method is implemented to should be aware if this
-	    // if there's large discrepancies in the calculation
-	    cellIter->iterateAccelMD(reactorSolver, *cellIter); // Dangerous acceleration  
-	  }
-	
-	if (reactorSolver.getL() != 0) {
-	  cellConverged = !(l <= reactorSolver.getL());
-	}
-	else if (currMaxRes < reactorSolver.getMaxRes()) {
-	  // Have reached steady-state with a tolerance of maxRes
-	  //cout << "Cell: "<< cell << "Steady-state reached in " << l << " iterations, with a maximum residual of " << currMaxRes << "!" << endl;
-	  cellConverged = true;
-	}
-	
-	l++; // Update iteration counter
-	
-	if (l > maxIter || currMaxRes > resCutOff) {
-	  cout << "Carried out " << l << " iterations, with a current residual of " << currMaxRes << ". Check that there is a steady-state solution." << endl;
-	  cellConverged = true;
-	}
-	
+		// Let's compute the moments of the distribution and get the current maximum residual
+		currMaxRes = cellIter->calculateMoments();
+		
+		// If this a 0D sim, output the moment convergents to screen and file
+		if (reactorSolver.getNoCells() <= 1)// && reactorSolver.getGridFileName() == "")
+		  reactorSolver.writeMoments(l, cellIter->getMoments());
+		
+		// Update old distribution to new distribution
+		cellIter->updateDist();
+		
+		// Iterate over all particle (cluster) sizes in cell
+		if(reactorSolver.isNumberDensityRep()) // Number density representation
+		  {
+			//cellIter->iterateND(reactorSolver, *cellIter); // Regular iterative method
+			cellIter->iterateAccelND(reactorSolver, *cellIter); // Accelerated iterative method
+			
+		  }
+		else // Mass density representation
+		  {
+			//cellIter->iterateMD(reactorSolver, *cellIter); // // Regular iterative method   
+			//cellIter->iterateAitkenMD(reactorSolver, *cellIter); // Aitken acceleration
+			
+			// N.B. It's legitimate to use continue to skip over small values of oldNumDens
+			// which won't affect the coagSum much, but dangerous to break out of the loop all together
+			// when numDens is small for remaining clusters
+			// Note currently the dangerous acceleration method is implemented so should be aware if this
+			// if there's large discrepancies in the calculation
+			cellIter->iterateAccelMD(reactorSolver, *cellIter); // Dangerous acceleration  
+		  }
+		
+		if (reactorSolver.getL() != 0) {
+		  cellConverged = !(l <= reactorSolver.getL());
+		}
+		else if (currMaxRes < reactorSolver.getMaxRes()) {
+		  // Have reached steady-state with a tolerance of maxRes
+		  //cout << "Cell: "<< cell << "Steady-state reached in " << l << " iterations, with a maximum residual of " << currMaxRes << "!" << endl;
+		  cellConverged = true;
+		}
+		
+		l++; // Update iteration counter
+		
+		if (l > maxIter || currMaxRes > resCutOff) {
+		  cout << "Carried out " << l << " iterations, with a current residual of " << currMaxRes << ". Check that there is a steady-state solution." << endl;
+		  cellConverged = true;
+		}
+		
       } // Single cell convergence loop
       
       
       /*
-	cout << cell << "\t"; 
-	reactorSolver.writeFinalMoments(cellIter->getMoments());
-	cout << "\t" << --l << "\t\t" << currMaxRes << endl;
+		cout << cell << "\t"; 
+		reactorSolver.writeFinalMoments(cellIter->getMoments());
+		cout << "\t" << --l << "\t\t" << currMaxRes << endl;
       */
       
       // Print steady-state moments in current cell (if this a 1D sim)
-      if (reactorSolver.getNoCells() > 1)
-	reactorSolver.writeFinalMoments(cell, cell * delta_x, reactorSolver.getU(), cellIter->getMoments(), l-1, currMaxRes);
-      
+      if (reactorSolver.getNoCells() > 1 && reactorSolver.getGridFileName() == "") 
+		reactorSolver.writeFinalMoments(cell, cell * delta_x, reactorSolver.getU(), cellIter->getMoments(), l-1, currMaxRes);
+      else if (reactorSolver.getGridFileName() != "")
+		reactorSolver.writeFinalMoments(cell, cfdGrid[cell][0], cfdGrid[cell][1], cellIter->getMoments(), l-1, currMaxRes);
       
       // Dump data to file
       //reactorSolver.writeOutput(reactorCell)
@@ -272,7 +292,15 @@ int main(int argc, char *argv[])
     } // Cell iterator
   }
   
-
+  
+  
+  
+  //
+  ///
+  //// WARNING -  IF THIS CODE IS EVER USED IT NEEDS TO BE UPDATED TO MATCH THE STRUCTURE ABOVE
+  ///
+  //
+  
   // This method turns out to be less efficient than cell-wise convergence in most cases, so this section
   // of the code is largely ignored
   else if (convergenceType == globalConvergence) 
@@ -281,15 +309,15 @@ int main(int argc, char *argv[])
       
       double globalMaxRes = 0e0;
       if (reactorSolver.getNoCells() > 1) {
-	// This is a quasi 1d reactor, alpha and beta are fixed by the velocity and dimensions of the grid
-	// Inflow (alpha) and outflow rates (beta) are given by alpha^(-1) = beta^(-1) = u/delta_x
-            //cellIter->setIORates(delta_x/u,delta_x/u);
-	in = out = reactorSolver.delta_x() / reactorSolver.getU();
+		// This is a quasi 1d reactor, alpha and beta are fixed by the velocity and dimensions of the grid
+		// Inflow (alpha) and outflow rates (beta) are given by alpha^(-1) = beta^(-1) = u/delta_x
+		//cellIter->setIORates(delta_x/u,delta_x/u);
+		in = out = reactorSolver.delta_x() / reactorSolver.getU();
       }
       else
         {
-	  in = reactorSolver.getIn();
-	  out = reactorSolver.getOut();
+		  in = reactorSolver.getIn();
+		  out = reactorSolver.getOut();
         }
       
       // Initialise a reactor as a network of noCells cells
@@ -298,19 +326,19 @@ int main(int argc, char *argv[])
       /*
         for(vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++)
         {
-	unsigned long cellId = cellIter - reactor.begin();
+		unsigned long cellId = cellIter - reactor.begin();
 	cellIter->setId(cellId);
-        }
-         */
-
+	}
+	  */
+	  
       // Loop through all cells once to initialise distributions in each cell
       for (vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++) {
+		
+		// Initialise initial distribution of particles in current cell
+		cellIter->initDist(mono);
 	
-	// Initialise initial distribution of particles in current cell
-	cellIter->initDist(mono);
-	
-	// Initialise moments in current cell
-	cellIter->initMoments();
+		// Initialise moments in current cell
+		cellIter->initMoments();
       }
       
       bool globallyConverged = false;
@@ -319,85 +347,84 @@ int main(int argc, char *argv[])
       
       while (!globallyConverged)
         {
-	  globalMaxRes = 0e0;
-	  globallyConverged = false;
-	  
-	  // Loop through all cells in the domain, converging to steady-state in each
-	  for (vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++) {
+		  globalMaxRes = 0e0;
+		  globallyConverged = false;
+		  
+		  // Loop through all cells in the domain, converging to steady-state in each
+		  for (vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++) {
+			
+			cell = cellIter - reactor.begin();
 	    
-	    cell = cellIter - reactor.begin();
-	    
-	    // Let's compute the moments of the distribution and get the current maximum residual
-	    currMaxRes = cellIter->calculateMoments();
+			// Let's compute the moments of the distribution and get the current maximum residual
+			currMaxRes = cellIter->calculateMoments();
             
-	    if (currMaxRes > globalMaxRes)
-	      globalMaxRes = currMaxRes;
-	    
-	    // First cell in domain, apply the boundary condition
-	    if (cell == 0) {
-	      continue; // this is the boundary condition, don't need to iterate
-	    }
-	    else 
-	      {
-		vector<Cell>::iterator prevCell = cellIter - 1;
-		cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
-		
-		// Find steady-state solution in each cell
-
-		// Update old distribution to new distribution
-		cellIter->updateDist();
-		
-		// Iterate over all particle (cluster) sizes in cell
-		cellIter->iterate(reactorSolver, *cellIter);
-		
-		
-	      }
-	  }
-	  
-	  cout << "Iteration" << l;
-	  cout << ". Global max residual: " << globalMaxRes << endl;
-	  
-          
-	  if (reactorSolver.getL() != 0) {
-	    globallyConverged = !(l <= reactorSolver.getL());
-	  } else if (globalMaxRes < reactorSolver.getMaxRes()) {
-	    // Have reached steady-state with a tolerance of maxRes
-	    //cout << "Cell: "<< cell << "Steady-state reached in " << l << " iterations, with a maximum residual of " << currMaxRes << "!" << endl;
-	    globallyConverged = true;
-	  }
-	  
-	  if (l > maxIter || globalMaxRes > resCutOff) {
-	    //cout << "Carried out " << l << " iterations, with a current residual of " << currMaxRes << ". Check that there is a steady-state solution." << endl;
-	    globallyConverged = true;
-	  }
-	  
-	  
-	  
-	  l++; // Update iteration counter   
+			if (currMaxRes > globalMaxRes)
+			  globalMaxRes = currMaxRes;
+			
+			// First cell in domain, apply the boundary condition
+			if (cell == 0) {
+			  continue; // this is the boundary condition, don't need to iterate
+			}
+			else 
+			  {
+				vector<Cell>::iterator prevCell = cellIter - 1;
+				cellIter->initInDist(prevCell->getDist()); // get steady-state distribution from previous cell        
+				
+				// Find steady-state solution in each cell
+				
+				// Update old distribution to new distribution
+				cellIter->updateDist();
+				
+				// Iterate over all particle (cluster) sizes in cell
+				cellIter->iterate(reactorSolver, *cellIter);
+				
+				
+			  }
+		  }
+		  
+		  cout << "Iteration" << l;
+		  cout << ". Global max residual: " << globalMaxRes << endl;
+		  
+		  
+		  if (reactorSolver.getL() != 0) {
+			globallyConverged = !(l <= reactorSolver.getL());
+		  } else if (globalMaxRes < reactorSolver.getMaxRes()) {
+			// Have reached steady-state with a tolerance of maxRes
+			//cout << "Cell: "<< cell << "Steady-state reached in " << l << " iterations, with a maximum residual of " << currMaxRes << "!" << endl;
+			globallyConverged = true;
+		  }
+		  
+		  if (l > maxIter || globalMaxRes > resCutOff) {
+			//cout << "Carried out " << l << " iterations, with a current residual of " << currMaxRes << ". Check that there is a steady-state solution." << endl;
+			globallyConverged = true;
+		  }
+		  
+		  
+		  
+		  l++; // Update iteration counter   
         } // Complete first iteration across all cells in domain
       
       // Output header
       if (reactorSolver.getNoCells() <= 1)
         {
-	  vector<Cell>::iterator cellIter = reactor.begin();
-	  cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
-	  reactorSolver.writeMoments(l, cellIter->getMoments());
+		  vector<Cell>::iterator cellIter = reactor.begin();
+		  cout << "Iter\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3" << endl;
+		  reactorSolver.writeMoments(l, cellIter->getMoments());
         }
       else
         {
-	  cout << "Cell\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3\t\t# iters\t\t\tres" << endl;
-	  for (vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++)
+		  cout << "Cell\t\tm0\t\t\tm1\t\t\tm2\t\t\tm3\t\t# iters\t\t\tres" << endl;
+		  for (vector<Cell>::iterator cellIter = reactor.begin(); cellIter != reactor.end(); cellIter++)
             {
-	      cell = cellIter - reactor.begin();
+			  cell = cellIter - reactor.begin();
 	      // Print steady-state moments in current cell (if this a 1D sim)
-	      reactorSolver.writeFinalMoments(cell, cell * delta_x, reactorSolver.getU(), cellIter->getMoments(), l-1, currMaxRes);
+			  reactorSolver.writeFinalMoments(cell, cell * delta_x, reactorSolver.getU(), cellIter->getMoments(), l-1, currMaxRes);
             }
         }
       
       
     } // Convergence type
-
-
+  
   return 0;
-
+  
 }//Main

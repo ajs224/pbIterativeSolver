@@ -92,7 +92,11 @@ int Solver::parseArgs(int argc, char *argv[]) {
     } 
     else if (strcmp(argv[i], "-u") == 0) {
       u = atof(argv[++i]);
-    }    
+    }
+	else if (strcmp(argv[i], "-grid") == 0) {
+      // Read the grid name
+      gridFileName = argv[++i];
+		}
     else if (strcmp(argv[i], "-mass") == 0) {
       // Solves the equation in mass flow form
       numberDensityRep = false;
@@ -171,9 +175,9 @@ int Solver::parseArgs(int argc, char *argv[]) {
   // I choose a power of 2, because for pure coagulations the cluster sizes double with each iteration
   // so we can't do more than log2(N)=p iterations before gelation occurs.
   
-  if (alpha == 0 && beta == 0 && noCells == 1 && gridLength == 0 && u == 0)
+  if (alpha == 0 && beta == 0 && noCells == 1 && gridLength == 0 && u == 0 && gridFileName == "") 
     {
-      cout << "Must provide alpha and beta (0D) or noCells, length and u (1D)." << endl;
+      cout << "Must provide alpha and beta (0D) or noCells, length and u (1D) or grid (1D CFD grid)." << endl;
       return 1;
     }
   
@@ -255,6 +259,22 @@ void Solver::setup() {
       cout << endl;
       out << "_cells" << noCells << "_length" << gridLength << "_u" << u;
     }
+  else if(gridFileName != "")
+	{
+	  cout << "1D reactor simulation (initialised from CFD grid)." << endl;
+	  //cout << "CFD grid: " << gridFileName << endl;
+	  //cout << "Domain length:" << gridLength << " (" << noCells << " cells)" << endl;
+      //cout << "Uniform velocity u = " << u << " m/s" << endl;
+      cout << endl;
+      //out << "_cells" << noCells << "_length" << gridLength << "_u" << u;
+
+	  size_t lastdot = gridFileName.find_last_of(".");
+	  if (lastdot == std::string::npos)
+		out << "_" << gridFileName;
+	  else
+		out << "_" << gridFileName.substr(0, lastdot); 
+
+	}
   else //if (alpha == 0 && beta == 0 && noCells == 1 && gridLength == 0 && u == 0)
     {
       cout << "Error! Check arguments." << endl;

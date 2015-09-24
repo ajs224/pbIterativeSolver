@@ -58,6 +58,9 @@ int blurb(int argc, char *argv[])
     cout << "\t" << "-cells" << "\t\t" << "number of cells" << endl;
     cout << "\t" << "-length" << "\t\t" << "length of domain in x direction" << endl;
     cout << "\t" << "-u" << "\t\t" << "uniform velocity in x direction" << endl;
+	cout << endl << endl;
+	cout << "or" << endl;
+	cout << "\t" << "-grid <filename>" << "\t\t" <<" where <filename> is the filename of the grid containing columns of x and u (one header line)"<< endl;
     cout << endl<< endl;
     
     cout << "0D Examples:" << endl << endl;
@@ -70,6 +73,7 @@ int blurb(int argc, char *argv[])
     cout << "\ttime " << argv[0] << " -alpha 0.05 -k freemolecular -loops 64 -p 16" << endl;
     cout << "* To run with a constant kernel, with a max cluster size of 16=2^4, with a max residual in all of m0-m3 of 1e-6:" << endl;
     cout << "\t(time " << argv[0] << " -alpha 0.1 -k constant -res 1e-10 -p 4 -mass) |& tee run.log" << endl;
+	
     
     cout << "* To run solve the Cauchy problem only (no coagulation), with inflow rate of 0.1, outflow rate of 0.2, a max cluster size of 16=2^4, with a max residual in all of m0-m3 of 1e-10 in mass flow form:" << endl;
     cout << "\t(time " << argv[0] << " -alpha 0.1 -beta 0.2 -res 1e-10 -p 16 -mass -nocoag) |& tee run.log" << endl;
@@ -80,8 +84,9 @@ int blurb(int argc, char *argv[])
     cout << endl<< endl;
     cout << "1D Examples:" << endl << endl;
     cout << "* To run a reactor of length 1m, with 100 cells and uniform velocity of u=1m/s, constant kernel, a max cluster size of 2^10 with max residual 1e-10 use (in mass flow form):" << endl;
-    cout << "\ttime " << argv[0] << " -cells 100 -length 1 -u 1 -k constant -p 10 -res 1e-10 -mass"  << endl;
-   
+    cout << "\t(time " << argv[0] << " -cells 100 -length 1 -u 1 -k constant -p 10 -res 1e-10 -mass) |& tee run.log"  << endl;
+	cout << "\t(time " << argv[0] << " -grid grid2.dat -k freemolecular -res 1e-12 -p 16) |& tee run.log" << endl;
+	
     cout << endl<< endl;
     cout << "\ttime N.B., you should use one of -loops, -iters, or -res." << endl;
     cout << endl;

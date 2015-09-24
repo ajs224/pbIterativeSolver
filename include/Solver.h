@@ -46,6 +46,8 @@ public:
     double delta_x(){return gridLength/(double) noCells;}
     int getNoCells() {return noCells;} 
     double getU(){return u;}
+
+	std::string getGridFileName() { return gridFileName;}
     
     //std::ofstream & getOutputFile(){return &outputFile;};
     //std::ofstream & getMomentsFile(){return &momentsFile;};
@@ -56,8 +58,11 @@ public:
     bool checkDir();
     bool writeK();
     bool readK();
-    
-        
+
+	//void readGrid();
+	std::vector<std::vector<double> > readGrid(std::vector<Cell> & reactor);
+
+		  
     //double k(unsigned long int i, unsigned long int j){return kernel->k(i,j);}// Calculates each time   
     double k(unsigned long int i, unsigned long int j){return precalculatedK[i][j];}// Used precalculated values for speed  
     
@@ -76,7 +81,9 @@ private:
     int noCells;// = 100; // grid consists of 100 cells
     double gridLength;// = 1; // grid has length 1m
     double u;// = 1; // velocity in x direction of domain in m/s
-    
+
+	std::string gridFileName;
+	
     // Common parameters
     bool numberDensityRep;
     mfaAnalytic::distributions inDist;

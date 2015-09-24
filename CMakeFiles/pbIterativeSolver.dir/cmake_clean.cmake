@@ -7,8 +7,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/pbIterativeSolver.dir/source/blurb.c++.o"
   "CMakeFiles/pbIterativeSolver.dir/source/mfa_params.c++.o"
   "CMakeFiles/pbIterativeSolver.dir/source/Solver.c++.o"
-  "bin/pbIterativeSolver.pdb"
-  "bin/pbIterativeSolver"
+  "CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o"
+  "pbIterativeSolver.pdb"
+  "pbIterativeSolver"
 )
 
 # Per-language clean rules from dependency scanning.

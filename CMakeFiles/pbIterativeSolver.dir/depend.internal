@@ -571,3 +571,9 @@ CMakeFiles/pbIterativeSolver.dir/source/pbIterativeSolver.c++.o
  include/mfa_functions.h
  include/mfa_params.h
  include/random.h
+CMakeFiles/pbIterativeSolver.dir/source/readGrid.c++.o
+ /home/userspace/ajs224/Dropbox/Code/pbIterativeSolver/source/readGrid.c++
+ include/Cell.h
+ include/Kernel.h
+ include/Solver.h
+ include/mfa_params.h

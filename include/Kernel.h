@@ -8,23 +8,25 @@
 #ifndef KERNEL_H
 #define	KERNEL_H
 
-
-
 #include <string>
 #include <cmath>
 #include <cstdlib>
 
 class Kernel
 {
- protected:
-  double A;
-  std::string kernelName;
  public:
+  
  Kernel(double val, std::string name) : A(val), kernelName(name) {}
+  virtual ~Kernel(){} // Need virtual destructor so that base class destructor is called
   virtual double k(unsigned long int i, unsigned long int j) =0;
   void setA(double val){ A = val;}
   double getA(void){ return A;}
   std::string Name() {return kernelName;}
+
+ protected:
+  double A;
+  std::string kernelName;
+  
 };
 
 class Constant: public Kernel
