@@ -9,3 +9,5 @@ code.old/
 Debug/
 Release
 *.gz
+kernels/*
+slurm/*.sh
