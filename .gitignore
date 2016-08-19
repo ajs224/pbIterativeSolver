@@ -12,3 +12,5 @@ kernels/*.dat
 slurm/*.sh
 .nfs*
 .dropbox.attr
+Makefile
+
