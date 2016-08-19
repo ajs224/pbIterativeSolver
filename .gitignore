@@ -5,9 +5,10 @@ data/
 source/*~
 include/*~
 code.old/
-*.txt
 Debug/
 Release
 *.gz
-kernels/*
+kernels/*.dat
 slurm/*.sh
+.nfs*
+.dropbox.attr
